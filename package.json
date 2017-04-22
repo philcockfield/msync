@@ -1,13 +1,10 @@
 {
   "name": "modulesync",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Manages building and syncing multiple node modules.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "ui": "./node_modules/@kadira/storybook/dist/server/index.js -p 3030 -c ./.storybook -s ./assets",
-    "start": "node .",
-    "watch": "nodemon . -e js --ignore src",
     "test": "sh sh/test.sh",
     "tdd": "yarn run test -- --reporter min --watch",
     "lint": "tslint 'src/**/*.ts{,x}' --format verbose",
@@ -16,6 +13,7 @@
     "prepublish": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
+    "js-util-log": "^1.0.4"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
@@ -26,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "__GITHUB_URL__"
+    "url": "https://github.com/philcockfield/modulesync"
   },
-  "license": "UNLICENSED"
+  "license": "MIT"
 }
