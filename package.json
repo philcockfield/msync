@@ -1,0 +1,32 @@
+{
+  "name": "modulesync",
+  "version": "1.0.0",
+  "description": "Manages building and syncing multiple node modules.",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "ui": "./node_modules/@kadira/storybook/dist/server/index.js -p 3030 -c ./.storybook -s ./assets",
+    "start": "node .",
+    "watch": "nodemon . -e js --ignore src",
+    "test": "sh sh/test.sh",
+    "tdd": "yarn run test -- --reporter min --watch",
+    "lint": "tslint 'src/**/*.ts{,x}' --format verbose",
+    "build:typescript": "rm -rf ./lib && tsc",
+    "build": "yarn run build:typescript",
+    "prepublish": "yarn run lint && yarn test && yarn run build"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/chai": "^3.5.1",
+    "@types/mocha": "^2.2.41",
+    "chai": "^3.5.0",
+    "js-typescript": "^2.3.1",
+    "mocha": "^3.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "__GITHUB_URL__"
+  },
+  "license": "UNLICENSED"
+}
