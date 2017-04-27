@@ -1,0 +1,3 @@
+modules:
+  - ./sample/*/package.json
+  - ./sample/libs/*/package.json
