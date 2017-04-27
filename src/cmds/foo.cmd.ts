@@ -1,11 +1,18 @@
-import { log, file, settings, printTitle } from '../common';
+import {
+  log,
+  file,
+  config,
+  printTitle,
+  constants,
+  IPackageObject,
+} from '../common';
 
 
 
 // export const group = 'dev';
-export const name = 'foo';
-export const alias = 'f';
-export const description = 'Sample script.';
+export const name = 'ls';
+// export const alias = 'f';
+export const description = 'Lists the modules.';
 
 
 
@@ -16,17 +23,17 @@ export async function cmd(
     options: {},
   },
 ) {
+  const logModule = (module: IPackageObject) => {
+    log.info.magenta(`- ${log.cyan(module.name)} ${module.version}`)
+  };
 
-  log.info.magenta('Foo!!!\n');
+  const settings = await config.init();
+  const modules = settings && settings.modules;
 
-  // file.findClosestAncestor(process.cwd(), '.sync.yaml');
-
-  printTitle('Config');
-
-  const s = await settings.init();
-
-  console.log('settings', s);
-
-  // file.findAncestor()
-
+  if (modules) {
+    modules.forEach(logModule)
+    log.info();
+  } else {
+    log.warn.yellow(`No modules defined within the '${constants.CONFIG_FILE_NAME}' file.`)
+  }
 }

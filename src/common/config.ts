@@ -1,8 +1,9 @@
 import * as file from './file';
 import * as constants from './constants';
-import { jsYaml, fs, fsPath, log } from './libs';
+import { R, jsYaml, fs, fsPath, log } from './libs';
 import { toPackages } from './package';
-import { IPackageObject, IPackage } from '../types';
+import { IPackageObject } from '../types';
+
 
 export interface IConfigYaml {
   modules?: string[];
@@ -38,21 +39,17 @@ export async function init() {
   const yaml = await loadConfigYaml();
   if (!yaml) { return; }
 
-  // Resolve all module-dirs in the YAML to be within
-  // the "current working directory".
+  // Resolve all module-directories in the YAML to
+  // be within the "current working directory".
   yaml.modules = (yaml.modules || [])
-    .map((path) => fsPath.resolve(process.cwd(), path))
+    .map((path) => fsPath.resolve(process.cwd(), path));
 
   // Load the [package.json] from files.
-  let modules = await toPackages(yaml.modules)
+  let modules = await toPackages(yaml.modules);
+  modules = R.sortBy(R.prop('name'), modules);
 
   // Finish up.
   return {
     modules
   };
 }
-
-
-
-
-

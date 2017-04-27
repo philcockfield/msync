@@ -1,6 +1,6 @@
 import * as file from './file';
 import { fs, fsPath } from './libs';
-import { IPackageObject, IPackage } from '../types';
+import { IPackageObject } from '../types';
 
 
 
@@ -27,10 +27,8 @@ export async function toPackage(packageJsonPath: string): Promise<IPackageObject
   const text = (await fs.readFileAsync(packageJsonPath)).toString();
   const json = JSON.parse(text);
   return {
-    path: fsPath.resolve(packageJsonPath, '..'),,
-    data: {
-      name: json.name,
-      version: json.version,
-    },
+    path: fsPath.resolve(packageJsonPath, '..'),
+    name: json.name,
+    version: json.version,
   };
 }
