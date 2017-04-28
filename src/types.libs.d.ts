@@ -19,8 +19,8 @@ declare module 'execa' {
 
 interface IListrTask {
   title: string;
-  task: Function;
-  skip?: Function;
+  task: () => void;
+  skip?: () => void;
 }
 interface IListrOptions {
   concurrent?: boolean;
@@ -28,7 +28,7 @@ interface IListrOptions {
 declare class Listr {
   public constructor(tasks?: IListrTask[], options?: IListrOptions);
   public run(): Promise<void>;
-  public add(task: IListrTask): Listr
+  public add(task: IListrTask): Listr;
 }
 declare module 'listr' {
   const listr = Listr;
