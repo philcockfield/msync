@@ -24,7 +24,7 @@ export async function findClosestAncestor(startDir: string, fileName: string) {
  */
 export function glob(pattern: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    new Glob(pattern, {}, (err, matches) => {
+    new Glob(pattern, {}, (err, matches) => { // tslint:disable-line
       if (err) {
         reject(err);
       } else {
@@ -33,4 +33,3 @@ export function glob(pattern: string): Promise<string[]> {
     });
   });
 }
-

@@ -1,39 +1,35 @@
 {
-  "compilerOptions": {
-    "outDir": "./lib",
-    "target": "es5",
-    "inlineSourceMap": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "isolatedModules": false,
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": true,
-    "removeComments": true,
-    "noLib": false,
-    "skipLibCheck": true,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "pretty": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "lib": [
-      "es5",
-      "es6",
-      "es7",
-      "dom"
-    ]
-  },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
   ],
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+  "rules": {
+    "no-consecutive-blank-lines": [
+      false
+    ],
+    "no-var-requires": false,
+    "object-literal-sort-keys": false,
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "jsx-no-lambda": true,
+    "no-shadowed-variable": false,
+    "ordered-imports": [
+      false
+    ],
+    "only-arrow-functions": [
+      false
+    ],
+    "no-empty-interface": false,
+    "interface-over-type-literal": false,
+    "jsx-alignment": false,
+    "member-ordering": [
+      false
+    ],
+    "object-literal-shorthand": false,
+    "max-classes-per-file": [
+      false
+    ]
+  }
 }

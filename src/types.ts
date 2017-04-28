@@ -1,7 +1,7 @@
 
 
 export interface IPackageObject {
-  path: string;
+  dir: string;
   name: string;
   version: string;
   dependencies: IDependency[];
@@ -13,4 +13,5 @@ export interface IDependency {
   version: string;
   isDev: boolean;
   isLocal: boolean;
+  package?: IPackageObject;
 }

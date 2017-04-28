@@ -8,12 +8,12 @@ import {
 
 
 export const name = 'ls';
+export const alias = 'l';
 export const description = 'List modules in dependency order.';
 export const args = {
   '-D': 'Show all module dependencies.',
   '-d': 'Show local module dependencies only.',
 };
-
 
 
 /**
@@ -22,11 +22,14 @@ export const args = {
 export async function cmd(
   args?: {
     params: string[],
-    options: {},
+    options: {
+      d?: boolean;
+      D?: boolean;
+    },
   },
 ) {
 
-  const options = (args && args.options) || {} as any;
+  const options = (args && args.options) || {};
   let deps: DisplayDependencies = 'none';
   if (options.d) { deps = 'local'; }
   if (options.D) { deps = 'all'; }
@@ -37,7 +40,7 @@ export async function cmd(
 
 export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
-  deps?: DisplayDependencies
+  deps?: DisplayDependencies;
 }
 
 
@@ -80,4 +83,7 @@ export async function ls(options: IOptions) {
   } else {
     log.warn.yellow(`No modules defined or the '${constants.CONFIG_FILE_NAME}' file not found.`);
   }
+
+  // Finish up.
+  return settings;
 }

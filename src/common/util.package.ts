@@ -20,10 +20,14 @@ export async function toPackages(moduleDirs: string[]) {
   }
 
   // Determine which ones are local.
-  const isLocal = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name) !== undefined;
+  const findPackage = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name);
+  // const isLocal = (dep: IDependency) => findPackage(dep) !== undefined;
   packages.forEach((pkg) => {
-    pkg.dependencies.forEach((dep) => dep.isLocal = isLocal(dep))
-  })
+    pkg.dependencies.forEach((dep) => {
+      dep.package = findPackage(dep);
+      dep.isLocal = dep.package !== undefined;
+    });
+  });
 
   // Finish up.
   return packages;
@@ -43,8 +47,7 @@ async function toPackage(packageFilePath: string): Promise<IPackageObject> {
     if (!deps) { return; }
     Object.keys(deps).forEach((name) => dependencies.push({
       name,
-      version:
-      deps[name],
+      version: deps[name],
       isDev,
       isLocal: false,
     }));
@@ -57,7 +60,7 @@ async function toPackage(packageFilePath: string): Promise<IPackageObject> {
   dependencies = R.uniqBy((dep) => dep.name, dependencies);
 
   return {
-    path: fsPath.resolve(packageFilePath, '..'),
+    dir: fsPath.resolve(packageFilePath, '..'),
     name: json.name,
     version: json.version,
     dependencies,
@@ -74,7 +77,7 @@ export function orderByDepth(packages: IPackageObject[]): IPackageObject[] {
     const deps = pkg.dependencies;
     const result = deps
       .map((dep) => dep.name)
-      .map((name) => [pkg.name, name])
+      .map((name) => [pkg.name, name]);
     return deps.length === 0
       ? [[pkg.name]]
       : result;

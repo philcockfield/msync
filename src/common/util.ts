@@ -1,4 +1,6 @@
 import { log } from './libs';
+import * as Listr from 'listr';
+
 
 
 /**
@@ -9,4 +11,12 @@ export function printTitle(message: string) {
   log.info.cyan(HR);
   log.info.cyan(` ${message}`);
   log.info.cyan(HR);
+}
+
+
+/**
+ * Invokes a new listr task.
+ */
+export function listr(tasks?: IListrTask[], options?: IListrOptions) {
+  return new Listr(tasks, options);
 }

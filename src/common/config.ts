@@ -53,7 +53,7 @@ export async function init(): Promise<IConfig | undefined> {
 
   // Load the [package.json] from files.
   let modules = await toPackages(yaml.modules);
-  modules = orderByDepth(modules)
+  modules = orderByDepth(modules);
 
   // Finish up.
   return {
