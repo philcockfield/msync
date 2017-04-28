@@ -5,6 +5,7 @@ import {
   copy,
   constants,
   IPackageObject,
+  elapsed,
 } from '../common';
 
 
@@ -35,6 +36,7 @@ export async function cmd(
  * Copies each module's dependency tree locally.
  */
 export async function sync() {
+  const startedAt = new Date();
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(`No modules defined or the '${constants.CONFIG_FILE_NAME}' file not found.`);
@@ -65,6 +67,7 @@ export async function sync() {
   try {
     const taskList = listr(tasks, { concurrent: false });
     await taskList.run();
+    log.info.gray(elapsed(startedAt));
     log.info();
 
   } catch (error) {
