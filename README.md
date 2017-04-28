@@ -24,3 +24,28 @@ modules:
 Run the command line using `ms` to list, sync or build the modules:
 
 ![Image](https://cloud.githubusercontent.com/assets/185555/25547887/d81a8f00-2cbd-11e7-98f7-730138032c3f.png)
+
+
+
+# API
+All command-line options can be programatically invoked:
+
+```js
+import { ls, sync } from 'module-sync';
+```
+
+### ls (list)
+List modules in dependency order.
+
+```js
+await ls();
+await ls({ deps: 'local' });
+await ls({ deps: 'all' });
+```
+
+### sync
+Syncs each module's dependency tree locally.
+
+```js
+await sync();
+```
