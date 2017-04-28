@@ -1,5 +1,10 @@
 # module-sync
+
+[![Build Status](https://travis-ci.org/philcockfield/module-sync.svg?branch=master)](https://travis-ci.org/philcockfield/module-sync)
+
 Manages building and syncing multiple node modules.
+
+
 
 ## Install
 
