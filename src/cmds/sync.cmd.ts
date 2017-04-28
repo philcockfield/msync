@@ -59,7 +59,7 @@ export async function sync() {
   const tasks = modules.map((pkg) => {
     const depNames = localDeps(pkg).map((dep) => ` ${log.cyan(dep.name)}`);
     return {
-      title: `${log.magenta(pkg.name)}${depNames}`,
+      title: `${log.magenta(pkg.name)} ${log.cyan('⬅')}${depNames}`,
       task: () => sync(pkg),
     };
   });
