@@ -1,7 +1,7 @@
-import * as file from './file';
+import * as file from './util.file';
 import * as constants from './constants';
 import { R, jsYaml, fs, fsPath, log } from './libs';
-import { toPackages } from './package';
+import { toPackages } from './util.package';
 import { IPackageObject } from '../types';
 
 
@@ -14,19 +14,16 @@ export interface IConfigYaml {
 /**
  * Finds and loads the YAML configuration file.
  */
-async function loadConfigYaml(): Promise<IConfigYaml | undefined> {
-  const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
-  if (path) {
-    try {
-      const text = (await fs.readFileAsync(path)).toString();
-      return jsYaml.safeLoad(text);
-    } catch (error) {
-      log.error(`Failed to parse YAML configuration`);
-      log.error(error.message);
-      log.info(log.magenta('File:'), path, '\n');
-    }
+async function loadConfigYaml(path: string) {
+  try {
+    const text = (await fs.readFileAsync(path)).toString();
+    return jsYaml.safeLoad(text) as IConfigYaml;
+  } catch (error) {
+    log.error(`Failed to parse YAML configuration`);
+    log.error(error.message);
+    log.info(log.magenta('File:'), path, '\n');
   }
-  return {};
+  return;
 }
 
 
@@ -36,7 +33,13 @@ async function loadConfigYaml(): Promise<IConfigYaml | undefined> {
  * Initializes the settings.
  */
 export async function init() {
-  const yaml = await loadConfigYaml();
+
+  // Find the configuration YAML file.
+  const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
+  if (!path) { return; }
+
+  // Load the YAML.
+  const yaml = await loadConfigYaml(path);
   if (!yaml) { return; }
 
   // Resolve all module-directories in the YAML to
@@ -50,6 +53,7 @@ export async function init() {
 
   // Finish up.
   return {
-    modules
+    path,
+    modules,
   };
 }

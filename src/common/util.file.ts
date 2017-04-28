@@ -30,7 +30,7 @@ export function glob(pattern: string): Promise<string[]> {
       } else {
         resolve(matches);
       }
-    })
+    });
   });
 }
 

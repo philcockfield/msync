@@ -1,1 +1,1 @@
-export const CONFIG_FILE_NAME = '.sync.yaml';
+export const CONFIG_FILE_NAME = 'sync.yaml';

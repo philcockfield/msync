@@ -1,2 +1,4 @@
-import init from 'command-interface';
-init(`${__dirname}/cmds/**`);
+import cli from 'command-interface';
+
+// Initialize the CLI.
+cli(`${__dirname}/cmds/**`);
