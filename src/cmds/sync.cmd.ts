@@ -10,7 +10,7 @@ import {
 
 export const name = 'sync';
 export const alias = 's';
-export const description = 'Copies each module\'s dependency tree locally.';
+export const description = 'Syncs each module\'s dependency tree locally.';
 export const args = {
 };
 
