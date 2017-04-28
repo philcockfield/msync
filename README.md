@@ -49,3 +49,18 @@ Syncs each module's dependency tree locally.
 ```js
 await sync();
 ```
+
+
+
+## Next Steps
+
+- `sync:watch`
+- `build` (Typescript)
+- `build:watch`
+- yaml:
+    - `ignore` (modules)
+      - paths
+      - module names
+      - `ignoreSync`
+      - `ignoreBuild`
+
