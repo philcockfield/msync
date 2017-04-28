@@ -31,11 +31,10 @@ export async function cmd(
   const showAllDeps = (options.D) || false;
   const settings = await config.init();
 
-  const isLocal = (dep: IDependency, modules: IPackageObject[]) => modules.find((m) => m.name === dep.name);
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
-    .filter((dep) => showAllDeps ? true : isLocal(dep, modules))
-    .map((dep) => `${log.magenta('-')} ${log.cyan(dep.name)}`)
+    .filter((dep) => showAllDeps ? true : dep.isLocal)
+    .map((dep) => `${log.magenta('-')} ${log.cyan(dep.name)} ${log.gray(dep.version)}`)
     .join('\n');
 
 

@@ -12,4 +12,5 @@ export interface IDependency {
   name: string;
   version: string;
   isDev: boolean;
+  isLocal: boolean;
 }

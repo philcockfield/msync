@@ -10,12 +10,22 @@ import { IPackageObject, IDependency } from '../types';
  */
 export async function toPackages(moduleDirs: string[]) {
   const packages: IPackageObject[] = [];
+
+  // Build list of packages.
   for (const pattern of moduleDirs) {
     const matches = await file.glob(pattern);
     for (const path of matches) {
       packages.push(await toPackage(path));
     }
   }
+
+  // Determine which ones are local.
+  const isLocal = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name) !== undefined;
+  packages.forEach((pkg) => {
+    pkg.dependencies.forEach((dep) => dep.isLocal = isLocal(dep))
+  })
+
+  // Finish up.
   return packages;
 }
 
@@ -24,14 +34,20 @@ export async function toPackages(moduleDirs: string[]) {
 /**
  * Loads a [package.json] file.
  */
-export async function toPackage(packageFilePath: string): Promise<IPackageObject> {
+async function toPackage(packageFilePath: string): Promise<IPackageObject> {
   const text = (await fs.readFileAsync(packageFilePath)).toString();
   const json = JSON.parse(text);
 
   let dependencies: IDependency[] = [];
   const addDeps = (deps: { [key: string]: string }, isDev: boolean) => {
     if (!deps) { return; }
-    Object.keys(deps).forEach((name) => dependencies.push({ name, version: deps[name], isDev }));
+    Object.keys(deps).forEach((name) => dependencies.push({
+      name,
+      version:
+      deps[name],
+      isDev,
+      isLocal: false,
+    }));
   };
 
   addDeps(json.dependencies, false);
