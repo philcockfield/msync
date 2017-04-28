@@ -12,6 +12,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
-## [0.0.1] - YYYY-MM-DD
+## [1.0.0] - 2017-04-29
 #### Added
-Initial creation and publish.
+Initial creation and publish with `ls` and `sync` commands.
