@@ -4,16 +4,18 @@ import {
   config,
   printTitle,
   constants,
-  IPackageObject,
   table,
+  orderByDepth,
+  IPackageObject,
+  IDependency,
 } from '../common';
 
 
-
 export const name = 'ls';
-export const description = 'Lists modules.';
+export const description = 'List modules in dependency order.';
 export const args = {
-  '--deps, -d': 'Show module depencies (depth first).',
+  '-D': 'Show all module dependencies.',
+  '-d': 'Show local module dependencies only.',
 };
 
 
@@ -25,11 +27,14 @@ export async function cmd(
 ) {
 
   const options = (args && args.options) || {} as any;
-  const showDeps = (options.deps || options.d) || false;
+  const showDeps = (options.d || options.D) || false;
+  const showAllDeps = (options.D) || false;
   const settings = await config.init();
 
-  const listDeps = (pkg: IPackageObject) => pkg
+  const isLocal = (dep: IDependency, modules: IPackageObject[]) => modules.find((m) => m.name === dep.name);
+  const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
+    .filter((dep) => showAllDeps ? true : isLocal(dep, modules))
     .map((dep) => `${log.magenta('-')} ${log.cyan(dep.name)}`)
     .join('\n');
 
@@ -38,7 +43,7 @@ export async function cmd(
     const builder = table([log.gray('module'), log.gray('version'), showDeps && log.gray('dependencies')]);
     modules.forEach((pkg) => {
       if (showDeps) {
-        builder.add(log.cyan(pkg.name), log.magenta(pkg.version), listDeps(pkg));
+        builder.add(log.cyan(pkg.name), log.magenta(pkg.version), listDeps(pkg, modules));
       } else {
         builder.add(log.cyan(pkg.name), log.magenta(pkg.version));
       }

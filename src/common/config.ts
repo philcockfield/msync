@@ -1,7 +1,7 @@
 import * as file from './util.file';
 import * as constants from './constants';
 import { R, jsYaml, fs, fsPath, log } from './libs';
-import { toPackages } from './util.package';
+import { toPackages, orderByDepth } from './util.package';
 import { IPackageObject } from '../types';
 
 
@@ -49,7 +49,7 @@ export async function init() {
 
   // Load the [package.json] from files.
   let modules = await toPackages(yaml.modules);
-  modules = R.sortBy(R.prop('name'), modules);
+  modules = orderByDepth(modules)
 
   // Finish up.
   return {

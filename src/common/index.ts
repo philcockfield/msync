@@ -6,4 +6,5 @@ export { file, constants, config }
 export { table } from './util.table';
 export * from './libs';
 export * from './util';
+export * from './util.package';
 export * from '../types';
