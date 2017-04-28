@@ -25,7 +25,7 @@ export async function cmd(
     options: {},
   },
 ) {
-  await syncAll();
+  await sync();
 }
 
 
@@ -34,7 +34,7 @@ export async function cmd(
 /**
  * Copies each module's dependency tree locally.
  */
-export async function syncAll() {
+export async function sync() {
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(`No modules defined or the '${constants.CONFIG_FILE_NAME}' file not found.`);
