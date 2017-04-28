@@ -1,0 +1,8 @@
+{
+  "name": "module-2",
+  "version": "0.1.34",
+  "dependencies": {
+    "react": "^15.5.4",
+    "module-1": "^0.0.1"
+  }
+}

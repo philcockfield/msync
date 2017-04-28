@@ -1,26 +1,46 @@
 {
   "name": "module-sync",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Manages building and syncing multiple node modules.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
+  "bin": {
+    "ms": "./bin-cli"
+  },
   "scripts": {
     "test": "sh sh/test.sh",
     "tdd": "yarn run test -- --reporter min --watch",
-    "lint": "tslint 'src/**/*.ts{,x}' --format verbose",
-    "build:typescript": "rm -rf ./lib && tsc",
-    "build": "yarn run build:typescript",
+    "lint": "node node_modules/tslint/bin/tslint 'src/**/*.ts{,x}' --format verbose",
+    "build": "rm -rf ./lib && node node_modules/typescript/bin/tsc",
+    "build:watch": "yarn run build -- --watch",
     "prepublish": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "js-util-log": "^1.0.4"
+    "cli-table": "^0.3.1",
+    "command-interface": "^2.4.1",
+    "execa": "^0.6.3",
+    "fs-extra-promise": "^1.0.1",
+    "glob": "^7.1.1",
+    "js-util-log": "^1.0.4",
+    "js-yaml": "^3.8.3",
+    "listr": "^0.12.0",
+    "moment": "^2.18.1",
+    "ramda": "^0.23.0",
+    "rsync": "^0.6.1",
+    "toposort": "^1.0.3"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
+    "@types/fs-extra-promise": "^1.0.0",
+    "@types/glob": "^5.0.30",
+    "@types/js-yaml": "^3.5.30",
     "@types/mocha": "^2.2.41",
+    "@types/moment": "^2.13.0",
+    "@types/ramda": "^0.0.7",
+    "@types/rsync": "^0.4.28",
     "chai": "^3.5.0",
     "js-typescript": "^2.3.1",
-    "mocha": "^3.2.0"
+    "mocha": "^3.3.0"
   },
   "repository": {
     "type": "git",
