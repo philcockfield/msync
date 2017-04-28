@@ -19,6 +19,10 @@ export const args = {
 };
 
 
+
+/**
+ * CLI command.
+ */
 export async function cmd(
   args?: {
     params: string[],
@@ -27,9 +31,30 @@ export async function cmd(
 ) {
 
   const options = (args && args.options) || {} as any;
-  const showDeps = (options.d || options.D) || false;
-  const showAllDeps = (options.D) || false;
+  let deps: DisplayDependencies = 'none';
+  if (options.d) { deps = 'local'; }
+  if (options.D) { deps = 'all'; }
+
+  await ls({ deps });
+}
+
+
+export type DisplayDependencies = 'none' | 'local' | 'all';
+export interface IOptions {
+  deps?: DisplayDependencies
+}
+
+
+/**
+ * List modules in dependency order.
+ */
+export async function ls(options: IOptions) {
+  options = options || {};
+  const { deps = 'none' } = options;
+  const showDeps = deps !== 'none';
+  const showAllDeps = deps === 'all';
   const settings = await config.init();
+
 
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
@@ -39,7 +64,8 @@ export async function cmd(
 
 
   const logModules = (modules: IPackageObject[]) => {
-    const builder = table([log.gray('module'), log.gray('version'), showDeps && log.gray('dependencies')]);
+    const depsHeader = deps === 'none' ? undefined : log.gray('dependencies');
+    const builder = table([log.gray('module'), log.gray('version'), depsHeader]);
     modules.forEach((pkg) => {
       if (showDeps) {
         builder.add(log.cyan(pkg.name), log.magenta(pkg.version), listDeps(pkg, modules));

@@ -5,7 +5,6 @@ const Table = require('cli-table');
 export const compact = (value: any[]) => R.pipe(
   R.reject(R.isNil),
   R.reject(R.isEmpty),
-  R.reject(R.is(Boolean)),
 )(value);
 
 
@@ -13,7 +12,7 @@ export const compact = (value: any[]) => R.pipe(
 /**
  * Creates a new table builder.
  */
-export function table(head: string[] = []) {
+export function table(head: Array<string | undefined> = []) {
   head = compact(head);
   const t = new Table({ head });
   const api = {
