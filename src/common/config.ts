@@ -48,12 +48,14 @@ export async function init(): Promise<IConfig | undefined> {
 
   // Resolve all module-directories in the YAML to
   // be within the "current working directory".
+  const dir = fsPath.dirname(path);
   yaml.modules = (yaml.modules || [])
-    .map((path) => fsPath.resolve(process.cwd(), path));
+    .map((path) => fsPath.resolve(dir, path));
 
   // Load the [package.json] from files.
   let modules = await toPackages(yaml.modules);
   modules = orderByDepth(modules);
+
 
   // Finish up.
   return {

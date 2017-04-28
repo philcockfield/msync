@@ -75,7 +75,6 @@ export async function ls(options: IOptions) {
     builder.log();
   };
 
-
   const modules = settings && settings.modules;
   if (modules && modules.length > 0) {
     logModules(modules);
