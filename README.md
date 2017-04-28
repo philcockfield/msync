@@ -60,7 +60,7 @@ await sync();
 - yaml:
     - `ignore` (modules)
       - paths
-      - module names
+      - names (module names)
       - `ignoreSync`
       - `ignoreBuild`
 
