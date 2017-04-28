@@ -1,4 +1,10 @@
 modules:
   - ./sample/*/package.json
-  - ./sample/libs/*/package.json
-  # - ../*/package.json
+  - ./sample/libs/**/package.json
+
+
+ignore:
+  paths:
+    - ./sample/**/ignore-folder
+
+

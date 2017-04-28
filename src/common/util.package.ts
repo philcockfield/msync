@@ -5,6 +5,7 @@ import { IPackageObject, IDependency } from '../types';
 
 
 
+
 /**
  * Converts a set of module-directory globs to package objects.
  */
@@ -15,7 +16,9 @@ export async function toPackages(moduleDirs: string[]) {
   for (const pattern of moduleDirs) {
     const matches = await file.glob(pattern);
     for (const path of matches) {
-      packages.push(await toPackage(path));
+      if (!path.includes('node_modules/')) {
+        packages.push(await toPackage(path));
+      }
     }
   }
 
