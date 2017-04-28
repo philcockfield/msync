@@ -46,7 +46,6 @@ export async function sync() {
     .modules
     .filter((pkg) => localDeps(pkg).length > 0);
 
-
   const sync = async (target: IPackageObject) => {
     for (const source of localDeps(target)) {
       if (source.package) {
