@@ -1,4 +1,4 @@
-import { fs, fsPath, log } from './libs';
+import { fs, fsPath } from './libs';
 import { Glob } from 'glob';
 
 
@@ -24,7 +24,7 @@ export async function findClosestAncestor(startDir: string, fileName: string) {
  */
 export function glob(pattern: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    const g = new Glob(pattern, {}, (err, matches) => {
+    new Glob(pattern, {}, (err, matches) => {
       if (err) {
         reject(err);
       } else {

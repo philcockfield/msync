@@ -1,6 +1,6 @@
 import * as file from './util.file';
 import * as constants from './constants';
-import { R, jsYaml, fs, fsPath, log } from './libs';
+import { jsYaml, fs, fsPath, log } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IPackageObject } from '../types';
 
@@ -9,6 +9,10 @@ export interface IConfigYaml {
   modules?: string[];
 }
 
+export interface IConfig {
+  path: string;
+  modules: IPackageObject[];
+}
 
 
 /**
@@ -32,7 +36,7 @@ async function loadConfigYaml(path: string) {
 /**
  * Initializes the settings.
  */
-export async function init() {
+export async function init(): Promise<IConfig | undefined> {
 
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
