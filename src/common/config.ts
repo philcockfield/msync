@@ -75,7 +75,7 @@ export async function init(): Promise<IConfig | undefined> {
   modules = orderByDepth(modules);
   modules.forEach((pkg) => {
     pkg.isIgnored = isIgnored(pkg, ignore);
-  })
+  });
 
   // Finish up.
   return {

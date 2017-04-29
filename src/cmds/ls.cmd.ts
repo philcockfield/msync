@@ -13,7 +13,7 @@ export const description = 'List modules in dependency order.';
 export const args = {
   '-D': 'Show all module dependencies.',
   '-d': 'Show local module dependencies only.',
-  '-i': 'Include ignored modules.'
+  '-i': 'Include ignored modules.',
 };
 
 
@@ -66,7 +66,7 @@ export async function ls(options: IOptions = {}) {
   const filterIgnored = (pkg: IPackageObject) => ignored ? true : !pkg.isIgnored;
   const modules = settings
     .modules
-    .filter((pkg) => filterIgnored(pkg))
+    .filter((pkg) => filterIgnored(pkg));
 
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies

@@ -13,7 +13,7 @@ export const name = 'sync';
 export const alias = 's';
 export const description = 'Syncs each module\'s dependency tree locally.';
 export const args = {
-  '-i': 'Include ignored modules.'
+  '-i': 'Include ignored modules.',
 };
 
 
@@ -57,7 +57,7 @@ export async function sync(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => localDeps(pkg).length > 0)
-    .filter((pkg) => ignored ? true : !pkg.isIgnored)
+    .filter((pkg) => ignored ? true : !pkg.isIgnored);
 
 
   const sync = async (target: IPackageObject) => {
