@@ -19,7 +19,7 @@
   "dependencies": {
     "chokidar": "^1.6.1",
     "cli-table": "^0.3.1",
-    "command-interface": "^2.4.1",
+    "command-interface": "^3.0.0",
     "execa": "^0.6.3",
     "fs-extra-promise": "^1.0.1",
     "glob": "^7.1.1",
