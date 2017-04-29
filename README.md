@@ -31,7 +31,7 @@ Run the command line using `msync` within your workspace folder to list, sync or
 ### sync
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559130/51c4dd4e-2d89-11e7-9f50-6adca46c7db2.png)
 
-### build
+### build (typescript)
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559109/ff123b14-2d88-11e7-8781-3f150f54c2a8.png)
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:
