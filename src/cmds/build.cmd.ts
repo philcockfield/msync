@@ -111,7 +111,7 @@ export async function buildOnce(modules: IPackageObject[]) {
  * Builds watches the typescript for the given set of modules.
  */
 export async function buildWatch(modules: IPackageObject[], includeIgnored: boolean) {
-  log.info.magenta('Watching:');
+  log.info.magenta('\nBuild watching:');
   listCommand.printTable(modules, { includeIgnored });
 
   modules.forEach(async (pkg) => {

@@ -123,7 +123,7 @@ export async function syncModules(modules: IPackageObject[], includeIgnored: boo
  */
 export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
-  log.info.magenta('\nSync on change:');
+  log.info.magenta('\nSync watching:');
   const { includeIgnored = false } = options;
   const result = await listCommand.ls({ deps: 'local', includeIgnored });
   if (!result) { return; }
