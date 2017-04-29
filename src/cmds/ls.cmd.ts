@@ -54,7 +54,6 @@ export async function ls(options: IOptions) {
   const showAllDeps = deps === 'all';
   const settings = await config.init();
 
-
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
     .filter((dep) => showAllDeps ? true : dep.isLocal)
