@@ -8,4 +8,4 @@ import { debounce } from 'lodash';
 
 export { R, fs, fsPath, jsYaml, moment, chokidar, debounce };
 export { log } from 'js-util-log';
-export { Observable, Subject } from 'rxjs'
+export { Observable, Subject } from 'rxjs';

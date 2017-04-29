@@ -15,7 +15,6 @@ export const args = {
   '-i': 'Include ignored modules.',
 };
 
-
 /**
  * CLI command.
  */
@@ -42,9 +41,9 @@ export interface IOptions {
  */
 export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
-  log.info.magenta('\nSync on change:')
+  log.info.magenta('\nSync on change:');
   const { ignored = false } = options;
-  const result = await listCommand.ls({ deps: 'local', ignored })
+  const result = await listCommand.ls({ deps: 'local', ignored });
   if (!result) { return; }
   const { modules, settings } = result;
 
@@ -61,13 +60,13 @@ function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: str
   const sync = debounce(() => {
     const dependents = dependsOn(pkg, modules);
     if (dependents.length > 0) {
-      log.info.green(`${pkg.name} changed:`)
-      syncCommand.syncModules(dependents)
+      log.info.green(`${pkg.name} changed:`);
+      syncCommand.syncModules(dependents);
     }
   }, 500);
 
   file
     .watch(`${pkg.dir}${watchPattern}`)
     .filter((path) => !path.includes('node_modules/'))
-    .forEach(() => sync())
+    .forEach(() => sync());
 }

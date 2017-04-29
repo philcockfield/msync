@@ -43,6 +43,6 @@ export function watch(pattern: string) {
   const subject = new Subject<string>();
   chokidar
     .watch(pattern)
-    .on('change', (path: string) => subject.next(path))
+    .on('change', (path: string) => subject.next(path));
   return subject;
 }
