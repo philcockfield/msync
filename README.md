@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/philcockfield/msync.svg?branch=master)](https://travis-ci.org/philcockfield/msync)
 
-Manages building and syncing multiple node modules in a flexibly defined workspace.
+Easily manage building and syncing multiple node-modules in a flexibly defined workspace.
 
 
 
