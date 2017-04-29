@@ -64,6 +64,7 @@ Syncs each module's dependency tree locally.
 
 ```js
 await sync();
+await sync({ ignore: true });
 ```
 
 
