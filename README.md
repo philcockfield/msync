@@ -1,6 +1,6 @@
+[![Build Status](https://travis-ci.org/philcockfield/msync.svg?branch=master)](https://travis-ci.org/philcockfield/msync)
 ![Title](https://cloud.githubusercontent.com/assets/185555/25552809/5ce7630a-2cf7-11e7-9074-3f088ef9f32e.png)
 
-[![Build Status](https://travis-ci.org/philcockfield/msync.svg?branch=master)](https://travis-ci.org/philcockfield/msync)
 
 Easily manage building and syncing multiple node-modules in a flexibly defined workspace.
 
