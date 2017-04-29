@@ -61,8 +61,10 @@ List modules in dependency order.
 
 ```js
 await ls();
-await ls({ deps: 'local' });
-await ls({ deps: 'all' });
+await ls({ 
+  deps: 'local' | 'all' | 'none', // Default: 'local'
+  showIgnored: boolean,           // Default: false.
+});
 ```
 
 ### sync
@@ -70,7 +72,9 @@ Syncs each module's dependency tree locally.
 
 ```js
 await sync();
-await sync({ ignored: true });
+await sync({ 
+  showIgnored: boolean            // Default: false 
+});
 ```
 
 
