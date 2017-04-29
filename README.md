@@ -19,6 +19,8 @@ Create a `sync.yaml` file to define the modules within your workspace.
 modules:
   - ./sample/*/package.json
   - ./sample/libs/*/package.json
+
+watchPattern: /lib/**/*.js # The files that when changed cause a sync to occur.
 ```
 
 Run the command line using `msync` within your workspace folder to list, sync or build the modules:
