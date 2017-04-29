@@ -66,6 +66,7 @@ async function toPackage(packageFilePath: string): Promise<IPackageObject> {
     dir: fsPath.resolve(packageFilePath, '..'),
     name: json.name,
     version: json.version,
+    isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,
   };
 }
