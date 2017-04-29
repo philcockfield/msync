@@ -1,6 +1,7 @@
 import {
   log,
   config,
+  file,
   listr,
   copy,
   constants,
@@ -8,8 +9,10 @@ import {
   IDependency,
   elapsed,
   filter,
+  debounce,
+  dependsOn,
 } from '../common';
-import { syncWatch } from './sync.cmd.watch';
+import * as listCommand from './ls.cmd';
 
 
 export const name = 'sync';
@@ -111,4 +114,41 @@ export async function syncModules(modules: IPackageObject[], includeIgnored: boo
 
   // Finish up.
   return modules;
+}
+
+
+
+/**
+ * Copies each module's dependency tree locally.
+ */
+export async function syncWatch(options: IOptions = {}) {
+  // Setup initial conditions.
+  log.info.magenta('\nSync on change:');
+  const { includeIgnored = false } = options;
+  const result = await listCommand.ls({ deps: 'local', includeIgnored });
+  if (!result) { return; }
+  const { modules, settings } = result;
+
+  // Start the watcher for each module.
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored));
+}
+
+
+
+/**
+ * Watches and syncs a single module.
+ */
+function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, includeIgnored: boolean) {
+  const sync = debounce(() => {
+    const dependents = dependsOn(pkg, modules);
+    if (dependents.length > 0) {
+      log.info.green(`${pkg.name} changed:`);
+      syncModules(dependents, includeIgnored);
+    }
+  }, 500);
+
+  file
+    .watch(`${pkg.dir}${watchPattern}`)
+    .filter((path) => !path.includes('node_modules/'))
+    .forEach(() => sync());
 }
