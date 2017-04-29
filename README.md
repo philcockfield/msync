@@ -25,7 +25,7 @@ Run the command line using `msync` within your workspace folder to list, sync or
 
 ![Image](https://cloud.githubusercontent.com/assets/185555/25553885/7f7b1206-2d13-11e7-8b06-52489f9e556d.png)
 
-![Image](https://cloud.githubusercontent.com/assets/185555/25553878/624e3fdc-2d13-11e7-9e58-76e84b286292.png)
+![Image](https://cloud.githubusercontent.com/assets/185555/25554301/ceeb7894-2d1d-11e7-802c-5427e1d56244.png)
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:
 
