@@ -94,6 +94,14 @@ await build({
 ```
 
 
+## Other Approaches
+Here are some other approaches to the problem that you might prefer:
+
+- [NPM link](https://docs.npmjs.com/cli/link) - Our old friend `npm link`. Good luck with that!
+
+- [Lerna](https://lernajs.io/): A tool for managing JavaScript projects with multiple packages.
+
 
 ## Next Steps
-- `sync --bump` 
+- `sync --bump` (pre-lint).
+- `watch` - open both sync and build watchers.
