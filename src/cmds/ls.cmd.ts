@@ -60,7 +60,7 @@ export async function ls(options: IOptions = {}) {
 
   const settings = await config.init();
   if (!settings) {
-    log.warn.yellow(`No modules defined or the '${constants.CONFIG_FILE_NAME}' file not found.`);
+    log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
   const filterIgnored = (pkg: IPackageObject) => ignored ? true : !pkg.isIgnored;

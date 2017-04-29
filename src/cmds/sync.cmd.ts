@@ -49,7 +49,7 @@ export async function sync(options: IOptions = {}) {
   const startedAt = new Date();
   const settings = await config.init();
   if (!settings) {
-    log.warn.yellow(`No modules defined or the '${constants.CONFIG_FILE_NAME}' file not found.`);
+    log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
 
