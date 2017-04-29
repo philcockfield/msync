@@ -12,12 +12,14 @@ export interface IIgnore {
 export interface IConfigYaml {
   modules: string[];
   ignore: IIgnore;
+  watchPattern: string;
 }
 
 export interface IConfig {
   path: string;
   modules: IPackageObject[];
   ignored: IIgnore;
+  watchPattern: string;
 }
 
 
@@ -33,6 +35,7 @@ async function loadConfigYaml(path: string) {
     result.ignore = result.ignore || { paths: [] };
     result.ignore.paths = result.ignore.paths || [];
     result.ignore.names = result.ignore.names || [];
+    result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
 
     return result;
   } catch (error) {
@@ -82,6 +85,7 @@ export async function init(): Promise<IConfig | undefined> {
     path,
     modules,
     ignored: ignore,
+    watchPattern: yaml.watchPattern,
   };
 }
 

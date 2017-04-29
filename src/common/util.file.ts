@@ -1,4 +1,4 @@
-import { fs, fsPath } from './libs';
+import { fs, fsPath, chokidar, Subject } from './libs';
 import { Glob } from 'glob';
 
 
@@ -32,4 +32,17 @@ export function glob(pattern: string): Promise<string[]> {
       }
     });
   });
+}
+
+
+
+/**
+ * Watches the given file/folder pattern.
+ */
+export function watch(pattern: string) {
+  const subject = new Subject<string>();
+  chokidar
+    .watch(pattern)
+    .on('change', (path: string) => subject.next(path));
+  return subject;
 }

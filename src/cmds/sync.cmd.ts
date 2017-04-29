@@ -39,6 +39,7 @@ export interface IOptions {
   ignored?: boolean;
 }
 
+const localDeps = (pkg: IPackageObject) => pkg.dependencies.filter((dep) => dep.isLocal);
 
 
 /**
@@ -46,19 +47,27 @@ export interface IOptions {
  */
 export async function sync(options: IOptions = {}) {
   const { ignored = false } = options;
-  const startedAt = new Date();
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
 
-  const localDeps = (pkg: IPackageObject) => pkg.dependencies.filter((dep) => dep.isLocal);
   const modules = settings
     .modules
     .filter((pkg) => localDeps(pkg).length > 0)
     .filter((pkg) => ignored ? true : !pkg.isIgnored);
 
+  // Finish up.
+  return { settings, modules };
+}
+
+
+/**
+ * Syncs the given set of modules.
+ */
+export async function syncModules(modules: IPackageObject[]) {
+  const startedAt = new Date();
 
   const sync = async (target: IPackageObject) => {
     for (const source of localDeps(target)) {
@@ -79,7 +88,7 @@ export async function sync(options: IOptions = {}) {
   try {
     const taskList = listr(tasks, { concurrent: false });
     await taskList.run();
-    log.info.gray(elapsed(startedAt));
+    log.info.gray('', elapsed(startedAt));
     log.info();
 
   } catch (error) {
@@ -87,5 +96,5 @@ export async function sync(options: IOptions = {}) {
   }
 
   // Finish up.
-  return settings;
+  return modules;
 }

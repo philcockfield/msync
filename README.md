@@ -2,7 +2,7 @@
 ![msync](https://cloud.githubusercontent.com/assets/185555/25552911/06c09016-2cfa-11e7-910c-a3723dff3f12.png)
 
 
-Easily manage building and syncing multiple node-modules in a flexibly defined workspace.
+A powerful toolkit for building and syncing multiple node-modules in a flexibly defined workspace.
 
 
 
@@ -23,7 +23,9 @@ modules:
 
 Run the command line using `msync` within your workspace folder to list, sync or build the modules:
 
-![Image](https://cloud.githubusercontent.com/assets/185555/25552563/4aed2708-2cf1-11e7-87c4-715d15ddd8c1.png)
+![Image](https://cloud.githubusercontent.com/assets/185555/25553885/7f7b1206-2d13-11e7-8b06-52489f9e556d.png)
+
+![Image](https://cloud.githubusercontent.com/assets/185555/25553878/624e3fdc-2d13-11e7-9e58-76e84b286292.png)
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:
 
@@ -72,7 +74,5 @@ await sync({ ignored: true });
 
 
 ## Next Steps
-
-- `sync:watch`
 - `build` (Typescript)
 - `build:watch`
