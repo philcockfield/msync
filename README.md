@@ -25,9 +25,9 @@ Run the command line using `ms` within your workspace folder to list, sync or bu
 
 ![Image](https://cloud.githubusercontent.com/assets/185555/25547887/d81a8f00-2cbd-11e7-98f7-730138032c3f.png)
 
-Use the `--help` (`-h`) flag for options on each command, eg:
+Use the `--help` (`-h`) flag to see the options for each command, eg:
 
-    ms sync -h
+    ms sync --help
 
 # Ignore
 You can ignore file `paths` and module `names` by declaring an `ignore` block in the `sync.yaml` definition:
