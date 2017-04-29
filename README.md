@@ -68,7 +68,7 @@ await ls({
 ```
 
 ### sync
-Syncs each module's dependency tree locally.
+Syncs each module's dependency tree within the workspace.
 
 ```js
 await sync();

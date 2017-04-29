@@ -13,7 +13,7 @@ import {
 
 export const name = 'sync';
 export const alias = 's';
-export const description = 'Syncs each module\'s dependency tree locally.';
+export const description = 'Syncs each module\'s dependency tree within the workspace.';
 export const args = {
   '-i': 'Include ignored modules.',
 };
