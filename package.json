@@ -1,6 +1,6 @@
 {
   "name": "module-sync",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Manages building and syncing multiple node modules.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
