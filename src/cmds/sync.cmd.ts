@@ -9,6 +9,7 @@ import {
   elapsed,
   filter,
 } from '../common';
+import { syncWatch } from './sync.cmd.watch';
 
 
 export const name = 'sync';
@@ -16,6 +17,7 @@ export const alias = 's';
 export const description = 'Syncs each module\'s dependency tree within the workspace.';
 export const args = {
   '-i': 'Include ignored modules.',
+  '-w': 'Sync on changes to files.',
 };
 
 
@@ -28,11 +30,18 @@ export async function cmd(
     params: string[],
     options: {
       i?: boolean;
+      w?: boolean;
     },
   },
 ) {
   const options = (args && args.options) || {};
-  await sync({ includeIgnored: options.i });
+  const watch = options.w || false;
+  const includeIgnored = options.i || false;
+  if (watch) {
+    await syncWatch({ includeIgnored });
+  } else {
+    await sync({ includeIgnored });
+  }
 }
 
 

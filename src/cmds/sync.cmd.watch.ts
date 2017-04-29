@@ -8,28 +8,6 @@ import {
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
 
-export const name = 'sync:watch';
-export const alias = 'sw';
-export const description = 'Runs the sync command when files change.';
-export const args = {
-  '-i': 'Include ignored modules.',
-};
-
-/**
- * CLI command.
- */
-export async function cmd(
-  args?: {
-    params: string[],
-    options: {
-      i?: boolean;
-    },
-  },
-) {
-  const options = (args && args.options) || {};
-  await syncWatch({ includeIgnored: options.i });
-}
-
 
 export interface IOptions {
   includeIgnored?: boolean;
