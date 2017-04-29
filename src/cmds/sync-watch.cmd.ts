@@ -4,7 +4,6 @@ import {
   IPackageObject,
   dependsOn,
   debounce,
-  filter,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -28,12 +27,12 @@ export async function cmd(
   },
 ) {
   const options = (args && args.options) || {};
-  await syncWatch({ ignored: options.i });
+  await syncWatch({ showIgnored: options.i });
 }
 
 
 export interface IOptions {
-  ignored?: boolean;
+  showIgnored?: boolean;
 }
 
 
@@ -43,13 +42,13 @@ export interface IOptions {
 export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
   log.info.magenta('\nSync on change:');
-  const { ignored = false } = options;
-  const result = await listCommand.ls({ deps: 'local', ignored });
+  const { showIgnored = false } = options;
+  const result = await listCommand.ls({ deps: 'local', showIgnored });
   if (!result) { return; }
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, ignored));
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, showIgnored));
 }
 
 
@@ -59,7 +58,7 @@ export async function syncWatch(options: IOptions = {}) {
  */
 function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, showIgnored: boolean) {
   const sync = debounce(() => {
-    const dependents = dependsOn(pkg, modules)
+    const dependents = dependsOn(pkg, modules);
     if (dependents.length > 0) {
       log.info.green(`${pkg.name} changed:`);
       syncCommand.syncModules(dependents, showIgnored);

@@ -32,13 +32,13 @@ export async function cmd(
   },
 ) {
   const options = (args && args.options) || {};
-  await sync({ ignored: options.i });
+  await sync({ showIgnored: options.i });
 }
 
 
 
 export interface IOptions {
-  ignored?: boolean;
+  showIgnored?: boolean;
 }
 
 
@@ -46,7 +46,7 @@ export interface IOptions {
  * Copies each module's dependency tree locally.
  */
 export async function sync(options: IOptions = {}) {
-  const { ignored = false } = options;
+  const { showIgnored = false } = options;
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
@@ -56,10 +56,10 @@ export async function sync(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => filter.localDeps(pkg).length > 0)
-    .filter((pkg) => filter.showIgnored(pkg, ignored));
+    .filter((pkg) => filter.showIgnored(pkg, showIgnored));
 
   // Finish up.
-  await syncModules(modules, ignored);
+  await syncModules(modules, showIgnored);
   return { settings, modules };
 }
 
@@ -81,7 +81,7 @@ export async function syncModules(modules: IPackageObject[], showIgnored: boolea
   const tasks = modules.map((target) => {
     const sources = filter
       .localDeps(target)
-      .filter((dep) => filter.showIgnored(dep.package, showIgnored))
+      .filter((dep) => filter.showIgnored(dep.package, showIgnored));
     const sourceNames = sources
       .map((dep) => ` ${log.cyan(dep.name)}`);
     return {
