@@ -53,7 +53,7 @@ ignore:
 All command-line options can be programatically invoked:
 
 ```js
-import { ls, sync } from 'msync';
+import { ls, sync, build } from 'msync';
 ```
 
 ### `ls` (list)
