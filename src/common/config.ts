@@ -2,7 +2,7 @@ import * as file from './util.file';
 import * as constants from './constants';
 import { jsYaml, fs, fsPath, log } from './libs';
 import { toPackages, orderByDepth } from './util.package';
-import { IPackageObject } from '../types';
+import { IModule } from '../types';
 
 export interface IIgnore {
   paths: string[];
@@ -17,7 +17,7 @@ export interface IConfigYaml {
 
 export interface IConfig {
   path: string;
-  modules: IPackageObject[];
+  modules: IModule[];
   ignored: IIgnore;
   watchPattern: string;
 }
@@ -100,7 +100,7 @@ async function ignorePaths(yaml: IConfigYaml, dir: string) {
 }
 
 
-function isIgnored(pkg: IPackageObject, ignore: IIgnore) {
+function isIgnored(pkg: IModule, ignore: IIgnore) {
   if (ignore.names.includes(pkg.name)) {
     return true;
   }

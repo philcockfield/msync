@@ -2,7 +2,7 @@ import * as toposort from 'toposort';
 import * as file from './util.file';
 import { R, fs, fsPath } from './libs';
 import { compact } from './util';
-import { IPackageObject, IDependency } from '../types';
+import { IModule, IDependency } from '../types';
 
 
 
@@ -11,7 +11,7 @@ import { IPackageObject, IDependency } from '../types';
  * Converts a set of module-directory globs to package objects.
  */
 export async function toPackages(moduleDirs: string[]) {
-  const packages: IPackageObject[] = [];
+  const packages: IModule[] = [];
 
   // Build list of packages.
   for (const pattern of moduleDirs) {
@@ -41,7 +41,7 @@ export async function toPackages(moduleDirs: string[]) {
 /**
  * Loads a [package.json] file.
  */
-async function toPackage(packageFilePath: string): Promise<IPackageObject> {
+async function toPackage(packageFilePath: string): Promise<IModule> {
   const text = (await fs.readFileAsync(packageFilePath)).toString();
   const json = JSON.parse(text);
 
@@ -80,8 +80,8 @@ async function toPackage(packageFilePath: string): Promise<IPackageObject> {
 /**
  * Retrieves a depth-first dependency order from the given packages.
  */
-export function orderByDepth(packages: IPackageObject[]): IPackageObject[] {
-  const toDependenciesArray = (pkg: IPackageObject) => {
+export function orderByDepth(packages: IModule[]): IModule[] {
+  const toDependenciesArray = (pkg: IModule) => {
     const deps = pkg.dependencies;
     const result = deps
       .map((dep) => dep.name)
@@ -108,11 +108,11 @@ export function orderByDepth(packages: IPackageObject[]): IPackageObject[] {
 /**
  * Retrieves the set of modules that depend upon the given package.
  */
-export function dependsOn(pkg: IPackageObject, modules: IPackageObject[]) {
+export function dependsOn(pkg: IModule, modules: IModule[]) {
   const result = modules
     .filter((module) =>
       module
         .dependencies
         .find((dep) => dep.name === pkg.name) !== undefined);
-  return compact<IPackageObject>(result);
+  return compact<IModule>(result);
 }

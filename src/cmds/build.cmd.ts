@@ -3,7 +3,7 @@ import {
   config,
   constants,
   filter,
-  IPackageObject,
+  IModule,
   listr,
   elapsed,
   fs,
@@ -69,7 +69,7 @@ export async function build(options: IOptions = {}) {
 }
 
 
-const tscCommand = async (pkg: IPackageObject) => {
+const tscCommand = async (pkg: IModule) => {
   const path = fsPath.join(pkg.dir, 'node_modules/typescript/bin/tsc');
   return (await fs.existsAsync(path))
     ? path
@@ -81,7 +81,7 @@ const tscCommand = async (pkg: IPackageObject) => {
 /**
  * Builds the typescript for the given set of modules.
  */
-export async function buildOnce(modules: IPackageObject[]) {
+export async function buildOnce(modules: IModule[]) {
   const startedAt = new Date();
   const tasks = modules.map((pkg) => {
     return {
@@ -110,7 +110,7 @@ export async function buildOnce(modules: IPackageObject[]) {
 /**
  * Builds watches the typescript for the given set of modules.
  */
-export async function buildWatch(modules: IPackageObject[], includeIgnored: boolean) {
+export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   log.info.magenta('\nBuild watching:');
   listCommand.printTable(modules, { includeIgnored });
 

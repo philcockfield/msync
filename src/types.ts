@@ -1,6 +1,4 @@
-
-
-export interface IPackageObject {
+export interface IModule {
   dir: string;
   name: string;
   version: string;
@@ -15,5 +13,5 @@ export interface IDependency {
   version: string;
   isDev: boolean;
   isLocal: boolean;
-  package?: IPackageObject;
+  package?: IModule;
 }

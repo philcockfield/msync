@@ -5,7 +5,7 @@ import {
   listr,
   copy,
   constants,
-  IPackageObject,
+  IModule,
   IDependency,
   elapsed,
   filter,
@@ -79,10 +79,10 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IPackageObject[], includeIgnored: boolean) {
+export async function syncModules(modules: IModule[], includeIgnored: boolean) {
   const startedAt = new Date();
 
-  const sync = async (sources: IDependency[], target: IPackageObject) => {
+  const sync = async (sources: IDependency[], target: IModule) => {
     for (const source of sources) {
       if (source.package) {
         await copy.module(source.package, target);
@@ -138,7 +138,7 @@ export async function syncWatch(options: IOptions = {}) {
 /**
  * Watches and syncs a single module.
  */
-function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, includeIgnored: boolean) {
+function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIgnored: boolean) {
   const sync = debounce(() => {
     const dependents = dependsOn(pkg, modules);
     if (dependents.length > 0) {
