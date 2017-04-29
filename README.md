@@ -1,14 +1,14 @@
-# module-sync
+# msync
 
-[![Build Status](https://travis-ci.org/philcockfield/module-sync.svg?branch=master)](https://travis-ci.org/philcockfield/module-sync)
+[![Build Status](https://travis-ci.org/philcockfield/msync.svg?branch=master)](https://travis-ci.org/philcockfield/msync)
 
-Manages building and syncing multiple node modules.
+Manages building and syncing multiple node modules in a flexibly defined workspace.
 
 
 
 ## Install
 
-    npm install -g module-sync
+    npm install -g msync
 
 
 
@@ -21,13 +21,13 @@ modules:
   - ./sample/libs/*/package.json
 ```
 
-Run the command line using `ms` within your workspace folder to list, sync or build the modules:
+Run the command line using `msync` within your workspace folder to list, sync or build the modules:
 
-![Image](https://cloud.githubusercontent.com/assets/185555/25547887/d81a8f00-2cbd-11e7-98f7-730138032c3f.png)
+![Image](https://cloud.githubusercontent.com/assets/185555/25552563/4aed2708-2cf1-11e7-87c4-715d15ddd8c1.png)
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:
 
-    ms sync --help
+    msync sync --help
 
 # Ignore
 You can ignore file `paths` and module `names` by declaring an `ignore` block in the `sync.yaml` definition:
@@ -49,7 +49,7 @@ ignore:
 All command-line options can be programatically invoked:
 
 ```js
-import { ls, sync } from 'module-sync';
+import { ls, sync } from 'msync';
 ```
 
 ### ls (list)

@@ -1,11 +1,11 @@
 {
-  "name": "module-sync",
+  "name": "msync",
   "version": "1.0.3",
-  "description": "Manages building and syncing multiple node modules.",
+  "description": "Manages building and syncing multiple node modules in a flexibly defined workspace.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "bin": {
-    "ms": "./bin-cli"
+    "msync": "./bin-cli"
   },
   "scripts": {
     "test": "sh sh/test.sh",
@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/philcockfield/module-sync"
+    "url": "https://github.com/philcockfield/msync"
   },
   "license": "MIT"
 }
