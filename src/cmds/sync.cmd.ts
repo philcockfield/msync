@@ -32,13 +32,13 @@ export async function cmd(
   },
 ) {
   const options = (args && args.options) || {};
-  await sync({ showIgnored: options.i });
+  await sync({ includeIgnored: options.i });
 }
 
 
 
 export interface IOptions {
-  showIgnored?: boolean;
+  includeIgnored?: boolean;
 }
 
 
@@ -46,7 +46,7 @@ export interface IOptions {
  * Copies each module's dependency tree locally.
  */
 export async function sync(options: IOptions = {}) {
-  const { showIgnored = false } = options;
+  const { includeIgnored = false } = options;
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
@@ -56,10 +56,10 @@ export async function sync(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => filter.localDeps(pkg).length > 0)
-    .filter((pkg) => filter.showIgnored(pkg, showIgnored));
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
-  await syncModules(modules, showIgnored);
+  await syncModules(modules, includeIgnored);
   return { settings, modules };
 }
 
@@ -67,7 +67,7 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IPackageObject[], showIgnored: boolean) {
+export async function syncModules(modules: IPackageObject[], includeIgnored: boolean) {
   const startedAt = new Date();
 
   const sync = async (sources: IDependency[], target: IPackageObject) => {
@@ -81,7 +81,7 @@ export async function syncModules(modules: IPackageObject[], showIgnored: boolea
   const tasks = modules.map((target) => {
     const sources = filter
       .localDeps(target)
-      .filter((dep) => filter.showIgnored(dep.package, showIgnored));
+      .filter((dep) => filter.includeIgnored(dep.package, includeIgnored));
     const sourceNames = sources
       .map((dep) => ` ${log.cyan(dep.name)}`);
     return {

@@ -56,24 +56,35 @@ All command-line options can be programatically invoked:
 import { ls, sync } from 'msync';
 ```
 
-### ls (list)
+### `ls` (list)
 List modules in dependency order.
 
 ```js
 await ls();
 await ls({ 
   deps: 'local' | 'all' | 'none', // Default: 'local'
-  showIgnored: boolean,           // Default: false.
+  includeIgnored: boolean,        // Default: false.
 });
 ```
 
-### sync
+### `sync`
 Syncs each module's dependency tree within the workspace.
 
 ```js
 await sync();
 await sync({ 
-  showIgnored: boolean            // Default: false 
+  includeIgnored: boolean         // Default: false 
+});
+```
+
+
+### `build`
+Builds all typescript modules.
+
+```js
+await build();
+await build({ 
+  includeIgnored: boolean         // Default: false 
 });
 ```
 

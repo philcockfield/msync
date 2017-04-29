@@ -3,11 +3,13 @@ import {
   IDependency,
 } from '../types';
 
+
 export const localDeps = (pkg: IPackageObject) => {
   return pkg.dependencies.filter((dep: IDependency) => dep.isLocal);
 };
 
-export const showIgnored = (pkg: IPackageObject | undefined, showIgnored: boolean) => {
+
+export const includeIgnored = (pkg: IPackageObject | undefined, includeIgnored: boolean) => {
   if (!pkg) { return true; }
-  return showIgnored ? true : !pkg.isIgnored;
+  return includeIgnored ? true : !pkg.isIgnored;
 };

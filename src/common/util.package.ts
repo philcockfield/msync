@@ -25,7 +25,6 @@ export async function toPackages(moduleDirs: string[]) {
 
   // Determine which ones are local.
   const findPackage = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name);
-  // const isLocal = (dep: IDependency) => findPackage(dep) !== undefined;
   packages.forEach((pkg) => {
     pkg.dependencies.forEach((dep) => {
       dep.package = findPackage(dep);
@@ -63,10 +62,14 @@ async function toPackage(packageFilePath: string): Promise<IPackageObject> {
   dependencies = R.sortBy(R.prop('name'), dependencies);
   dependencies = R.uniqBy((dep) => dep.name, dependencies);
 
+  const dir = fsPath.resolve(packageFilePath, '..');
+  const isTypeScript = await fs.existsAsync(fsPath.join(dir, 'tsconfig.json'));
+
   return {
-    dir: fsPath.resolve(packageFilePath, '..'),
+    dir,
     name: json.name,
     version: json.version,
+    isTypeScript,
     isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,
   };

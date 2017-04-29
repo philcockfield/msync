@@ -27,12 +27,12 @@ export async function cmd(
   },
 ) {
   const options = (args && args.options) || {};
-  await syncWatch({ showIgnored: options.i });
+  await syncWatch({ includeIgnored: options.i });
 }
 
 
 export interface IOptions {
-  showIgnored?: boolean;
+  includeIgnored?: boolean;
 }
 
 
@@ -42,13 +42,13 @@ export interface IOptions {
 export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
   log.info.magenta('\nSync on change:');
-  const { showIgnored = false } = options;
-  const result = await listCommand.ls({ deps: 'local', showIgnored });
+  const { includeIgnored = false } = options;
+  const result = await listCommand.ls({ deps: 'local', includeIgnored });
   if (!result) { return; }
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, showIgnored));
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored));
 }
 
 
@@ -56,12 +56,12 @@ export async function syncWatch(options: IOptions = {}) {
 /**
  * Watches and syncs a single module.
  */
-function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, showIgnored: boolean) {
+function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, includeIgnored: boolean) {
   const sync = debounce(() => {
     const dependents = dependsOn(pkg, modules);
     if (dependents.length > 0) {
       log.info.green(`${pkg.name} changed:`);
-      syncCommand.syncModules(dependents, showIgnored);
+      syncCommand.syncModules(dependents, includeIgnored);
     }
   }, 500);
 
