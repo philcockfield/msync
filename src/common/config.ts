@@ -6,6 +6,7 @@ import { IPackageObject } from '../types';
 
 export interface IIgnore {
   paths: string[];
+  names: string[];
 }
 
 export interface IConfigYaml {
@@ -31,6 +32,7 @@ async function loadConfigYaml(path: string) {
     result.modules = result.modules || [];
     result.ignore = result.ignore || { paths: [] };
     result.ignore.paths = result.ignore.paths || [];
+    result.ignore.names = result.ignore.names || [];
 
     return result;
   } catch (error) {
@@ -64,7 +66,8 @@ export async function init(): Promise<IConfig | undefined> {
 
   // Ignore
   const ignore = {
-    paths: await ignorePaths(yaml, dir)
+    paths: await ignorePaths(yaml, dir),
+    names: yaml.ignore.names,
   };
 
   // Load the [package.json] from files.
@@ -84,7 +87,7 @@ export async function init(): Promise<IConfig | undefined> {
 async function ignorePaths(yaml: IConfigYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
-    const paths = await file.glob(fsPath.resolve(dir, pattern))
+    const paths = await file.glob(fsPath.resolve(dir, pattern));
     paths.forEach((path) => result.push(path));
   }
   return result;
@@ -92,10 +95,12 @@ async function ignorePaths(yaml: IConfigYaml, dir: string) {
 
 
 function isIgnored(pkg: IPackageObject, ignore: IIgnore) {
+  if (ignore.names.includes(pkg.name)) {
+    return true;
+  }
+
   for (const path of ignore.paths) {
     if (pkg.dir.startsWith(path)) { return true; }
   }
   return false;
 }
-
-

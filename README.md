@@ -26,6 +26,21 @@ Run the command line using `ms` within your workspace folder to list, sync or bu
 ![Image](https://cloud.githubusercontent.com/assets/185555/25547887/d81a8f00-2cbd-11e7-98f7-730138032c3f.png)
 
 
+# Ignore
+You can ignore file `paths` and module `names` by declaring an `ignore` block in the `sync.yaml` definition:
+
+
+```yaml
+ignore:
+  paths:
+    - ./sample/**/ignore-folder
+  names:
+    - 'module-4'
+
+```
+
+
+
 
 # API
 All command-line options can be programatically invoked:
@@ -57,10 +72,3 @@ await sync();
 - `sync:watch`
 - `build` (Typescript)
 - `build:watch`
-- yaml:
-    - `ignore` (modules)
-      - paths
-      - names (module names)
-      - `ignoreSync`
-      - `ignoreBuild`
-
