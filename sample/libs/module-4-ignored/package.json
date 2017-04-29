@@ -1,5 +1,5 @@
 {
-  "name": "module-4",
+  "name": "module-4-ignored",
   "version": "2.3.6",
   "dependencies": {
     "module-1": "^0.0.1"

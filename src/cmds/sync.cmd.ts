@@ -13,6 +13,7 @@ export const name = 'sync';
 export const alias = 's';
 export const description = 'Syncs each module\'s dependency tree locally.';
 export const args = {
+  '-i': 'Include ignored modules.'
 };
 
 
@@ -23,19 +24,28 @@ export const args = {
 export async function cmd(
   args?: {
     params: string[],
-    options: {},
+    options: {
+      i?: boolean;
+    },
   },
 ) {
-  await sync();
+  const options = (args && args.options) || {};
+  await sync({ ignored: options.i });
 }
 
+
+
+export interface IOptions {
+  ignored?: boolean;
+}
 
 
 
 /**
  * Copies each module's dependency tree locally.
  */
-export async function sync() {
+export async function sync(options: IOptions = {}) {
+  const { ignored = false } = options;
   const startedAt = new Date();
   const settings = await config.init();
   if (!settings) {
@@ -46,7 +56,9 @@ export async function sync() {
   const localDeps = (pkg: IPackageObject) => pkg.dependencies.filter((dep) => dep.isLocal);
   const modules = settings
     .modules
-    .filter((pkg) => localDeps(pkg).length > 0);
+    .filter((pkg) => localDeps(pkg).length > 0)
+    .filter((pkg) => ignored ? true : !pkg.isIgnored)
+
 
   const sync = async (target: IPackageObject) => {
     for (const source of localDeps(target)) {

@@ -7,6 +7,6 @@ ignore:
   paths:
     - ./sample/**/ignore-folder
   names:
-    - module-4
+    - module-4-ignored
 
 

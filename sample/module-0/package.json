@@ -5,7 +5,9 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "module-1": "^0.0.1",
-    "module-3": "^0.0.1"
+    "module-3": "^0.0.1",
+    "module-4-ignored": "^0.0.1",
+    "module-5-ignored": "^0.0.1"
   },
   "peerDependencies": {
     "react": "^15.5.4",

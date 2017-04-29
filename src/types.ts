@@ -4,6 +4,7 @@ export interface IPackageObject {
   dir: string;
   name: string;
   version: string;
+  isIgnored: boolean;
   dependencies: IDependency[];
 }
 

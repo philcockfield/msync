@@ -72,8 +72,10 @@ export async function init(): Promise<IConfig | undefined> {
 
   // Load the [package.json] from files.
   let modules = await toPackages(yaml.modules);
-  modules = modules.filter((pkg) => !isIgnored(pkg, ignore));
   modules = orderByDepth(modules);
+  modules.forEach((pkg) => {
+    pkg.isIgnored = isIgnored(pkg, ignore);
+  })
 
   // Finish up.
   return {
