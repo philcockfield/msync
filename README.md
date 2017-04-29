@@ -25,7 +25,7 @@ watchPattern: /lib/**/*.js # The files that when changed cause a sync to occur.
 
 Run the command line using `msync` within your workspace folder to list, sync or build the modules:
 
-### ls
+### ls (list)
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559120/2120a7b8-2d89-11e7-97a9-e8dd3ca7dc75.png)
 
 ### sync
