@@ -7,6 +7,7 @@
 /dist
 /lib
 /TEMP.md
+/sample/**/lib
 
 node_modules
 npm-debug.log

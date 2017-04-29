@@ -91,6 +91,4 @@ await build({
 
 
 ## Next Steps
-- `build` (Typescript)
-- `build:watch`
 - `sync --bump` 

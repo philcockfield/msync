@@ -55,9 +55,7 @@ export interface IOptions {
  * List modules in dependency order.
  */
 export async function ls(options: IOptions = {}) {
-  const { deps = 'none', includeIgnored = false } = options;
-  const showDeps = deps !== 'none';
-  const showAllDeps = deps === 'all';
+  const { includeIgnored = false } = options;
 
   const settings = await config.init();
   if (!settings) {
@@ -67,6 +65,18 @@ export async function ls(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
+
+  printTable(modules, options);
+  return { modules, settings };
+}
+
+
+export interface IPrintOptions { }
+
+export function printTable(modules: IPackageObject[], options: IOptions = {}) {
+  const { deps = 'none', includeIgnored = false } = options;
+  const showDeps = deps !== 'none';
+  const showAllDeps = deps === 'all';
 
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
@@ -99,5 +109,5 @@ export async function ls(options: IOptions = {}) {
     logModules(modules);
     log.info();
   }
-  return { modules, settings };
 }
+
