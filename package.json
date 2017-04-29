@@ -1,5 +1,5 @@
 {
-  "name": "module-sync",
+  "name": "msync",
   "version": "1.0.3",
   "description": "Manages building and syncing multiple node modules.",
   "main": "./lib/index.js",
@@ -44,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/philcockfield/module-sync"
+    "url": "https://github.com/philcockfield/msync"
   },
   "license": "MIT"
 }

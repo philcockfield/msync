@@ -1,14 +1,14 @@
-# module-sync
+# msync
 
-[![Build Status](https://travis-ci.org/philcockfield/module-sync.svg?branch=master)](https://travis-ci.org/philcockfield/module-sync)
+[![Build Status](https://travis-ci.org/philcockfield/msync.svg?branch=master)](https://travis-ci.org/philcockfield/msync)
 
-Manages building and syncing multiple node modules.
+Manages building and syncing multiple node modules in a flexibly defined workspace.
 
 
 
 ## Install
 
-    npm install -g module-sync
+    npm install -g msync
 
 
 
@@ -49,7 +49,7 @@ ignore:
 All command-line options can be programatically invoked:
 
 ```js
-import { ls, sync } from 'module-sync';
+import { ls, sync } from 'msync';
 ```
 
 ### ls (list)
