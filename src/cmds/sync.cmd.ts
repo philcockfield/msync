@@ -5,7 +5,9 @@ import {
   copy,
   constants,
   IPackageObject,
+  IDependency,
   elapsed,
+  filter,
 } from '../common';
 
 
@@ -39,8 +41,6 @@ export interface IOptions {
   ignored?: boolean;
 }
 
-const localDeps = (pkg: IPackageObject) => pkg.dependencies.filter((dep) => dep.isLocal);
-
 
 /**
  * Copies each module's dependency tree locally.
@@ -55,10 +55,11 @@ export async function sync(options: IOptions = {}) {
 
   const modules = settings
     .modules
-    .filter((pkg) => localDeps(pkg).length > 0)
-    .filter((pkg) => ignored ? true : !pkg.isIgnored);
+    .filter((pkg) => filter.localDeps(pkg).length > 0)
+    .filter((pkg) => filter.showIgnored(pkg, ignored));
 
   // Finish up.
+  await syncModules(modules, ignored);
   return { settings, modules };
 }
 
@@ -66,22 +67,26 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IPackageObject[]) {
+export async function syncModules(modules: IPackageObject[], showIgnored: boolean) {
   const startedAt = new Date();
 
-  const sync = async (target: IPackageObject) => {
-    for (const source of localDeps(target)) {
+  const sync = async (sources: IDependency[], target: IPackageObject) => {
+    for (const source of sources) {
       if (source.package) {
         await copy.module(source.package, target);
       }
     }
   };
 
-  const tasks = modules.map((pkg) => {
-    const depNames = localDeps(pkg).map((dep) => ` ${log.cyan(dep.name)}`);
+  const tasks = modules.map((target) => {
+    const sources = filter
+      .localDeps(target)
+      .filter((dep) => filter.showIgnored(dep.package, showIgnored))
+    const sourceNames = sources
+      .map((dep) => ` ${log.cyan(dep.name)}`);
     return {
-      title: `${log.magenta(pkg.name)} ${log.cyan('⬅')}${depNames}`,
-      task: () => sync(pkg),
+      title: `${log.magenta(target.name)} ${log.cyan('⬅')}${sourceNames}`,
+      task: () => sync(sources, target),
     };
   });
 

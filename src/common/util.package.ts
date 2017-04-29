@@ -111,6 +111,6 @@ export function dependsOn(pkg: IPackageObject, modules: IPackageObject[]) {
       module
         .dependencies
         .find((dep) => dep.name === pkg.name) !== undefined);
-  return compact(result);
+  return compact<IPackageObject>(result);
 }
 

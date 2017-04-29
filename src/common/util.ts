@@ -2,10 +2,10 @@ import { R, moment } from './libs';
 import * as Listr from 'listr';
 
 
-export const compact = (value: any[]) => R.pipe(
+export const compact = <T>(value: T[]) => R.pipe(
   R.reject(R.isNil),
   R.reject(R.isEmpty),
-)(value);
+)(value) as T[];
 
 
 

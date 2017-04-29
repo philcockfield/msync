@@ -4,6 +4,7 @@ import {
   IPackageObject,
   dependsOn,
   debounce,
+  filter,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -48,7 +49,7 @@ export async function syncWatch(options: IOptions = {}) {
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern));
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, ignored));
 }
 
 
@@ -56,12 +57,12 @@ export async function syncWatch(options: IOptions = {}) {
 /**
  * Watches and syncs a single module.
  */
-function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string) {
+function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, showIgnored: boolean) {
   const sync = debounce(() => {
-    const dependents = dependsOn(pkg, modules);
+    const dependents = dependsOn(pkg, modules)
     if (dependents.length > 0) {
       log.info.green(`${pkg.name} changed:`);
-      syncCommand.syncModules(dependents);
+      syncCommand.syncModules(dependents, showIgnored);
     }
   }, 500);
 
