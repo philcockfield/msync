@@ -10,3 +10,4 @@ ignore:
     - module-4-ignored
 
 
+watchPattern: /**/*.js

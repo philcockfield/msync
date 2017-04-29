@@ -1,17 +1,14 @@
-import { log, moment } from './libs';
+import { R, moment } from './libs';
 import * as Listr from 'listr';
 
 
+export const compact = (value: any[]) => R.pipe(
+  R.reject(R.isNil),
+  R.reject(R.isEmpty),
+)(value);
 
-/**
- * Prints a display title to the console.
- */
-export function printTitle(message: string) {
-  const HR = '------------------------------------------------------------------------';
-  log.info.cyan(HR);
-  log.info.cyan(` ${message}`);
-  log.info.cyan(HR);
-}
+
+
 
 
 /**

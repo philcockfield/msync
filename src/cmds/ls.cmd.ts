@@ -58,12 +58,12 @@ export async function ls(options: IOptions = {}) {
   const showDeps = deps !== 'none';
   const showAllDeps = deps === 'all';
 
+  const filterIgnored = (pkg: IPackageObject) => ignored ? true : !pkg.isIgnored;
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const filterIgnored = (pkg: IPackageObject) => ignored ? true : !pkg.isIgnored;
   const modules = settings
     .modules
     .filter((pkg) => filterIgnored(pkg));
@@ -99,5 +99,5 @@ export async function ls(options: IOptions = {}) {
     logModules(modules);
     log.info();
   }
-  return settings;
+  return { modules, settings };
 }

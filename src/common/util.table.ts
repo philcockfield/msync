@@ -1,11 +1,8 @@
-import { R, log } from './libs';
+import { log } from './libs';
+import { compact } from './util';
 const Table = require('cli-table');
 
 
-export const compact = (value: any[]) => R.pipe(
-  R.reject(R.isNil),
-  R.reject(R.isEmpty),
-)(value);
 
 
 

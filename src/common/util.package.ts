@@ -1,6 +1,7 @@
 import * as toposort from 'toposort';
 import * as file from './util.file';
 import { R, fs, fsPath } from './libs';
+import { compact } from './util';
 import { IPackageObject, IDependency } from '../types';
 
 
@@ -98,3 +99,18 @@ export function orderByDepth(packages: IPackageObject[]): IPackageObject[] {
   const result = names.map((name) => R.find(R.propEq('name', name), packages));
   return R.reject(R.isNil, result);
 }
+
+
+
+/**
+ * Retrieves the set of modules that depend upon the given package.
+ */
+export function dependsOn(pkg: IPackageObject, modules: IPackageObject[]) {
+  const result = modules
+    .filter((module) =>
+      module
+        .dependencies
+        .find((dep) => dep.name === pkg.name) !== undefined);
+  return compact(result);
+}
+
