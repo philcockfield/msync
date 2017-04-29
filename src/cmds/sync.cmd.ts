@@ -1,6 +1,7 @@
 import {
   log,
   config,
+  file,
   listr,
   copy,
   constants,
@@ -8,7 +9,10 @@ import {
   IDependency,
   elapsed,
   filter,
+  debounce,
+  dependsOn,
 } from '../common';
+import * as listCommand from './ls.cmd';
 
 
 export const name = 'sync';
@@ -16,6 +20,7 @@ export const alias = 's';
 export const description = 'Syncs each module\'s dependency tree within the workspace.';
 export const args = {
   '-i': 'Include ignored modules.',
+  '-w': 'Sync on changes to files.',
 };
 
 
@@ -28,17 +33,24 @@ export async function cmd(
     params: string[],
     options: {
       i?: boolean;
+      w?: boolean;
     },
   },
 ) {
   const options = (args && args.options) || {};
-  await sync({ showIgnored: options.i });
+  const watch = options.w || false;
+  const includeIgnored = options.i || false;
+  if (watch) {
+    await syncWatch({ includeIgnored });
+  } else {
+    await sync({ includeIgnored });
+  }
 }
 
 
 
 export interface IOptions {
-  showIgnored?: boolean;
+  includeIgnored?: boolean;
 }
 
 
@@ -46,7 +58,7 @@ export interface IOptions {
  * Copies each module's dependency tree locally.
  */
 export async function sync(options: IOptions = {}) {
-  const { showIgnored = false } = options;
+  const { includeIgnored = false } = options;
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
@@ -56,10 +68,10 @@ export async function sync(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => filter.localDeps(pkg).length > 0)
-    .filter((pkg) => filter.showIgnored(pkg, showIgnored));
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
-  await syncModules(modules, showIgnored);
+  await syncModules(modules, includeIgnored);
   return { settings, modules };
 }
 
@@ -67,7 +79,7 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IPackageObject[], showIgnored: boolean) {
+export async function syncModules(modules: IPackageObject[], includeIgnored: boolean) {
   const startedAt = new Date();
 
   const sync = async (sources: IDependency[], target: IPackageObject) => {
@@ -81,7 +93,7 @@ export async function syncModules(modules: IPackageObject[], showIgnored: boolea
   const tasks = modules.map((target) => {
     const sources = filter
       .localDeps(target)
-      .filter((dep) => filter.showIgnored(dep.package, showIgnored));
+      .filter((dep) => filter.includeIgnored(dep.package, includeIgnored));
     const sourceNames = sources
       .map((dep) => ` ${log.cyan(dep.name)}`);
     return {
@@ -102,4 +114,41 @@ export async function syncModules(modules: IPackageObject[], showIgnored: boolea
 
   // Finish up.
   return modules;
+}
+
+
+
+/**
+ * Copies each module's dependency tree locally.
+ */
+export async function syncWatch(options: IOptions = {}) {
+  // Setup initial conditions.
+  log.info.magenta('\nSync watching:');
+  const { includeIgnored = false } = options;
+  const result = await listCommand.ls({ deps: 'local', includeIgnored });
+  if (!result) { return; }
+  const { modules, settings } = result;
+
+  // Start the watcher for each module.
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored));
+}
+
+
+
+/**
+ * Watches and syncs a single module.
+ */
+function watch(pkg: IPackageObject, modules: IPackageObject[], watchPattern: string, includeIgnored: boolean) {
+  const sync = debounce(() => {
+    const dependents = dependsOn(pkg, modules);
+    if (dependents.length > 0) {
+      log.info.green(`${pkg.name} changed:`);
+      syncModules(dependents, includeIgnored);
+    }
+  }, 500);
+
+  file
+    .watch(`${pkg.dir}${watchPattern}`)
+    .filter((path) => !path.includes('node_modules/'))
+    .forEach(() => sync());
 }

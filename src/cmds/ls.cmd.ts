@@ -39,7 +39,7 @@ export async function cmd(
 
   await ls({
     deps,
-    showIgnored: options.i,
+    includeIgnored: options.i,
   });
 }
 
@@ -47,7 +47,7 @@ export async function cmd(
 export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
   deps?: DisplayDependencies;
-  showIgnored?: boolean;
+  includeIgnored?: boolean;
 }
 
 
@@ -55,11 +55,8 @@ export interface IOptions {
  * List modules in dependency order.
  */
 export async function ls(options: IOptions = {}) {
-  const { deps = 'none', showIgnored = false } = options;
-  const showDeps = deps !== 'none';
-  const showAllDeps = deps === 'all';
+  const { includeIgnored = false } = options;
 
-  // const filterIgnored = (pkg: IPackageObject) => ignored ? true : !pkg.isIgnored;
   const settings = await config.init();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
@@ -67,12 +64,24 @@ export async function ls(options: IOptions = {}) {
   }
   const modules = settings
     .modules
-    .filter((pkg) => filter.showIgnored(pkg, showIgnored));
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
+
+  printTable(modules, options);
+  return { modules, settings };
+}
+
+
+export interface IPrintOptions { }
+
+export function printTable(modules: IPackageObject[], options: IOptions = {}) {
+  const { deps = 'none', includeIgnored = false } = options;
+  const showDeps = deps !== 'none';
+  const showAllDeps = deps === 'all';
 
   const listDeps = (pkg: IPackageObject, modules: IPackageObject[]) => pkg
     .dependencies
     .filter((dep) => showAllDeps ? true : dep.isLocal)
-    .filter((dep) => dep.package ? filter.showIgnored(dep.package, showIgnored) : true)
+    .filter((dep) => dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true)
     .map((dep) => {
       const isIgnored = dep.package && dep.package.isIgnored;
       const bullet = isIgnored ? log.gray('-') : log.magenta('-');
@@ -100,5 +109,5 @@ export async function ls(options: IOptions = {}) {
     logModules(modules);
     log.info();
   }
-  return { modules, settings };
 }
+

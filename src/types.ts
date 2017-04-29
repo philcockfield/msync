@@ -5,6 +5,7 @@ export interface IPackageObject {
   name: string;
   version: string;
   isIgnored: boolean;
+  isTypeScript: boolean;
   dependencies: IDependency[];
 }
 

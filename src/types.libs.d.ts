@@ -24,6 +24,7 @@ interface IListrTask {
 }
 interface IListrOptions {
   concurrent?: boolean;
+  exitOnError?: boolean;
 }
 declare class Listr {
   public constructor(tasks?: IListrTask[], options?: IListrOptions);

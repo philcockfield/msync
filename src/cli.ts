@@ -1,4 +1,2 @@
-import cli from 'command-interface';
-
-// Initialize the CLI.
-cli(`${__dirname}/cmds/**`);
+import command from 'command-interface';
+command(`${__dirname}/**/*.cmd.js`);

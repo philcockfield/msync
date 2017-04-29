@@ -1,10 +1,11 @@
-import * as file from './util.file';
-import * as copy from './util.copy';
-import * as constants from './constants';
 import * as config from './config';
+import * as constants from './constants';
+import * as exec from './exec';
+import * as copy from './util.copy';
+import * as file from './util.file';
 import * as filter from './util.filter';
 
-export { file, filter, constants, config, copy };
+export { config, constants, exec, copy, file, filter };
 export { table } from './util.table';
 export * from './libs';
 export * from './util';
