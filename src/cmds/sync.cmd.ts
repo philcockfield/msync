@@ -75,7 +75,7 @@ export async function sync(options: IOptions = {}) {
   await syncModules(modules, includeIgnored);
   return {
     settings: settings as ISettings,
-    modules
+    modules,
   };
 }
 
