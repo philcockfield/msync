@@ -271,16 +271,18 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.0:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.8.tgz#8a160f67d06ef14684f763079acc94b9d61556b2"
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.9.tgz#56781b197f7d8122c6916133bcd7ba46fbd53659"
   dependencies:
     "@types/lodash.debounce" "^4.0.2"
     chokidar "^1.6.1"
     cli-table "^0.3.1"
+    execa "^0.6.3"
     fs-extra-promise "^1.0.1"
     glob "^7.1.1"
     js-util-log "^1.0.2"
     js-yaml "^3.8.3"
+    listr "^0.12.0"
     lodash.debounce "^4.0.8"
     minimist "^1.2.0"
     moment "^2.18.1"

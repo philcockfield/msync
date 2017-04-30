@@ -9,4 +9,6 @@ export {
   fsPath,
   Observable,
   Subject,
+  exec,
+  listr,
 } from 'command-interface';

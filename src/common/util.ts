@@ -1,5 +1,4 @@
 import { R, moment } from './libs';
-import * as Listr from 'listr';
 
 
 export const compact = <T>(value: T[]) => R.pipe(
@@ -9,14 +8,6 @@ export const compact = <T>(value: T[]) => R.pipe(
 
 
 
-
-
-/**
- * Invokes a new listr task.
- */
-export function listr(tasks?: IListrTask[], options?: IListrOptions) {
-  return new Listr(tasks, options);
-}
 
 
 /**

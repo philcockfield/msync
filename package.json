@@ -17,8 +17,6 @@
   },
   "dependencies": {
     "command-interface": "^3.0.0",
-    "execa": "^0.6.3",
-    "listr": "^0.12.0",
     "lodash.debounce": "^4.0.8",
     "rsync": "^0.6.1",
     "toposort": "^1.0.3"
