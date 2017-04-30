@@ -7,5 +7,5 @@ import * as chokidar from 'chokidar';
 import { debounce } from 'lodash';
 
 export { R, fs, fsPath, jsYaml, moment, chokidar, debounce };
-export { log } from 'js-util-log';
+export { log, table } from 'command-interface';
 export { Observable, Subject } from 'rxjs';

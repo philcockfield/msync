@@ -318,9 +318,10 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.0.tgz#7aa74d87c5012d9f3c12096e12c113817db45294"
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.1.tgz#5ab8171c6c80ee44e368d9963ef838effb482e4c"
   dependencies:
+    cli-table "^0.3.1"
     glob "^7.1.1"
     js-util-log "^1.0.2"
     minimist "^1.2.0"
@@ -801,7 +802,7 @@ js-typescript@^2.3.1:
     tslint-react "2.6.0"
     typescript "2.2.2"
 
-js-util-log@^1.0.2, js-util-log@^1.0.4:
+js-util-log@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/js-util-log/-/js-util-log-1.0.4.tgz#420ba982ad4eb24fb45f1674c714acb1f6387623"
   dependencies:

@@ -6,7 +6,6 @@ import * as file from './util.file';
 import * as filter from './util.filter';
 
 export { config, constants, exec, copy, file, filter };
-export { table } from './util.table';
 export * from './libs';
 export * from './util';
 export * from './util.package';
