@@ -1,5 +1,5 @@
 import * as constants from './constants';
-import { jsYaml, fs, fsPath, log, file } from './libs';
+import { fsPath, log, file } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
 
@@ -27,8 +27,9 @@ export interface IConfig {
  */
 async function loadConfigYaml(path: string) {
   try {
-    const text = (await fs.readFileAsync(path)).toString();
-    const result = jsYaml.safeLoad(text) as IConfigYaml;
+    // const text = (await fs.readFileAsync(path)).toString();
+    // const result = jsYaml.safeLoad(text) as IConfigYaml;
+    const result = await file.yaml<IConfigYaml>(path);
 
     result.modules = result.modules || [];
     result.ignore = result.ignore || { paths: [] };
