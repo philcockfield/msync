@@ -1,6 +1,7 @@
 import {
   log,
-  config,
+  loadSettings,
+  ISettings,
   constants,
   table,
   IModule,
@@ -57,7 +58,7 @@ export interface IOptions {
 export async function ls(options: IOptions = {}) {
   const { includeIgnored = false } = options;
 
-  const settings = await config.init();
+  const settings = await loadSettings();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -67,11 +68,13 @@ export async function ls(options: IOptions = {}) {
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   printTable(modules, options);
-  return { modules, settings };
+  return {
+    modules,
+    settings: settings as ISettings,
+  };
 }
 
 
-export interface IPrintOptions { }
 
 export function printTable(modules: IModule[], options: IOptions = {}) {
   const { deps = 'none', includeIgnored = false } = options;

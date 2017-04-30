@@ -1,6 +1,6 @@
 import {
   log,
-  config,
+  loadSettings,
   constants,
   filter,
   IModule,
@@ -51,7 +51,7 @@ export interface IOptions {
  */
 export async function build(options: IOptions = {}) {
   const { includeIgnored = false, watch = false } = options;
-  const settings = await config.init();
+  const settings = await loadSettings();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;

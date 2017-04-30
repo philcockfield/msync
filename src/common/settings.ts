@@ -8,13 +8,13 @@ export interface IIgnore {
   names: string[];
 }
 
-export interface IConfigYaml {
+export interface IYaml {
   modules: string[];
   ignore: IIgnore;
   watchPattern: string;
 }
 
-export interface IConfig {
+export interface ISettings {
   path: string;
   modules: IModule[];
   ignored: IIgnore;
@@ -29,7 +29,7 @@ async function loadConfigYaml(path: string) {
   try {
     // const text = (await fs.readFileAsync(path)).toString();
     // const result = jsYaml.safeLoad(text) as IConfigYaml;
-    const result = await file.yaml<IConfigYaml>(path);
+    const result = await file.yaml<IYaml>(path);
 
     result.modules = result.modules || [];
     result.ignore = result.ignore || { paths: [] };
@@ -52,7 +52,7 @@ async function loadConfigYaml(path: string) {
 /**
  * Initializes the settings.
  */
-export async function init(): Promise<IConfig | undefined> {
+export async function loadSettings(): Promise<ISettings | undefined> {
 
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
@@ -90,7 +90,7 @@ export async function init(): Promise<IConfig | undefined> {
 }
 
 
-async function ignorePaths(yaml: IConfigYaml, dir: string) {
+async function ignorePaths(yaml: IYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
     const paths = await file.glob(fsPath.resolve(dir, pattern));

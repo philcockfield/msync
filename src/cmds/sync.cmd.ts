@@ -1,6 +1,7 @@
 import {
   log,
-  config,
+  loadSettings,
+  ISettings,
   file,
   listr,
   copy,
@@ -59,7 +60,7 @@ export interface IOptions {
  */
 export async function sync(options: IOptions = {}) {
   const { includeIgnored = false } = options;
-  const settings = await config.init();
+  const settings = await loadSettings();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -72,7 +73,10 @@ export async function sync(options: IOptions = {}) {
 
   // Finish up.
   await syncModules(modules, includeIgnored);
-  return { settings, modules };
+  return {
+    settings: settings as ISettings,
+    modules
+  };
 }
 
 
