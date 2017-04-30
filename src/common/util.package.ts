@@ -1,6 +1,5 @@
 import * as toposort from 'toposort';
-import * as file from './util.file';
-import { R, fs, fsPath } from './libs';
+import { R, fs, fsPath, file } from './libs';
 import { compact } from './util';
 import { IModule, IDependency } from '../types';
 

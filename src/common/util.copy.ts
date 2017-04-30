@@ -31,13 +31,6 @@ export async function module(
     '.DS_Store',
     'node_modules',
     '.tmp',
-    // 'typings',
-    // 'src',
-    // '.babelrc',
-    // '.npmignore',
-    // 'tsconfig.json',
-    // 'tslint.json',
-    // 'typings.json',
   ];
   const FROM_DIR = fsPath.join(from.dir, '/');
   const TO_DIR = fsPath.join(to.dir, 'node_modules', from.name, '/');

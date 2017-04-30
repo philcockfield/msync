@@ -1,6 +1,5 @@
-import * as file from './util.file';
 import * as constants from './constants';
-import { jsYaml, fs, fsPath, log } from './libs';
+import { jsYaml, fs, fsPath, log, file } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
 

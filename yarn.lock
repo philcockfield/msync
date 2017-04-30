@@ -318,14 +318,17 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.1.tgz#5ab8171c6c80ee44e368d9963ef838effb482e4c"
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.3.tgz#24f71f134c1010156c4247aa46612cc6fc91bcd2"
   dependencies:
+    chokidar "^1.6.1"
     cli-table "^0.3.1"
+    fs-extra-promise "^1.0.1"
     glob "^7.1.1"
     js-util-log "^1.0.2"
     minimist "^1.2.0"
     ramda "^0.23.0"
+    rxjs "^5.3.0"
 
 commander@2.9.0:
   version "2.9.0"
