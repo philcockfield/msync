@@ -24,10 +24,6 @@
   version "7.0.13"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.13.tgz#1b0a53fe9ef9c3a5d061b126cc9b915bca43a3f5"
 
-"@types/ramda@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.0.7.tgz#1226d32bc779e05ac9e6f76f960eeb660447fcab"
-
 "@types/rsync@^0.4.28":
   version "0.4.28"
   resolved "https://registry.yarnpkg.com/@types/rsync/-/rsync-0.4.28.tgz#14e2e3d1cbb52f6c8f1f47aecef82334f7792cfd"
@@ -275,15 +271,17 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.0:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.5.tgz#39b2a3714aa03605738511c1cbc715495e434793"
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.8.tgz#8a160f67d06ef14684f763079acc94b9d61556b2"
   dependencies:
+    "@types/lodash.debounce" "^4.0.2"
     chokidar "^1.6.1"
     cli-table "^0.3.1"
     fs-extra-promise "^1.0.1"
     glob "^7.1.1"
     js-util-log "^1.0.2"
     js-yaml "^3.8.3"
+    lodash.debounce "^4.0.8"
     minimist "^1.2.0"
     moment "^2.18.1"
     ramda "^0.23.0"

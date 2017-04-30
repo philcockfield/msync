@@ -59,7 +59,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
   addDeps(json.peerDependencies, false);
   addDeps(json.devDependencies, true);
   dependencies = R.sortBy(R.prop('name'), dependencies);
-  dependencies = R.uniqBy((dep) => dep.name, dependencies);
+  dependencies = R.uniqBy((dep: IDependency) => dep.name, dependencies);
 
   const dir = fsPath.resolve(packageFilePath, '..');
   const isTypeScript = await fs.existsAsync(fsPath.join(dir, 'tsconfig.json'));
