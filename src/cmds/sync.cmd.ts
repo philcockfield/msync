@@ -159,7 +159,7 @@ function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIg
       log.info.green(`${pkg.name} changed:`);
       syncModules(dependents, includeIgnored);
     }
-  }, 500);
+  }, 1000);
 
   file
     .watch(`${pkg.dir}${watchPattern}`)
