@@ -100,14 +100,14 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     .join('\n');
 
   const logModules = (modules: IModule[]) => {
-    const header = [] as string[];
-    const addHeader = (label: string, include = true) => include && header.push(log.gray(label));
+    const head = [] as string[];
+    const addHeader = (label: string, include = true) => include && head.push(log.gray(label));
     addHeader('module');
     addHeader('version');
     addHeader('dependencies', deps !== 'none');
     addHeader('path', showPath);
 
-    const builder = table(header);
+    const builder = table({ head });
     modules.forEach((pkg) => {
       const name = pkg.isIgnored ? log.gray(pkg.name) : log.cyan(pkg.name);
       const row = [] as string[];

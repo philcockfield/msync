@@ -132,7 +132,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
         if (isError) {
           table()
-            .add([log.yellow(pkg.name), text])
+            .add([log.yellow(pkg.name), formatError(text)])
             .log();
         } else {
           log.info(`${log.cyan(pkg.name)} ${text}`);
@@ -140,3 +140,32 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
       });
   });
 }
+
+
+const formatError = (error: string) => {
+  const MAX = 80;
+  const lines = [] as string[];
+  error.split('\n').forEach((line) => {
+    line = line.length <= MAX
+      ? line
+      : splitLines(line);
+    lines.push(line);
+  });
+  return lines.join('\n');
+};
+
+
+const splitLines = (line: string) => {
+  const MAX = 80;
+  const words = [] as string[];
+  let count = 0;
+  line.split('').forEach((word) => {
+    count += word.length;
+    if (count > MAX) {
+      word = `${word}\n`;
+      count = 0;
+    }
+    words.push(word);
+  });
+  return words.join('');
+};
