@@ -71,6 +71,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     isTypeScript,
     isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,
+    json,
   };
 }
 
@@ -114,4 +115,38 @@ export function dependsOn(pkg: IModule, modules: IModule[]) {
         .dependencies
         .find((dep) => dep.name === pkg.name) !== undefined);
   return compact<IModule>(result);
+}
+
+
+
+/**
+ * Updates the version from the given source module onto the target module.
+ */
+export async function updatePackageRef(
+  source: IModule,
+  target: IModule,
+  options: { save: boolean },
+) {
+  const { save = false } = options || {};
+  let changed = false;
+
+  // Update the version on the target JSON.
+  const prefix = (version: string) => ['^', '~'].filter((p) => version && version.startsWith(p))[0] || '';
+  ['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
+    const obj = target.json[key];
+    if (obj && obj[source.name]) {
+      const currentValue = obj[source.name];
+      const newValue = `${prefix(currentValue)}${source.version}`;
+      if (newValue !== currentValue) {
+        obj[source.name] = newValue;
+        changed = true;
+      }
+    }
+  });
+
+  // Save the package.json file.
+  if (save && changed) {
+    const text = `${JSON.stringify(target.json, null, '  ')}\n`;
+    await fs.writeFileAsync(fsPath.join(target.dir, 'package.json'), text);
+  }
 }

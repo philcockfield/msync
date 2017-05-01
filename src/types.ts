@@ -5,6 +5,7 @@ export interface IModule {
   isIgnored: boolean;
   isTypeScript: boolean;
   dependencies: IDependency[];
+  json: object;
 }
 
 

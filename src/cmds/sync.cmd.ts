@@ -12,6 +12,7 @@ import {
   filter,
   debounce,
   dependsOn,
+  updatePackageRef,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -22,6 +23,7 @@ export const description = 'Syncs each module\'s dependency tree within the work
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
+  '-v': 'Update version reference in package.json files.',
 };
 
 
@@ -35,16 +37,19 @@ export async function cmd(
     options: {
       i?: boolean;
       w?: boolean;
+      v?: boolean;
     },
   },
 ) {
   const options = (args && args.options) || {};
   const watch = options.w || false;
   const includeIgnored = options.i || false;
+  const updateVersions = options.v || false;
+  const config = { includeIgnored, updateVersions };
   if (watch) {
-    await syncWatch({ includeIgnored });
+    await syncWatch(config);
   } else {
-    await sync({ includeIgnored });
+    await sync(config);
   }
 }
 
@@ -52,6 +57,7 @@ export async function cmd(
 
 export interface IOptions {
   includeIgnored?: boolean;
+  updateVersions?: boolean;
 }
 
 
@@ -72,7 +78,7 @@ export async function sync(options: IOptions = {}) {
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
-  await syncModules(modules, includeIgnored);
+  await syncModules(modules, options);
   return {
     settings: settings as ISettings,
     modules,
@@ -83,13 +89,17 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IModule[], includeIgnored: boolean) {
+export async function syncModules(modules: IModule[], options: IOptions = {}) {
   const startedAt = new Date();
+  const { includeIgnored = false, updateVersions = false } = options;
 
   const sync = async (sources: IDependency[], target: IModule) => {
     for (const source of sources) {
       if (source.package) {
         await copy.module(source.package, target);
+        if (updateVersions) {
+          await updatePackageRef(source.package, target, { save: true });
+        }
       }
     }
   };
