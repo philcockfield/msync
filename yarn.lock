@@ -408,8 +408,8 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.9:
-  version "3.0.14"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.14.tgz#da54778d379f367f4dbcb95b17a2cfb0a1c825ae"
+  version "3.0.15"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.15.tgz#acfdd377d924c6764c1c84611cfdd8779b739eeb"
   dependencies:
     "@types/fs-extra-promise" "^1.0.0"
     "@types/inquirer" "^0.0.34"
