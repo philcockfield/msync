@@ -84,7 +84,7 @@ export async function run(cmd: string, options: IOptions = {}) {
       },
     };
   });
-  const runner = listr(tasks, { concurrent: true, exitOnError: false })
+  const runner = listr(tasks, { concurrent: true, exitOnError: false });
   try {
     await runner.run();
   } catch (error) {

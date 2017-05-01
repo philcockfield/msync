@@ -16,7 +16,7 @@ export const args = {
   '-D': 'Show all module dependencies.',
   '-d': 'Show local module dependencies only.',
   '-i': 'Include ignored modules.',
-  '-p': 'Show path to module.'
+  '-p': 'Show path to module.',
 };
 
 
@@ -52,7 +52,7 @@ export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
   deps?: DisplayDependencies;
   includeIgnored?: boolean;
-  showPath?: boolean
+  showPath?: boolean;
 }
 
 
@@ -112,9 +112,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       const addRow = (label: string, include = true) => include && row.push(log.gray(label));
       addRow(name);
       addRow(log.magenta(pkg.version));
-      addRow(listDeps(pkg, modules), showDeps)
-      addRow(pkg.dir, showPath)
-      builder.add(row)
+      addRow(listDeps(pkg, modules), showDeps);
+      addRow(pkg.dir, showPath);
+      builder.add(row);
     });
     builder.log();
   };
