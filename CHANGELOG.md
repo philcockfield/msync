@@ -12,7 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
-## [1.2.0] - 2017-5-1
+## [1.2.0] - 2017-05-01
 #### Added
 - Print `path` in module listing: `msync ls -p`
 - `run` command.
