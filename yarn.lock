@@ -270,7 +270,7 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-command-interface@^3.0.0:
+command-interface@^3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.9.tgz#56781b197f7d8122c6916133bcd7ba46fbd53659"
   dependencies:

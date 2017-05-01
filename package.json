@@ -16,7 +16,7 @@
     "prepublish": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "command-interface": "^3.0.0",
+    "command-interface": "^3.0.9",
     "lodash.debounce": "^4.0.8",
     "rsync": "^0.6.1",
     "toposort": "^1.0.3"
