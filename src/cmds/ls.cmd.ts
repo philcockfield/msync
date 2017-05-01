@@ -92,7 +92,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     .map((dep) => {
       const isIgnored = dep.package && dep.package.isIgnored;
       const bullet = isIgnored ? log.gray('-') : log.magenta('-');
-      const name = isIgnored ? log.gray(dep.name) : log.cyan(dep.name);
+      const name = isIgnored
+        ? log.gray(dep.name)
+        : dep.isLocal ? log.cyan(dep.name) : log.gray(dep.name);
       return `${bullet} ${name} ${log.gray(dep.version)}`;
     })
     .join('\n');
