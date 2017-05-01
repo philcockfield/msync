@@ -16,6 +16,7 @@ export const args = {
   '-D': 'Show all module dependencies.',
   '-d': 'Show local module dependencies only.',
   '-i': 'Include ignored modules.',
+  '-p': 'Show path to module.',
 };
 
 
@@ -29,6 +30,7 @@ export async function cmd(
       d?: boolean;
       D?: boolean;
       i?: boolean;
+      p?: boolean;
     },
   },
 ) {
@@ -41,6 +43,7 @@ export async function cmd(
   await ls({
     deps,
     includeIgnored: options.i,
+    showPath: options.p,
   });
 }
 
@@ -49,6 +52,7 @@ export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
   deps?: DisplayDependencies;
   includeIgnored?: boolean;
+  showPath?: boolean;
 }
 
 
@@ -77,7 +81,7 @@ export async function ls(options: IOptions = {}) {
 
 
 export function printTable(modules: IModule[], options: IOptions = {}) {
-  const { deps = 'none', includeIgnored = false } = options;
+  const { deps = 'none', includeIgnored = false, showPath = false } = options;
   const showDeps = deps !== 'none';
   const showAllDeps = deps === 'all';
 
@@ -88,21 +92,31 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     .map((dep) => {
       const isIgnored = dep.package && dep.package.isIgnored;
       const bullet = isIgnored ? log.gray('-') : log.magenta('-');
-      const name = isIgnored ? log.gray(dep.name) : log.cyan(dep.name);
+      const name = isIgnored
+        ? log.gray(dep.name)
+        : dep.isLocal ? log.cyan(dep.name) : log.gray(dep.name);
       return `${bullet} ${name} ${log.gray(dep.version)}`;
     })
     .join('\n');
 
   const logModules = (modules: IModule[]) => {
-    const depsHeader = deps === 'none' ? undefined : log.gray('dependencies');
-    const builder = table([log.gray('module'), log.gray('version'), depsHeader]);
+    const header = [] as string[];
+    const addHeader = (label: string, include = true) => include && header.push(log.gray(label));
+    addHeader('module');
+    addHeader('version');
+    addHeader('dependencies', deps !== 'none');
+    addHeader('path', showPath);
+
+    const builder = table(header);
     modules.forEach((pkg) => {
       const name = pkg.isIgnored ? log.gray(pkg.name) : log.cyan(pkg.name);
-      if (showDeps) {
-        builder.add(name, log.magenta(pkg.version), listDeps(pkg, modules));
-      } else {
-        builder.add(name, log.magenta(pkg.version));
-      }
+      const row = [] as string[];
+      const addRow = (label: string, include = true) => include && row.push(log.gray(label));
+      addRow(name);
+      addRow(log.magenta(pkg.version));
+      addRow(listDeps(pkg, modules), showDeps);
+      addRow(pkg.dir, showPath);
+      builder.add(row);
     });
     builder.log();
   };

@@ -11,8 +11,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Fixed
 #### Security
 
+## [1.3.0] - 2017-05-01
+#### Added
+- `msync sync -v` command for syncing and saving version numbers on `package.json` files.
 
-## [Unreleased] - 2017-04-29
+
+## [1.2.0] - 2017-05-01
+#### Added
+- Print `path` in module listing: `msync ls -p`
+- `run` command.
+
+
+
+## [1.1.0] - 2017-04-29
 #### Added
 - Sync watch command: `sync -w`
 - Build command: `build`

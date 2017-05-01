@@ -123,8 +123,8 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
         const isError = data.text.includes('error');
 
         // Clean up text output from TS compiler:
-        // - Remove training new-lines.
-        // - Remove date prefix.
+        //    - Remove training new-lines.
+        //    - Remove date prefix.
         let text = data.text.replace(/\n*$/, '');
         if (!isError) {
           text = text.substring(text.indexOf(' - ') + 3, text.length);
@@ -132,7 +132,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
         if (isError) {
           table()
-            .add(log.yellow(pkg.name), text)
+            .add([log.yellow(pkg.name), text])
             .log();
         } else {
           log.info(`${log.cyan(pkg.name)} ${text}`);

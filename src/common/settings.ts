@@ -25,12 +25,11 @@ export interface ISettings {
 /**
  * Finds and loads the YAML configuration file.
  */
-async function loadConfigYaml(path: string) {
+async function loadYaml(path: string) {
   try {
-    // const text = (await fs.readFileAsync(path)).toString();
-    // const result = jsYaml.safeLoad(text) as IConfigYaml;
     const result = await file.yaml<IYaml>(path);
 
+    // Fill in default values.
     result.modules = result.modules || [];
     result.ignore = result.ignore || { paths: [] };
     result.ignore.paths = result.ignore.paths || [];
@@ -59,7 +58,7 @@ export async function loadSettings(): Promise<ISettings | undefined> {
   if (!path) { return; }
 
   // Load the YAML.
-  const yaml = await loadConfigYaml(path);
+  const yaml = await loadYaml(path);
   if (!yaml) { return; }
 
   // Resolve all module-directories in the YAML to
