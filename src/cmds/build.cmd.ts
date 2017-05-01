@@ -101,7 +101,7 @@ export async function buildOnce(modules: IModule[]) {
     log.info();
 
   } catch (error) {
-    log.warn(log.yellow(`\nFailed while building typescript. '${error.message}'.`));
+    // Ignore.  The failure is obvious in the `listr` output.
   }
 }
 
