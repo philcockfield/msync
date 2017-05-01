@@ -103,9 +103,5 @@ Here are some other approaches to the problem that you might prefer:
 
 
 ## Next Steps
-- `sync --bump` (pre-lint).
-- `watch` - open both sync and build watchers.
 - workspaces
-- `run` (run script on all modules)
-- `install` (run install script on all modules)
 
