@@ -13,15 +13,13 @@ import {
 } from '../common';
 import * as listCommand from './ls.cmd';
 
-
-export type ReleaseType = 'major' | 'minor' | 'patch';
-
 export const name = 'bump';
 export const description = 'Bumps a module version and all references to it in dependent modules.';
 export const args = {
   '-i': 'Include ignored modules.',
 };
 
+export type ReleaseType = 'major' | 'minor' | 'patch';
 
 
 /**
