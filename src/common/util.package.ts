@@ -123,8 +123,9 @@ export function dependsOn(pkg: IModule, modules: IModule[]) {
  * Updates the version from the given source module onto the target module.
  */
 export async function updatePackageRef(
-  source: IModule,
   target: IModule,
+  moduleName: string,
+  newVersion: string,
   options: { save: boolean },
 ) {
   const { save = false } = options || {};
@@ -134,11 +135,11 @@ export async function updatePackageRef(
   const prefix = (version: string) => ['^', '~'].filter((p) => version && version.startsWith(p))[0] || '';
   ['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
     const obj = target.json[key];
-    if (obj && obj[source.name]) {
-      const currentValue = obj[source.name];
-      const newValue = `${prefix(currentValue)}${source.version}`;
+    if (obj && obj[moduleName]) {
+      const currentValue = obj[moduleName];
+      const newValue = `${prefix(currentValue)}${newVersion}`;
       if (newValue !== currentValue) {
-        obj[source.name] = newValue;
+        obj[moduleName] = newValue;
         changed = true;
       }
     }
@@ -146,7 +147,15 @@ export async function updatePackageRef(
 
   // Save the package.json file.
   if (save && changed) {
-    const text = `${JSON.stringify(target.json, null, '  ')}\n`;
-    await fs.writeFileAsync(fsPath.join(target.dir, 'package.json'), text);
+    await savePackage(target.dir, target.json);
   }
+}
+
+
+/**
+ * Saves the given package JSON.
+ */
+export async function savePackage(dir: string, json: object) {
+  const text = `${JSON.stringify(json, null, '  ')}\n`;
+  await fs.writeFileAsync(fsPath.join(dir, 'package.json'), text);
 }

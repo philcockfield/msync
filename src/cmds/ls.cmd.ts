@@ -36,12 +36,12 @@ export async function cmd(
 ) {
 
   const options = (args && args.options) || {};
-  let deps: DisplayDependencies = 'none';
-  if (options.d) { deps = 'local'; }
-  if (options.D) { deps = 'all'; }
+  let dependencies: DisplayDependencies = 'none';
+  if (options.d) { dependencies = 'local'; }
+  if (options.D) { dependencies = 'all'; }
 
   await ls({
-    deps,
+    dependencies,
     includeIgnored: options.i,
     showPath: options.p,
   });
@@ -50,9 +50,10 @@ export async function cmd(
 
 export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
-  deps?: DisplayDependencies;
+  dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
   showPath?: boolean;
+  dependants?: IModule[];
 }
 
 
@@ -81,13 +82,19 @@ export async function ls(options: IOptions = {}) {
 
 
 export function printTable(modules: IModule[], options: IOptions = {}) {
-  const { deps = 'none', includeIgnored = false, showPath = false } = options;
-  const showDeps = deps !== 'none';
-  const showAllDeps = deps === 'all';
+  const {
+    dependencies = 'none',
+    includeIgnored = false,
+    showPath = false,
+    dependants,
+  } = options;
+  const showDependencies = dependencies !== 'none';
+  const showAllDependencies = dependencies === 'all';
+  const showDependants = dependants !== undefined;
 
-  const listDeps = (pkg: IModule, modules: IModule[]) => pkg
+  const listDependences = (pkg: IModule, modules: IModule[]) => pkg
     .dependencies
-    .filter((dep) => showAllDeps ? true : dep.isLocal)
+    .filter((dep) => showAllDependencies ? true : dep.isLocal)
     .filter((dep) => dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true)
     .map((dep) => {
       const isIgnored = dep.package && dep.package.isIgnored;
@@ -99,12 +106,27 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     })
     .join('\n');
 
+  const listDependants = (dependants: IModule[]) => {
+    if (!dependants || dependants.length === 0) { return log.yellow('dependant'); }
+    return dependants
+      .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
+      .map((pkg) => {
+        const bullet = pkg.isIgnored ? log.gray('-') : log.magenta('-');
+        const name = pkg.isIgnored
+          ? log.gray(pkg.name)
+          : log.cyan(pkg.name);
+        return `${bullet} ${name} ${log.gray(pkg.version)}`;
+      })
+      .join('\n');
+  };
+
   const logModules = (modules: IModule[]) => {
     const head = [] as string[];
     const addHeader = (label: string, include = true) => include && head.push(log.gray(label));
     addHeader('module');
     addHeader('version');
-    addHeader('dependencies', deps !== 'none');
+    addHeader('dependencies', dependencies !== 'none');
+    addHeader('dependants', showDependants);
     addHeader('path', showPath);
 
     const builder = table({ head });
@@ -114,7 +136,8 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       const addRow = (label: string, include = true) => include && row.push(log.gray(label));
       addRow(name);
       addRow(log.magenta(pkg.version));
-      addRow(listDeps(pkg, modules), showDeps);
+      addRow(listDependences(pkg, modules), showDependencies);
+      addRow(listDependants(dependants || []), showDependants);
       addRow(pkg.dir, showPath);
       builder.add(row);
     });
@@ -127,4 +150,3 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     log.info();
   }
 }
-
