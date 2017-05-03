@@ -98,7 +98,7 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
       if (source.package) {
         await copy.module(source.package, target);
         if (updateVersions) {
-          await updatePackageRef(source.package, target, { save: true });
+          await updatePackageRef(target, source.package.name, source.package.version, { save: true });
         }
       }
     }
@@ -139,7 +139,7 @@ export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
   log.info.magenta('\nSync watching:');
   const { includeIgnored = false } = options;
-  const result = await listCommand.ls({ deps: 'local', includeIgnored });
+  const result = await listCommand.ls({ dependencies: 'local', includeIgnored });
   if (!result) { return; }
   const { modules, settings } = result;
 
