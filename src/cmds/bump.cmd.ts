@@ -17,7 +17,6 @@ import * as listCommand from './ls.cmd';
 export type ReleaseType = 'major' | 'minor' | 'patch';
 
 export const name = 'bump';
-export const alias = 'bp';
 export const description = 'Bumps a module version and all references to it in dependent modules.';
 export const args = {
   '-i': 'Include ignored modules.',
@@ -72,7 +71,6 @@ export async function bump(options: IOptions = {}) {
   // Get the version number.
   const release = await promptForReleaseType(module.version);
   if (!release) { return; }
-  // const version = semver.inc(module.version, release);
 
   // Update the selected module and all dependent modules.
   log.info();
@@ -104,6 +102,7 @@ async function bumpModule(release: ReleaseType, module: IModule, allModules: IMo
     log.info.gray('\nDependents:');
   }
   for (const pkg of dependents) {
+    await updatePackageRef(pkg, module.name, version, { save: true });
     await bumpModule('patch', pkg, allModules, level + 1);
   }
 }
