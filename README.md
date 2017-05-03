@@ -104,4 +104,4 @@ Here are some other approaches to the problem that you might prefer:
 
 ## Next Steps
 - workspaces
-
+- `bump` - update version of one modules, and patch all dependent modules.
