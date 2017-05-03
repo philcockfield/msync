@@ -1,15 +1,20 @@
 import {
+  R,
   log,
   loadSettings,
   constants,
   filter,
   IModule,
   inquirer,
-  dependsOn,
   semver,
+  dependsOn,
+  updatePackageRef,
+  savePackage,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
+
+export type ReleaseType = 'major' | 'minor' | 'patch';
 
 export const name = 'bump';
 export const alias = 'bp';
@@ -54,7 +59,7 @@ export async function bump(options: IOptions = {}) {
   }
   const modules = settings
     .modules
-    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Prompt for the module to bump.
   const module = await promptForModule(modules);
@@ -65,10 +70,44 @@ export async function bump(options: IOptions = {}) {
   listCommand.printTable([module], { includeIgnored: true, dependents });
 
   // Get the version number.
-  const version = await promptForVersion(module.version);
-  log.info.cyan(`\nUpdate ${log.magenta(module.name)} to version ${log.magenta(version)}\n`);
+  const release = await promptForReleaseType(module.version);
+  if (!release) { return; }
+  // const version = semver.inc(module.version, release);
+
+  // Update the selected module and all dependent modules.
+  log.info();
+  await bumpModule(release, module, modules, 0);
+  log.info();
 
 }
+
+
+async function bumpModule(release: ReleaseType, module: IModule, allModules: IModule[], level: number) {
+  // Setup initial conditions.
+  const dependents = dependsOn(module, allModules);
+  const version = semver.inc(module.version, release);
+  const isRoot = level === 0;
+
+  // Log output.
+  const indent = '   '.repeat(level);
+  const bar = isRoot ? '' : '├─';
+  const prefix = log.gray(`${indent}${bar}`);
+  log.info.cyan(`${prefix}${release.toUpperCase()} update ${log.magenta(module.name)} to version ${log.magenta(version)}`); // tslint:disable-line
+
+  // Update the selected module.
+  const json = R.clone<any>(module.json);
+  json.version = version;
+  await savePackage(module.dir, json);
+
+  // Update all dependent modules.
+  if (isRoot && dependents.length > 0) {
+    log.info.gray('\nDependents:');
+  }
+  for (const pkg of dependents) {
+    await bumpModule('patch', pkg, allModules, level + 1);
+  }
+}
+
 
 
 async function promptForModule(modules: IModule[]) {
@@ -85,7 +124,7 @@ async function promptForModule(modules: IModule[]) {
 
 
 
-async function promptForVersion(version: string) {
+async function promptForReleaseType(version: string) {
   const choices = ['patch', 'minor', 'major'];
   const confirm = {
     type: 'list',
@@ -93,7 +132,6 @@ async function promptForVersion(version: string) {
     message: 'Release',
     choices,
   };
-  const release = (await inquirer.prompt(confirm)).name;
-  return semver.inc(version, release);
+  return (await inquirer.prompt(confirm)).name;
 }
 

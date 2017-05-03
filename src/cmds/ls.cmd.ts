@@ -53,7 +53,7 @@ export interface IOptions {
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
   showPath?: boolean;
-  dependents?: IModule[],
+  dependents?: IModule[];
 }
 
 
@@ -138,7 +138,7 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       addRow(name);
       addRow(log.magenta(pkg.version));
       addRow(listDependences(pkg, modules), showDependencies);
-      addRow(listDependents(dependents), showDependents);
+      addRow(listDependents(dependents || []), showDependents);
       addRow(pkg.dir, showPath);
       builder.add(row);
     });
