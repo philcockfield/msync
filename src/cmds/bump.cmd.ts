@@ -78,30 +78,43 @@ export async function bump(options: IOptions = {}) {
 
 
 
-async function bumpModule(release: ReleaseType, module: IModule, allModules: IModule[], level: number) {
+async function bumpModule(
+  release: ReleaseType,
+  pkg: IModule,
+  allModules: IModule[],
+  level: number,
+  ref?: { name: string, version: string },
+) {
   // Setup initial conditions.
-  const dependants = dependsOn(module, allModules);
-  const version = semver.inc(module.version, release);
+  const dependants = dependsOn(pkg, allModules);
+  const version = semver.inc(pkg.version, release);
   const isRoot = level === 0;
 
   // Log output.
-  const indent = '   '.repeat(level);
+  const indent = '  ';
   const bar = isRoot ? '' : '├─';
   const prefix = log.gray(`${indent}${bar}`);
-  log.info.cyan(`${prefix}${release.toUpperCase()} update ${log.magenta(module.name)} to version ${log.magenta(version)}`); // tslint:disable-line
+
+  let msg = '';
+  msg += `${prefix}${release.toUpperCase()} `;
+  msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `
+  if (ref) {
+    msg += log.yellow(`⬅ ${ref.name} (${ref.version})`);
+  }
+  log.info.cyan(msg);
 
   // Update the selected module.
-  const json = R.clone<any>(module.json);
+  const json = R.clone<any>(pkg.json);
   json.version = version;
-  await savePackage(module.dir, json);
+  await savePackage(pkg.dir, json);
 
   // Update all dependant modules.
   if (isRoot && dependants.length > 0) {
     log.info.gray('\nDependant modules:');
   }
-  for (const pkg of dependants) {
-    await updatePackageRef(pkg, module.name, version, { save: true });
-    await bumpModule('patch', pkg, allModules, level + 1);
+  for (const dependentPkg of dependants) {
+    await updatePackageRef(dependentPkg, pkg.name, version, { save: true });
+    await bumpModule('patch', dependentPkg, allModules, level + 1, { name: pkg.name, version });
   }
 }
 
