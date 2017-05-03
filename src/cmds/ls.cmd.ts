@@ -7,6 +7,8 @@ import {
   IModule,
   filter,
   fsPath,
+  npm,
+  semver,
 } from '../common';
 
 
@@ -18,6 +20,7 @@ export const args = {
   '-d': 'Show local module dependencies only.',
   '-i': 'Include ignored modules.',
   '-p': 'Show path to module.',
+  '-n': 'Retrieve registry details from NPM.',
 };
 
 
@@ -32,6 +35,7 @@ export async function cmd(
       D?: boolean;
       i?: boolean;
       p?: boolean;
+      n?: boolean;
     },
   },
 ) {
@@ -45,17 +49,19 @@ export async function cmd(
     dependencies,
     includeIgnored: options.i,
     showPath: options.p,
+    queryNpm: options.n,
   });
 }
 
 
 export type DisplayDependencies = 'none' | 'local' | 'all';
 export interface IOptions {
+  basePath?: string;
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
   showPath?: boolean;
   dependants?: IModule[];
-  basePath?: string;
+  queryNpm?: boolean;
   columns?: ITableColumn[];
 }
 
@@ -69,7 +75,7 @@ export interface ITableColumn {
  * List modules in dependency order.
  */
 export async function ls(options: IOptions = {}) {
-  const { includeIgnored = false } = options;
+  const { includeIgnored = false, queryNpm = false } = options;
 
   const settings = await loadSettings();
   if (!settings) {
@@ -80,9 +86,27 @@ export async function ls(options: IOptions = {}) {
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
+  const columns = [] as ITableColumn[];
+  if (queryNpm) {
+    const modulesNpmInfo = await npm.info(modules);
+    columns.push({
+      head: 'npm (latest)',
+      render: (pkg: IModule) => {
+        const info = modulesNpmInfo.find((item) => item.module.name === pkg.name);
+        const msg = !info
+          ? 'Not in registry'
+          : semver.gt(pkg.version, info.latest)
+            ? log.yellow(`${info.latest} ⬅`)
+            : info.latest;
+        return log.gray(msg);
+      },
+    });
+  }
+
   printTable(modules, {
     ...options,
     basePath: fsPath.dirname(settings.path),
+    columns: [...(options.columns || []), ...columns],
   });
   return {
     modules,
@@ -159,7 +183,6 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       },
     },
   };
-
 
   const logModules = (modules: IModule[]) => {
     const cols = [] as ITableColumn[];
