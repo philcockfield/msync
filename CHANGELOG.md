@@ -11,6 +11,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Fixed
 #### Security
 
+
+## [1.4.0] - 2017-04-03
+#### Added
+- `bump` command. Bumps the specified module to the desired SemVer release, and then patch updates all dependent modules, walking through the dependency graph in order.
+  
+
+
 ## [1.3.0] - 2017-05-01
 #### Added
 - `msync sync -v` command for syncing and saving version numbers on `package.json` files.
