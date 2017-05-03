@@ -6,6 +6,7 @@ import {
   table,
   IModule,
   filter,
+  fsPath,
 } from '../common';
 
 
@@ -54,6 +55,13 @@ export interface IOptions {
   includeIgnored?: boolean;
   showPath?: boolean;
   dependants?: IModule[];
+  basePath?: string;
+  columns?: ITableColumn[];
+}
+
+export interface ITableColumn {
+  head?: string;
+  render: (data: any) => string;
 }
 
 
@@ -72,7 +80,10 @@ export async function ls(options: IOptions = {}) {
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
-  printTable(modules, options);
+  printTable(modules, {
+    ...options,
+    basePath: fsPath.dirname(settings.path),
+  });
   return {
     modules,
     settings: settings as ISettings,
@@ -87,8 +98,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     includeIgnored = false,
     showPath = false,
     dependants,
+    basePath,
+    columns = [],
   } = options;
-  const showDependencies = dependencies !== 'none';
   const showAllDependencies = dependencies === 'all';
   const showDependants = dependants !== undefined;
 
@@ -120,25 +132,51 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       .join('\n');
   };
 
-  const logModules = (modules: IModule[]) => {
-    const head = [] as string[];
-    const addHeader = (label: string, include = true) => include && head.push(log.gray(label));
-    addHeader('module');
-    addHeader('version');
-    addHeader('dependencies', dependencies !== 'none');
-    addHeader('dependants', showDependants);
-    addHeader('path', showPath);
+  const column: { [key: string]: ITableColumn } = {
+    module: {
+      head: 'module',
+      render: (pkg: IModule) => log.cyan(pkg.name),
+    },
+    version: {
+      head: 'version',
+      render: (pkg: IModule) => log.magenta(pkg.version),
+    },
+    dependencies: {
+      head: 'dependencies',
+      render: (pkg: IModule) => listDependences(pkg, modules),
+    },
+    dependants: {
+      head: 'dependants',
+      render: (pkg: IModule) => listDependants(dependants || []),
+    },
+    path: {
+      head: 'path',
+      render: (pkg: IModule) => {
+        const path = basePath && pkg.dir.startsWith(basePath)
+          ? pkg.dir.substring(basePath.length, pkg.dir.length)
+          : pkg.dir;
+        return log.gray(path);
+      },
+    },
+  };
 
+
+  const logModules = (modules: IModule[]) => {
+    const cols = [] as ITableColumn[];
+    const addColumn = (col: ITableColumn, include = true) => include && cols.push(col);
+
+    addColumn(column.module);
+    addColumn(column.version);
+    addColumn(column.dependencies, dependencies !== 'none');
+    addColumn(column.dependants, showDependants);
+    addColumn(column.path, showPath);
+    (columns || []).forEach((col) => addColumn(col));
+
+    const head = cols.map((col) => log.gray(col.head));
     const builder = table({ head });
     modules.forEach((pkg) => {
-      const name = pkg.isIgnored ? log.gray(pkg.name) : log.cyan(pkg.name);
       const row = [] as string[];
-      const addRow = (label: string, include = true) => include && row.push(log.gray(label));
-      addRow(name);
-      addRow(log.magenta(pkg.version));
-      addRow(listDependences(pkg, modules), showDependencies);
-      addRow(listDependants(dependants || []), showDependants);
-      addRow(pkg.dir, showPath);
+      cols.forEach((col) => row.push(col.render(pkg)));
       builder.add(row);
     });
     builder.log();
