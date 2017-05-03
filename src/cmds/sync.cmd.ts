@@ -154,10 +154,10 @@ export async function syncWatch(options: IOptions = {}) {
  */
 function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIgnored: boolean) {
   const sync = debounce(() => {
-    const dependents = dependsOn(pkg, modules);
-    if (dependents.length > 0) {
+    const dependants = dependsOn(pkg, modules);
+    if (dependants.length > 0) {
       log.info.green(`${pkg.name} changed:`);
-      syncModules(dependents, includeIgnored);
+      syncModules(dependants, includeIgnored);
     }
   }, 1000);
 

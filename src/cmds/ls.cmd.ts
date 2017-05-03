@@ -53,7 +53,7 @@ export interface IOptions {
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
   showPath?: boolean;
-  dependents?: IModule[];
+  dependants?: IModule[];
 }
 
 
@@ -86,11 +86,11 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     dependencies = 'none',
     includeIgnored = false,
     showPath = false,
-    dependents,
+    dependants,
   } = options;
   const showDependencies = dependencies !== 'none';
   const showAllDependencies = dependencies === 'all';
-  const showDependents = dependents !== undefined;
+  const showDependants = dependants !== undefined;
 
   const listDependences = (pkg: IModule, modules: IModule[]) => pkg
     .dependencies
@@ -106,9 +106,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     })
     .join('\n');
 
-  const listDependents = (dependents: IModule[]) => {
-    if (!dependents || dependents.length === 0) { return log.yellow('No dependent modules.'); }
-    return dependents
+  const listDependants = (dependants: IModule[]) => {
+    if (!dependants || dependants.length === 0) { return log.yellow('dependant'); }
+    return dependants
       .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
       .map((pkg) => {
         const bullet = pkg.isIgnored ? log.gray('-') : log.magenta('-');
@@ -126,19 +126,18 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     addHeader('module');
     addHeader('version');
     addHeader('dependencies', dependencies !== 'none');
-    addHeader('dependents', showDependents);
+    addHeader('dependants', showDependants);
     addHeader('path', showPath);
 
     const builder = table({ head });
     modules.forEach((pkg) => {
-      // const dependents = showDependents && dependsOn(pkg, allModules);
       const name = pkg.isIgnored ? log.gray(pkg.name) : log.cyan(pkg.name);
       const row = [] as string[];
       const addRow = (label: string, include = true) => include && row.push(log.gray(label));
       addRow(name);
       addRow(log.magenta(pkg.version));
       addRow(listDependences(pkg, modules), showDependencies);
-      addRow(listDependents(dependents || []), showDependents);
+      addRow(listDependants(dependants || []), showDependants);
       addRow(pkg.dir, showPath);
       builder.add(row);
     });

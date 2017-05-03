@@ -14,7 +14,7 @@ import {
 import * as listCommand from './ls.cmd';
 
 export const name = 'bump';
-export const description = 'Bumps a module version and all references to it in dependent modules.';
+export const description = 'dependant';
 export const args = {
   '-i': 'Include ignored modules.',
 };
@@ -45,7 +45,7 @@ export interface IOptions {
 }
 
 /**
- * Bumps a module version and all references to it in dependent modules.
+ * Bumps a module version and all references to it in dependant modules.
  */
 export async function bump(options: IOptions = {}) {
   const { includeIgnored = false } = options;
@@ -62,25 +62,25 @@ export async function bump(options: IOptions = {}) {
   const module = await promptForModule(modules);
   if (!module) { return; }
 
-  // Retrieve the dependent modules and list them in a table.
-  const dependents = dependsOn(module, modules);
-  listCommand.printTable([module], { includeIgnored: true, dependents });
+  // Retrieve the dependant modules and list them in a table.
+  const dependants = dependsOn(module, modules);
+  listCommand.printTable([module], { includeIgnored: true, dependants });
 
   // Get the version number.
   const release = await promptForReleaseType(module.version);
   if (!release) { return; }
 
-  // Update the selected module and all dependent modules.
+  // Update the selected module and all dependant modules.
   log.info();
   await bumpModule(release, module, modules, 0);
   log.info();
-
 }
+
 
 
 async function bumpModule(release: ReleaseType, module: IModule, allModules: IModule[], level: number) {
   // Setup initial conditions.
-  const dependents = dependsOn(module, allModules);
+  const dependants = dependsOn(module, allModules);
   const version = semver.inc(module.version, release);
   const isRoot = level === 0;
 
@@ -95,11 +95,11 @@ async function bumpModule(release: ReleaseType, module: IModule, allModules: IMo
   json.version = version;
   await savePackage(module.dir, json);
 
-  // Update all dependent modules.
-  if (isRoot && dependents.length > 0) {
-    log.info.gray('\nDependents:');
+  // Update all dependant modules.
+  if (isRoot && dependants.length > 0) {
+    log.info.gray('\nDependant modules:');
   }
-  for (const pkg of dependents) {
+  for (const pkg of dependants) {
     await updatePackageRef(pkg, module.name, version, { save: true });
     await bumpModule('patch', pkg, allModules, level + 1);
   }
