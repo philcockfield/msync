@@ -97,7 +97,7 @@ async function bumpModule(
 
   let msg = '';
   msg += `${prefix}${release.toUpperCase()} `;
-  msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `
+  msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `;
   if (ref) {
     msg += log.yellow(`⬅ ${ref.name} (${ref.version})`);
   }
