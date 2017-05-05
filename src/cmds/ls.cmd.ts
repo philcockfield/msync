@@ -15,8 +15,7 @@ export const name = 'ls';
 export const alias = 'l';
 export const description = 'List modules in dependency order.';
 export const args = {
-  '-D': 'Show all module dependencies.',
-  '-d': 'Show local module dependencies only.',
+  '-D': 'Show all module dependencies (omit for local only).',
   '-i': 'Include ignored modules.',
   '-p': 'Show path to module.',
   '-n': 'Retrieve registry details from NPM.',
@@ -30,7 +29,6 @@ export async function cmd(
   args?: {
     params: string[],
     options: {
-      d?: boolean;
       D?: boolean;
       i?: boolean;
       p?: boolean;
@@ -38,14 +36,9 @@ export async function cmd(
     },
   },
 ) {
-
   const options = (args && args.options) || {};
-  let dependencies: DisplayDependencies = 'none';
-  if (options.d) { dependencies = 'local'; }
-  if (options.D) { dependencies = 'all'; }
-
   await ls({
-    dependencies,
+    dependencies: options.D ? 'all' : 'local',
     includeIgnored: options.i,
     showPath: options.p,
     npm: options.n,
