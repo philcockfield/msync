@@ -6,7 +6,7 @@ export {
   moment,
   debounce,
   log,
-  table,
+  table, ITable,
   file,
   fs,
   fsPath,

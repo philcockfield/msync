@@ -10,6 +10,8 @@ import {
   dependsOn,
   updatePackageRef,
   savePackage,
+  table,
+  ITable,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -88,7 +90,14 @@ export async function bump(options: IOptions = {}) {
 
   // Update the selected module and all dependant modules.
   log.info();
-  await bumpModule(release, module, modules, 0, undefined, save);
+  const tableBuilder = await bumpModule({
+    release,
+    pkg: module,
+    allModules: modules,
+    save,
+  });
+  tableBuilder.log();
+
   if (dryRun) {
     log.info.gray(`\nNo files were saved.`);
   } else {
@@ -98,31 +107,45 @@ export async function bump(options: IOptions = {}) {
 
 
 
-async function bumpModule(
-  release: ReleaseType,
-  pkg: IModule,
-  allModules: IModule[],
-  level: number,
-  ref: { name: string, version: string } | undefined,
-  save: boolean,
-) {
+export interface IBumpOptions {
+  release: ReleaseType;
+  pkg: IModule;
+  allModules: IModule[];
+  save: boolean;
+  level?: number;
+  ref?: { name: string, version: string };
+  table?: ITable;
+}
+
+async function bumpModule(options: IBumpOptions) {
   // Setup initial conditions.
+  const { release, pkg, allModules, save, level = 0, ref } = options;
   const dependants = dependsOn(pkg, allModules);
   const version = semver.inc(pkg.latest, release);
-  const isRoot = level === 0;
+  const isRoot = ref === undefined;
 
   // Log output.
-  const indent = '  ';
-  const bar = isRoot ? '' : '├─';
-  const prefix = log.gray(`${indent}${bar}`);
+  const tableBuilder = options.table || table({
+    head: ['update', 'module', 'version', 'ref updated'],
+  });
 
-  let msg = '';
-  msg += `${prefix}${release.toUpperCase()} `;
-  msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `;
-  if (ref) {
-    msg += log.yellow(`⬅ ${ref.name} (${ref.version})`);
+  if (!ref) {
+    let msg = '';
+    msg += `  ${release.toUpperCase()} `;
+    msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `;
+    log.info.cyan(msg);
+  } else {
+    tableBuilder
+      .add([
+        log.cyan(release.toUpperCase()),
+        log.magenta(pkg.name),
+        log.magenta(version),
+        log.yellow(`${ref.name} (${ref.version})`),
+      ]);
+    // tableBuilder.log();
   }
-  log.info.cyan(msg);
+
+
 
   // Update the selected module.
   const json = R.clone<any>(pkg.json);
@@ -135,17 +158,20 @@ async function bumpModule(
   if (isRoot && dependants.length > 0) {
     log.info.gray('\nDependant modules:');
   }
+
   for (const dependentPkg of dependants) {
     await updatePackageRef(dependentPkg, pkg.name, version, { save });
-    await bumpModule(
-      'patch',
-      dependentPkg,
+    await bumpModule({
+      release: 'patch',
+      pkg: dependentPkg,
       allModules,
-      level + 1,
-      { name: pkg.name, version },
+      level: level + 1,
+      ref: { name: pkg.name, version },
       save,
-    );
+      table: tableBuilder,
+    });
   }
+  return tableBuilder;
 }
 
 
@@ -174,4 +200,3 @@ async function promptForReleaseType(version: string) {
   };
   return (await inquirer.prompt(confirm)).name;
 }
-
