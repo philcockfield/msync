@@ -17,8 +17,8 @@ export const name = 'bump';
 export const description = 'dependant';
 export const args = {
   '-i': 'Include ignored modules.',
-  '-n': 'Retrieve registry details from NPM.',
   '-d': 'Dry run where no files are saved.',
+  '-l': 'Local versions only. Does not retrieve NPM details.',
 };
 
 export type ReleaseType = 'major' | 'minor' | 'patch';
@@ -32,15 +32,15 @@ export async function cmd(
     params: string[],
     options: {
       i?: boolean;
-      n?: boolean;
       d?: boolean;
+      l?: boolean;
     },
   },
 ) {
   const options = (args && args.options) || {};
   await bump({
     includeIgnored: options.i || false,
-    npm: options.n || false,
+    local: options.l || false,
     dryRun: options.d || false,
   });
 }
@@ -49,7 +49,7 @@ export async function cmd(
 
 export interface IOptions {
   includeIgnored?: boolean;
-  npm?: boolean;
+  local?: boolean;
   dryRun?: boolean;
 }
 
@@ -59,8 +59,9 @@ export interface IOptions {
  * Bumps a module version and all references to it in dependant modules.
  */
 export async function bump(options: IOptions = {}) {
-  const { includeIgnored = false, npm = false, dryRun = false } = options;
+  const { includeIgnored = false, local = false, dryRun = false } = options;
   const save = !dryRun;
+  const npm = !local;
   const settings = await loadSettings({ npm, spinner: npm });
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
