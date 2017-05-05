@@ -63,11 +63,14 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
 
   const dir = fsPath.resolve(packageFilePath, '..');
   const isTypeScript = await fs.existsAsync(fsPath.join(dir, 'tsconfig.json'));
+  const version = json.version;
+
 
   return {
     dir,
     name: json.name,
-    version: json.version,
+    version,
+    latest: version,
     isTypeScript,
     isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,

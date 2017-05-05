@@ -17,6 +17,8 @@ export const name = 'bump';
 export const description = 'dependant';
 export const args = {
   '-i': 'Include ignored modules.',
+  '-n': 'Retrieve registry details from NPM.',
+  '-d': 'Dry run where no files are saved.',
 };
 
 export type ReleaseType = 'major' | 'minor' | 'patch';
@@ -30,26 +32,36 @@ export async function cmd(
     params: string[],
     options: {
       i?: boolean;
+      n?: boolean;
+      d?: boolean;
     },
   },
 ) {
   const options = (args && args.options) || {};
-  const includeIgnored = options.i || false;
-  await bump({ includeIgnored });
+  await bump({
+    includeIgnored: options.i || false,
+    npm: options.n || false,
+    dryRun: options.d || false,
+  });
 }
 
 
 
 export interface IOptions {
   includeIgnored?: boolean;
+  npm?: boolean;
+  dryRun?: boolean;
 }
+
+
 
 /**
  * Bumps a module version and all references to it in dependant modules.
  */
 export async function bump(options: IOptions = {}) {
-  const { includeIgnored = false } = options;
-  const settings = await loadSettings();
+  const { includeIgnored = false, npm = false, dryRun = false } = options;
+  const save = !dryRun;
+  const settings = await loadSettings({ npm, spinner: npm });
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -65,6 +77,9 @@ export async function bump(options: IOptions = {}) {
   // Retrieve the dependant modules and list them in a table.
   const dependants = dependsOn(module, modules);
   listCommand.printTable([module], { includeIgnored: true, dependants });
+  if (dryRun) {
+    log.info.gray(`Dry run...no files will be saved.\n`);
+  }
 
   // Get the version number.
   const release = await promptForReleaseType(module.version);
@@ -72,8 +87,12 @@ export async function bump(options: IOptions = {}) {
 
   // Update the selected module and all dependant modules.
   log.info();
-  await bumpModule(release, module, modules, 0);
-  log.info();
+  await bumpModule(release, module, modules, 0, undefined, save);
+  if (dryRun) {
+    log.info.gray(`\nNo files were saved.`);
+  } else {
+    log.info();
+  }
 }
 
 
@@ -83,11 +102,12 @@ async function bumpModule(
   pkg: IModule,
   allModules: IModule[],
   level: number,
-  ref?: { name: string, version: string },
+  ref: { name: string, version: string } | undefined,
+  save: boolean,
 ) {
   // Setup initial conditions.
   const dependants = dependsOn(pkg, allModules);
-  const version = semver.inc(pkg.version, release);
+  const version = semver.inc(pkg.latest, release);
   const isRoot = level === 0;
 
   // Log output.
@@ -106,15 +126,24 @@ async function bumpModule(
   // Update the selected module.
   const json = R.clone<any>(pkg.json);
   json.version = version;
-  await savePackage(pkg.dir, json);
+  if (save) {
+    await savePackage(pkg.dir, json);
+  }
 
   // Update all dependant modules.
   if (isRoot && dependants.length > 0) {
     log.info.gray('\nDependant modules:');
   }
   for (const dependentPkg of dependants) {
-    await updatePackageRef(dependentPkg, pkg.name, version, { save: true });
-    await bumpModule('patch', dependentPkg, allModules, level + 1, { name: pkg.name, version });
+    await updatePackageRef(dependentPkg, pkg.name, version, { save });
+    await bumpModule(
+      'patch',
+      dependentPkg,
+      allModules,
+      level + 1,
+      { name: pkg.name, version },
+      save,
+    );
   }
 }
 
