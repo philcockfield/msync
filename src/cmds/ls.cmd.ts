@@ -7,7 +7,6 @@ import {
   IModule,
   filter,
   fsPath,
-  npm,
   semver,
 } from '../common';
 
@@ -49,7 +48,7 @@ export async function cmd(
     dependencies,
     includeIgnored: options.i,
     showPath: options.p,
-    queryNpm: options.n,
+    npm: options.n,
   });
 }
 
@@ -61,7 +60,7 @@ export interface IOptions {
   includeIgnored?: boolean;
   showPath?: boolean;
   dependants?: IModule[];
-  queryNpm?: boolean;
+  npm?: boolean;
   columns?: ITableColumn[];
 }
 
@@ -75,9 +74,9 @@ export interface ITableColumn {
  * List modules in dependency order.
  */
 export async function ls(options: IOptions = {}) {
-  const { includeIgnored = false, queryNpm = false } = options;
+  const { includeIgnored = false, npm = false } = options;
 
-  const settings = await loadSettings();
+  const settings = await loadSettings({ npm });
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -86,27 +85,10 @@ export async function ls(options: IOptions = {}) {
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
-  const columns = [] as ITableColumn[];
-  if (queryNpm) {
-    const modulesNpmInfo = await npm.info(modules);
-    columns.push({
-      head: 'npm (latest)',
-      render: (pkg: IModule) => {
-        const info = modulesNpmInfo.find((item) => item.module.name === pkg.name);
-        const msg = !info
-          ? 'Not in registry'
-          : semver.gt(pkg.version, info.latest)
-            ? log.yellow(`${info.latest} ⬅`)
-            : info.latest;
-        return log.gray(msg);
-      },
-    });
-  }
-
   printTable(modules, {
     ...options,
     basePath: fsPath.dirname(settings.path),
-    columns: [...(options.columns || []), ...columns],
+    columns: options.columns,
   });
   return {
     modules,
@@ -163,7 +145,14 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     },
     version: {
       head: 'version',
-      render: (pkg: IModule) => log.magenta(pkg.version),
+      render: (pkg: IModule) => {
+        const npmVersion = pkg.npm && pkg.npm.latest;
+        if (npmVersion && semver.gt(pkg.version, npmVersion)) {
+          return log.yellow(`${pkg.version}`) + log.gray(` (npm: ${npmVersion})`);
+        } else {
+          return log.magenta(pkg.version)
+        }
+      },
     },
     dependencies: {
       head: 'dependencies',

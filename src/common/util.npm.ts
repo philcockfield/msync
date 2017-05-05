@@ -1,13 +1,7 @@
 import { exec } from './libs';
 import { compact } from './util';
-import { IModule } from '../types';
+import { IModule, INpmInfo } from '../types';
 
-
-export interface INpmInfo {
-  latest: string;
-  json: object;
-  module: IModule;
-}
 
 
 /**
@@ -29,12 +23,13 @@ async function getInfo(pkg: IModule): Promise<INpmInfo | undefined> {
     }
     const json = JSON.parse(result.stdout);
     const latest = json.data['dist-tags'].latest;
+    const name = json.data.name;
     return {
+      name,
       latest,
       json,
-      module: pkg,
     };
   } catch (error) {
-    throw new Error(`Failed to read NPM info for '${pkg.name}'. ${error.message}`);
+    throw new Error(`Failed while reading info for '${pkg.name}' from NPM.\n\n${error.message}`);
   }
 }

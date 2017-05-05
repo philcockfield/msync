@@ -5,7 +5,8 @@ export interface IModule {
   isIgnored: boolean;
   isTypeScript: boolean;
   dependencies: IDependency[];
-  json: object;
+  json: any;
+  npm?: INpmInfo;
 }
 
 
@@ -15,4 +16,11 @@ export interface IDependency {
   isDev: boolean;
   isLocal: boolean;
   package?: IModule;
+}
+
+
+export interface INpmInfo {
+  name: string;
+  latest: string;
+  json: any;
 }
