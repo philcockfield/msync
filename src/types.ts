@@ -2,6 +2,7 @@ export interface IModule {
   dir: string;
   name: string;
   version: string;
+  latest: string;
   isIgnored: boolean;
   isTypeScript: boolean;
   dependencies: IDependency[];

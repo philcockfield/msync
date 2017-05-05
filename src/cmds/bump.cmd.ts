@@ -61,7 +61,7 @@ export interface IOptions {
 export async function bump(options: IOptions = {}) {
   const { includeIgnored = false, npm = false, dryRun = false } = options;
   const save = !dryRun;
-  const settings = await loadSettings();
+  const settings = await loadSettings({ npm, spinner: npm });
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -69,8 +69,6 @@ export async function bump(options: IOptions = {}) {
   const modules = settings
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
-
-  console.log("npm", npm);
 
   // Prompt for the module to bump.
   const module = await promptForModule(modules);
@@ -80,7 +78,7 @@ export async function bump(options: IOptions = {}) {
   const dependants = dependsOn(module, modules);
   listCommand.printTable([module], { includeIgnored: true, dependants });
   if (dryRun) {
-    log.info.gray(`Dry run. No files will be saved.\n`);
+    log.info.gray(`Dry run...no files will be saved.\n`);
   }
 
   // Get the version number.
@@ -91,9 +89,10 @@ export async function bump(options: IOptions = {}) {
   log.info();
   await bumpModule(release, module, modules, 0, undefined, save);
   if (dryRun) {
-    log.info.gray(`\nDry run. No files were be saved.\n`);
+    log.info.gray(`\nNo files were saved.`);
+  } else {
+    log.info();
   }
-  log.info();
 }
 
 
@@ -104,11 +103,11 @@ async function bumpModule(
   allModules: IModule[],
   level: number,
   ref: { name: string, version: string } | undefined,
-  save: boolean
+  save: boolean,
 ) {
   // Setup initial conditions.
   const dependants = dependsOn(pkg, allModules);
-  const version = semver.inc(pkg.version, release);
+  const version = semver.inc(pkg.latest, release);
   const isRoot = level === 0;
 
   // Log output.

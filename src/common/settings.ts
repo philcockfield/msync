@@ -1,6 +1,6 @@
 import * as constants from './constants';
 import * as npm from './util.npm';
-import { fsPath, log, file } from './libs';
+import { fsPath, log, file, semver, listr } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
 
@@ -49,6 +49,7 @@ async function loadYaml(path: string) {
 
 export interface IOptions {
   npm?: boolean;
+  spinner?: boolean;
 }
 
 
@@ -56,6 +57,29 @@ export interface IOptions {
  * Initializes the settings.
  */
 export async function loadSettings(options: IOptions = {}): Promise<ISettings | undefined> {
+  const { spinner = false, npm = false } = options;
+
+  if (spinner) {
+    // Load the settings with a spinner.
+    let result: ISettings | undefined;
+    const title = npm
+      ? 'Load module info locally and from NPM.'
+      : 'Load module info locally.';
+    const task = {
+      title,
+      task: async () => result = await loadSettingsInternal(options),
+    };
+    await listr([task]).run();
+    log.info();
+    return result;
+
+  } else {
+    // No spinner.
+    return await loadSettingsInternal(options);
+  }
+}
+
+async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings | undefined> {
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
   if (!path) { return; }
@@ -87,6 +111,9 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
     const npmModules = await npm.info(modules);
     modules.forEach((pkg) => {
       pkg.npm = npmModules.find((item) => item.name === pkg.name);
+      if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
+        pkg.latest = pkg.npm.latest;
+      }
     });
   }
 

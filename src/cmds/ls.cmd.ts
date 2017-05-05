@@ -76,7 +76,7 @@ export interface ITableColumn {
 export async function ls(options: IOptions = {}) {
   const { includeIgnored = false, npm = false } = options;
 
-  const settings = await loadSettings({ npm });
+  const settings = await loadSettings({ npm, spinner: npm });
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
@@ -150,8 +150,10 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
         const npmVersion = pkg.npm && pkg.npm.latest;
         if (npmVersion && semver.gt(pkg.version, npmVersion)) {
           return log.yellow(`${pkg.version}`) + log.gray(` (NPM ${npmVersion})`);
+        } else if (npmVersion && semver.lt(pkg.version, npmVersion)) {
+          return log.gray(`${pkg.version}`) + log.magenta(` (NPM ${npmVersion})`);
         } else {
-          return log.magenta(pkg.version)
+          return log.magenta(pkg.version);
         }
       },
     },
