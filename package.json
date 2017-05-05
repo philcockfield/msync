@@ -10,7 +10,7 @@
   "scripts": {
     "test": "sh sh/test.sh",
     "tdd": "yarn run test -- --reporter min --watch",
-    "lint": "node node_modules/tslint/bin/tslint 'src/**/*.ts{,x}' --format verbose --fix",
+    "lint": "node node_modules/tslint/bin/tslint 'src/**/*.ts{,x}' --format verbose",
     "build": "rm -rf ./lib && node node_modules/typescript/bin/tsc",
     "build:watch": "yarn run build -- --watch",
     "prepublish": "yarn run lint && yarn test && yarn run build"
