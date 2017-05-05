@@ -11,16 +11,16 @@
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-3.5.2.tgz#c11cd2817d3a401b7ba0f5a420f35c56139b1c1e"
 
 "@types/fs-extra-promise@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra-promise/-/fs-extra-promise-1.0.0.tgz#f55f5f22f78a9219621a3676fa2e2de1a3e81241"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra-promise/-/fs-extra-promise-1.0.1.tgz#d59bf88f387f2a6b07f26b1d16146977f6c89a25"
   dependencies:
     "@types/bluebird" "*"
     "@types/fs-extra" "*"
     "@types/node" "*"
 
 "@types/fs-extra@*":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-2.1.0.tgz#8b350239c0455d92b8d3c626edac193860ff395f"
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-3.0.0.tgz#13e5566e4d780618ba52bd55e0dc713d7a687e59"
   dependencies:
     "@types/node" "*"
 
@@ -38,8 +38,8 @@
     "@types/lodash" "*"
 
 "@types/lodash@*":
-  version "4.14.63"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.63.tgz#5ac475f55bfdc62bc88c4239dbc482f2f3bead93"
+  version "4.14.64"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.64.tgz#979cf3a3d4a368670840bf9b3e448dc33ffe84ee"
 
 "@types/mocha@^2.2.41":
   version "2.2.41"
@@ -408,8 +408,8 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
     delayed-stream "~1.0.0"
 
 command-interface@^3.0.9:
-  version "3.0.16"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.16.tgz#1153e2b5cd896cae4f59af5838286e79808e0324"
+  version "3.0.17"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.17.tgz#b9b9fea76659eb0bb0d0b3044194589adb0f6c3a"
   dependencies:
     "@types/fs-extra-promise" "^1.0.0"
     "@types/inquirer" "^0.0.34"
@@ -668,7 +668,7 @@ fstream@^1.0.0, fstream@^1.0.10, fstream@^1.0.2:
     mkdirp ">=0.5 0"
     rimraf "2"
 
-gauge@~2.7.1:
+gauge@~2.7.3:
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/gauge/-/gauge-2.7.4.tgz#2c03405c7538c39d7eb37b317022e325fb018bf7"
   dependencies:
@@ -1246,12 +1246,12 @@ npm-run-path@^2.0.0:
     path-key "^2.0.0"
 
 npmlog@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.0.2.tgz#d03950e0e78ce1527ba26d2a7592e9348ac3e75f"
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.0.tgz#dc59bee85f64f00ed424efb2af0783df25d1c0b5"
   dependencies:
     are-we-there-yet "~1.1.2"
     console-control-strings "~1.1.0"
-    gauge "~2.7.1"
+    gauge "~2.7.3"
     set-blocking "~2.0.0"
 
 number-is-nan@^1.0.0:
@@ -1511,8 +1511,8 @@ rx@^4.1.0:
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
 
 rxjs@^5.0.0-beta.11, rxjs@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.3.0.tgz#d88ccbdd46af290cbdb97d5d8055e52453fabe2d"
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.3.1.tgz#9ecc9e722247e4f4490d30a878577a3740fd0cb7"
   dependencies:
     symbol-observable "^1.0.1"
 
