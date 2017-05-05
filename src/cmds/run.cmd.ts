@@ -73,6 +73,7 @@ export async function run(cmd: string, options: IOptions = {}) {
   // Print status:
   log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);
   listCommand.printTable(modules, { showPath: true });
+  log.info();
 
   // Run tasks.
   const tasks = modules.map((pkg) => {

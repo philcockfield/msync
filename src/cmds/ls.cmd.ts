@@ -90,6 +90,7 @@ export async function ls(options: IOptions = {}) {
     basePath: fsPath.dirname(settings.path),
     columns: options.columns,
   });
+  log.info();
   return {
     modules,
     settings: settings as ISettings,
@@ -197,6 +198,5 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
   // Finish up.
   if (modules.length > 0) {
     logModules(modules);
-    log.info();
   }
 }

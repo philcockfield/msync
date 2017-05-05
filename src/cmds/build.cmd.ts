@@ -113,6 +113,7 @@ export async function buildOnce(modules: IModule[]) {
 export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   log.info.magenta('\nBuild watching:');
   listCommand.printTable(modules, { includeIgnored });
+  log.info();
 
   modules.forEach(async (pkg) => {
     const tsc = await tscCommand(pkg);
