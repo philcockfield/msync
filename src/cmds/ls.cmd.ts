@@ -148,7 +148,7 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
       render: (pkg: IModule) => {
         const npmVersion = pkg.npm && pkg.npm.latest;
         if (npmVersion && semver.gt(pkg.version, npmVersion)) {
-          return log.yellow(`${pkg.version}`) + log.gray(` (npm: ${npmVersion})`);
+          return log.yellow(`${pkg.version}`) + log.gray(` (NPM ${npmVersion})`);
         } else {
           return log.magenta(pkg.version)
         }
