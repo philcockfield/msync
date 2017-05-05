@@ -1,4 +1,5 @@
 import * as constants from './constants';
+import * as npm from './util.npm';
 import { fsPath, log, file } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
@@ -38,7 +39,7 @@ async function loadYaml(path: string) {
 
     return result;
   } catch (error) {
-    log.error(`Failed to parse YAML configuration`);
+    log.error(`Failed to parse YAML configuration.`);
     log.error(error.message);
     log.info(log.magenta('File:'), path, '\n');
   }
@@ -46,13 +47,15 @@ async function loadYaml(path: string) {
 }
 
 
+export interface IOptions {
+  npm?: boolean;
+}
 
 
 /**
  * Initializes the settings.
  */
-export async function loadSettings(): Promise<ISettings | undefined> {
-
+export async function loadSettings(options: IOptions = {}): Promise<ISettings | undefined> {
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
   if (!path) { return; }
@@ -66,18 +69,26 @@ export async function loadSettings(): Promise<ISettings | undefined> {
   const dir = fsPath.dirname(path);
   yaml.modules = yaml.modules.map((path) => fsPath.resolve(dir, path));
 
-  // Ignore
+  // Load the [package.json] from files and setup depth order.
+  let modules = await toPackages(yaml.modules);
+  modules = orderByDepth(modules);
+
+  // Flag ignored packages.
   const ignore = {
     paths: await ignorePaths(yaml, dir),
     names: yaml.ignore.names,
   };
-
-  // Load the [package.json] from files.
-  let modules = await toPackages(yaml.modules);
-  modules = orderByDepth(modules);
   modules.forEach((pkg) => {
     pkg.isIgnored = isIgnored(pkg, ignore);
   });
+
+  // NPM.
+  if (options.npm) {
+    const npmModules = await npm.info(modules);
+    modules.forEach((pkg) => {
+      pkg.npm = npmModules.find((item) => item.name === pkg.name);
+    });
+  }
 
   // Finish up.
   return {
@@ -103,7 +114,6 @@ function isIgnored(pkg: IModule, ignore: IIgnore) {
   if (ignore.names.includes(pkg.name)) {
     return true;
   }
-
   for (const path of ignore.paths) {
     if (pkg.dir.startsWith(path)) { return true; }
   }
