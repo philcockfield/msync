@@ -125,26 +125,23 @@ async function bumpModule(options: IBumpOptions) {
   const isRoot = ref === undefined;
 
   // Log output.
-  const tableBuilder = options.table || table({
-    head: ['update', 'module', 'version', 'ref updated'],
-  });
+  const head = ['update', 'module', 'version', 'ref updated'].map((title) => log.gray(title));
+  const tableBuilder = options.table || table({ head });
 
   if (!ref) {
     let msg = '';
-    msg += `  ${release.toUpperCase()} `;
-    msg += `update ${log.magenta(pkg.name)} to version ${log.magenta(version)} `;
-    log.info.cyan(msg);
+    msg += `  ${log.yellow(release.toUpperCase())} `;
+    msg += `update ${log.cyan(pkg.name)} from ${log.gray(pkg.latest)} ${log.gray('=>')} ${log.magenta(version)} `;
+    log.info.gray(msg);
   } else {
     tableBuilder
       .add([
-        log.cyan(release.toUpperCase()),
-        log.magenta(pkg.name),
-        log.magenta(version),
-        log.yellow(`${ref.name} (${ref.version})`),
+        log.yellow(release.toUpperCase()),
+        log.cyan(pkg.name),
+        log.gray(`${pkg.latest} => ${log.magenta(version)}`),
+        log.gray(`${ref.name}: ${log.magenta(ref.version)}`),
       ]);
-    // tableBuilder.log();
   }
-
 
 
   // Update the selected module.
