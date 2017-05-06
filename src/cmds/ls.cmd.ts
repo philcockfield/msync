@@ -13,7 +13,7 @@ import {
 
 export const name = 'ls';
 export const alias = 'l';
-export const description = 'List modules in dependency order.';
+export const description = 'Lists modules in dependency order.';
 export const args = {
   '-D': 'Show all module dependencies (omit for local only).',
   '-i': 'Include ignored modules.',

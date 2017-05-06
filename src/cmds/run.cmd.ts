@@ -3,20 +3,15 @@ import {
   loadSettings,
   constants,
   filter,
-  // IModule,
   listr,
-  // elapsed,
-  // fs,
-  // fsPath,
   exec,
-  // table,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
 
 export const name = 'run';
 export const alias = 'r';
-export const description = 'Runs the given command on all modules';
+export const description = 'Runs the given command on all modules.';
 export const args = {
   '<command>': 'The shell command to invoke.',
   '-i': 'Include ignored modules.',

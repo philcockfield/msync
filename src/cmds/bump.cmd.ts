@@ -16,7 +16,7 @@ import {
 import * as listCommand from './ls.cmd';
 
 export const name = 'bump';
-export const description = 'dependant';
+export const description = 'Bumps a module version along with it\'s entire dependency graph.';
 export const args = {
   '-i': 'Include ignored modules.',
   '-d': 'Dry run where no files are saved.',
