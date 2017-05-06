@@ -113,7 +113,7 @@ export interface IBumpOptions {
   allModules: IModule[];
   save: boolean;
   level?: number;
-  ref?: { name: string, version: string };
+  ref?: { name: string, fromVersion: string, toVersion: string };
   table?: ITable;
 }
 
@@ -139,7 +139,7 @@ async function bumpModule(options: IBumpOptions) {
         log.yellow(release.toUpperCase()),
         log.cyan(pkg.name),
         log.gray(`${pkg.latest} => ${log.magenta(version)}`),
-        log.gray(`${ref.name}: ${log.magenta(ref.version)}`),
+        log.gray(`${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(ref.toVersion)}`),
       ]);
   }
 
@@ -163,7 +163,7 @@ async function bumpModule(options: IBumpOptions) {
       pkg: dependentPkg,
       allModules,
       level: level + 1,
-      ref: { name: pkg.name, version },
+      ref: { name: pkg.name, fromVersion: pkg.latest, toVersion: version },
       save,
       table: tableBuilder,
     });
