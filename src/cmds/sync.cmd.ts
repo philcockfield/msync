@@ -13,6 +13,7 @@ import {
   debounce,
   dependsOn,
   updatePackageRef,
+  moment,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -108,10 +109,10 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
     const sources = filter
       .localDeps(target)
       .filter((dep) => filter.includeIgnored(dep.package, includeIgnored));
-    const sourceNames = sources
-      .map((dep) => ` ${log.cyan(dep.name)}`);
+    const sourceNames = sources.map((dep) => ` ${log.cyan(dep.name)}`);
+    const title = `${log.magenta(target.name)} ${log.cyan(sourceNames.length > 0 ? '⬅' : '')}${sourceNames}`;
     return {
-      title: `${log.magenta(target.name)} ${log.cyan('⬅')}${sourceNames}`,
+      title,
       task: () => sync(sources, target),
     };
   });
@@ -119,7 +120,7 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
   try {
     const taskList = listr(tasks, { concurrent: false });
     await taskList.run();
-    log.info.gray('', elapsed(startedAt));
+    log.info.gray(` ${elapsed(startedAt)}, ${moment().format('h:mm:ssa')}`);
     log.info();
 
   } catch (error) {
@@ -156,13 +157,13 @@ function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIg
   const sync = debounce(() => {
     const dependants = dependsOn(pkg, modules);
     if (dependants.length > 0) {
-      log.info.green(`${pkg.name} changed:`);
+      log.info.green(`${pkg.name} changed: `);
       syncModules(dependants, includeIgnored);
     }
   }, 1000);
 
   file
-    .watch(`${pkg.dir}${watchPattern}`)
+    .watch(`${pkg.dir} ${watchPattern} `)
     .filter((path) => !path.includes('node_modules/'))
     .forEach(() => sync());
 }
