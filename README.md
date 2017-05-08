@@ -26,7 +26,7 @@ watchPattern: /lib/**/*.js # The files that when changed cause a sync to occur.
 Run the command line using `msync` within your workspace folder to list, sync or build the modules:
 
 ### ls (list)
-![Image](https://cloud.githubusercontent.com/assets/185555/25559120/2120a7b8-2d89-11e7-97a9-e8dd3ca7dc75.png)
+![Image](https://cloud.githubusercontent.com/assets/185555/25798458/56674ff0-3435-11e7-854d-2a1ddb45b3d0.png)
 
 ### sync
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559130/51c4dd4e-2d89-11e7-9f50-6adca46c7db2.png)
@@ -53,17 +53,6 @@ ignore:
 
 
 
-
-
-### `build`
-Builds all typescript modules.
-
-```js
-await build();
-await build({ 
-  includeIgnored: boolean         // Default: false 
-});
-```
 
 
 ## Other Approaches
