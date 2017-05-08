@@ -54,34 +54,6 @@ ignore:
 
 
 
-# API
-All command-line options can be programatically invoked:
-
-```js
-import { ls, sync, build } from 'msync';
-```
-
-### `ls` (list)
-List modules in dependency order.
-
-```js
-await ls();
-await ls({ 
-  deps: 'local' | 'all' | 'none', // Default: 'local'
-  includeIgnored: boolean,        // Default: false.
-});
-```
-
-### `sync`
-Syncs each module's dependency tree within the workspace.
-
-```js
-await sync();
-await sync({ 
-  includeIgnored: boolean         // Default: false 
-});
-```
-
 
 ### `build`
 Builds all typescript modules.
