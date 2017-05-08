@@ -78,7 +78,7 @@ export async function publish(options: IOptions = {}) {
   const publishCommand = 'npm publish';
   const publishedSuccessfully = await runCommand(modules, publishCommand);
   if (publishedSuccessfully) {
-    log.info.green(`\n✨✨ Done. ${log.gray(elapsed(startedAt))}\n`);
+    log.info(`\n✨✨  Done. ${log.gray(elapsed(startedAt))}\n`);
   } else {
     log.info.yellow(`\n💩  Something went wrong while publishing.\n`);
   }
