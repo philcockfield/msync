@@ -2,7 +2,12 @@
 ![msync](https://cloud.githubusercontent.com/assets/185555/25552911/06c09016-2cfa-11e7-910c-a3723dff3f12.png)
 
 
-A powerful toolkit for building and syncing multiple node-modules in a flexibly defined workspace.
+A powerful toolkit for managing multiple node-modules in a flexibly defined workspace.
+
+- `build` and watch (typescript)
+- `sync` and watch (dependency graph)
+- `bump` (versions in dependency graph order)
+- `publish` (to NPM)
 
 
 
@@ -26,7 +31,7 @@ watchPattern: /lib/**/*.js # The files that when changed cause a sync to occur.
 Run the command line using `msync` within your workspace folder to list, sync or build the modules:
 
 ### ls (list)
-![Image](https://cloud.githubusercontent.com/assets/185555/25559120/2120a7b8-2d89-11e7-97a9-e8dd3ca7dc75.png)
+![Image](https://cloud.githubusercontent.com/assets/185555/25798458/56674ff0-3435-11e7-854d-2a1ddb45b3d0.png)
 
 ### sync
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559130/51c4dd4e-2d89-11e7-9f50-6adca46c7db2.png)
@@ -53,45 +58,6 @@ ignore:
 
 
 
-
-# API
-All command-line options can be programatically invoked:
-
-```js
-import { ls, sync, build } from 'msync';
-```
-
-### `ls` (list)
-List modules in dependency order.
-
-```js
-await ls();
-await ls({ 
-  deps: 'local' | 'all' | 'none', // Default: 'local'
-  includeIgnored: boolean,        // Default: false.
-});
-```
-
-### `sync`
-Syncs each module's dependency tree within the workspace.
-
-```js
-await sync();
-await sync({ 
-  includeIgnored: boolean         // Default: false 
-});
-```
-
-
-### `build`
-Builds all typescript modules.
-
-```js
-await build();
-await build({ 
-  includeIgnored: boolean         // Default: false 
-});
-```
 
 
 ## Other Approaches
