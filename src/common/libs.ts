@@ -13,6 +13,6 @@ export {
   Observable,
   Subject,
   exec,
-  listr,
+  listr, IListrOptions,
   inquirer,
 } from 'command-interface';
