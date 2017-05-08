@@ -23,30 +23,6 @@ export interface ISettings {
 }
 
 
-/**
- * Finds and loads the YAML configuration file.
- */
-async function loadYaml(path: string) {
-  try {
-    const result = await file.yaml<IYaml>(path);
-
-    // Fill in default values.
-    result.modules = result.modules || [];
-    result.ignore = result.ignore || { paths: [] };
-    result.ignore.paths = result.ignore.paths || [];
-    result.ignore.names = result.ignore.names || [];
-    result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
-
-    return result;
-  } catch (error) {
-    log.error(`Failed to parse YAML configuration.`);
-    log.error(error.message);
-    log.info(log.magenta('File:'), path, '\n');
-  }
-  return;
-}
-
-
 export interface IOptions {
   npm?: boolean;
   spinner?: boolean;
@@ -102,9 +78,7 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
     paths: await ignorePaths(yaml, dir),
     names: yaml.ignore.names,
   };
-  modules.forEach((pkg) => {
-    pkg.isIgnored = isIgnored(pkg, ignore);
-  });
+  modules.forEach((pkg) => pkg.isIgnored = isIgnored(pkg, ignore));
 
   // NPM.
   if (options.npm) {
@@ -146,3 +120,30 @@ function isIgnored(pkg: IModule, ignore: IIgnore) {
   }
   return false;
 }
+
+
+
+
+/**
+ * Finds and loads the YAML configuration file.
+ */
+async function loadYaml(path: string) {
+  try {
+    const result = await file.yaml<IYaml>(path);
+
+    // Fill in default values.
+    result.modules = result.modules || [];
+    result.ignore = result.ignore || { paths: [] };
+    result.ignore.paths = result.ignore.paths || [];
+    result.ignore.names = result.ignore.names || [];
+    result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
+
+    return result;
+  } catch (error) {
+    log.error(`Failed to parse YAML configuration.`);
+    log.error(error.message);
+    log.info(log.magenta('File:'), path, '\n');
+  }
+  return;
+}
+

@@ -41,9 +41,11 @@ export async function toPackages(moduleDirs: string[]) {
  * Loads a [package.json] file.
  */
 async function toPackage(packageFilePath: string): Promise<IModule> {
+  // Setup initial conditions.
   const text = (await fs.readFileAsync(packageFilePath)).toString();
   const json = JSON.parse(text);
 
+  // Dependencies.
   let dependencies: IDependency[] = [];
   const addDeps = (deps: { [key: string]: string }, isDev: boolean) => {
     if (!deps) { return; }
@@ -54,24 +56,31 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
       isLocal: false,
     }));
   };
-
   addDeps(json.dependencies, false);
   addDeps(json.peerDependencies, false);
   addDeps(json.devDependencies, true);
   dependencies = R.sortBy(R.prop('name'), dependencies);
   dependencies = R.uniqBy((dep: IDependency) => dep.name, dependencies);
 
-  const dir = fsPath.resolve(packageFilePath, '..');
-  const isTypeScript = await fs.existsAsync(fsPath.join(dir, 'tsconfig.json'));
+  // Derive useful values.
   const version = json.version;
+  const dir = fsPath.resolve(packageFilePath, '..');
 
+  // Load typescript config.
+  const tsconfigPath = fsPath.join(dir, 'tsconfig.json');
+  const isTypeScript = await fs.existsAsync(tsconfigPath);
+  const tsconfig = isTypeScript
+    ? (await fs.readJSONAsync(tsconfigPath))
+    : undefined;
 
+  // Finish up.
   return {
     dir,
     name: json.name,
     version,
     latest: version,
     isTypeScript,
+    tsconfig,
     isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,
     json,

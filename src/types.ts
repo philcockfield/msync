@@ -5,6 +5,7 @@ export interface IModule {
   latest: string;
   isIgnored: boolean;
   isTypeScript: boolean;
+  tsconfig?: any;
   dependencies: IDependency[];
   json: any;
   npm?: INpmInfo;
