@@ -14,6 +14,7 @@ import {
   dependsOn,
   updatePackageRef,
   moment,
+  fsPath,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -163,7 +164,7 @@ function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIg
   }, 1000);
 
   file
-    .watch(`${pkg.dir} ${watchPattern} `)
+    .watch(fsPath.join(pkg.dir, watchPattern))
     .filter((path) => !path.includes('node_modules/'))
     .forEach(() => sync());
 }
