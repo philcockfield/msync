@@ -1,8 +1,8 @@
 {
-  "name": "module-5-ignored",
+  "name": "msync.sample-5-ignored",
   "version": "2.3.6",
   "dependencies": {
-    "module-1": "^0.0.1",
-    "module-4-ignored": "^0.0.1"
+    "msync.sample-1": "^0.0.1",
+    "msync.sample-4-ignored": "^0.0.1"
   }
 }

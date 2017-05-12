@@ -7,7 +7,7 @@ ignore:
   paths:
     - ./sample/**/ignore-folder
   names:
-    - module-4-ignored
+    - msync.sample-4-ignored
 
 
 # watchPattern: /**/*.js

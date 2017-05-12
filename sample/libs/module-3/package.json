@@ -1,7 +1,7 @@
 {
-  "name": "module-3",
+  "name": "msync.sample-3",
   "version": "2.3.6",
   "dependencies": {
-    "module-1": "^0.0.1"
+    "msync.sample-1": "^0.0.1"
   }
 }
