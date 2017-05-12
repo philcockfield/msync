@@ -1,0 +1,11 @@
+{
+  "name": "msync.sample-2",
+  "version": "0.1.39",
+  "dependencies": {
+    "react": "^15.5.4",
+    "msync.sample-1": "^0.0.6"
+  },
+  "scripts": {
+    "prepublish": "echo no-op"
+  }
+}

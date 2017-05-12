@@ -1,0 +1,7 @@
+{
+  "name": "msync.sample-4-ignored",
+  "version": "2.3.6",
+  "dependencies": {
+    "msync.sample-1": "^0.0.1"
+  }
+}
