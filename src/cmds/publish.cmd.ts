@@ -16,7 +16,9 @@ export const name = 'publish';
 export const alias = 'p';
 export const description = 'Publishes all modules that are ahead of NPM.';
 export const args = {
+  '-f': 'Full `install -> publish -> sync` on each module (slower).',
 };
+
 
 
 /**
@@ -26,15 +28,20 @@ export async function cmd(
   args?: {
     params: string[],
     options: {
+      f?: boolean;
     },
   },
 ) {
-  // const options = (args && args.options) || {};
-  await publish({});
+  const options = (args && args.options) || {};
+  await publish({
+    fullInstallAndSync: options.f || false,
+  });
 }
 
 
-export interface IOptions { }
+export interface IOptions {
+  fullInstallAndSync?: boolean;
+}
 
 
 export async function publish(options: IOptions = {}) {
@@ -75,8 +82,20 @@ export async function publish(options: IOptions = {}) {
   // Publish.
   log.info.gray(`Publishing to NPM:\n`);
   const startedAt = new Date();
-  const publishCommand = () => 'npm publish';
-  const publishedSuccessfully = await runCommand(modules, publishCommand);
+  let publishedSuccessfully = false;
+
+  if (options.fullInstallAndSync) {
+    // Slow.  Full install and sync mode.
+    // install -> prepublish -> publish -> sync
+    const publishCommand = () => 'yarn install && npm publish && msync sync';
+    publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: false, exitOnError: true });
+
+  } else {
+    // Fast.  Publish all concurrently as-is.
+    const publishCommand = () => 'npm publish';
+    publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: true, exitOnError: false });
+  }
+
   if (publishedSuccessfully) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
   } else {
@@ -86,7 +105,7 @@ export async function publish(options: IOptions = {}) {
 
 
 
-const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, options: IListrOptions = {}) => {
+const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, options: IListrOptions) => {
   const prepublish = (pkg: IModule) => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
@@ -97,7 +116,7 @@ const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, opt
     };
   };
   const tasks = modules.map((pkg) => prepublish(pkg));
-  const runner = listr(tasks, { concurrent: true, exitOnError: false });
+  const runner = listr(tasks, options);
   try {
     await runner.run();
     return true;
