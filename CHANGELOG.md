@@ -12,6 +12,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
+
+## [1.6.0] - 2017-05-13
+#### Added
+- Full install and sync for `msync publish` using the `-f` flag.
+  The option is slower but ensures all modules references, including changes to external module references, are consistent and correct.  It is included as a flag because it is slower, and when publishing fast (without the flag) it is assumed that all internal modules have been synced and that dependencies are working.
+
+  ![Screenshot](https://cloud.githubusercontent.com/assets/185555/26020254/6c5e8eba-37d0-11e7-940a-c55a50d70314.png)
+
+
 ## [1.5.0] - 2017-04-05
 #### Added
 - Listing latest version details from NPM (see the `-n` flag for `ls`).
