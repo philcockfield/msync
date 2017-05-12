@@ -65,6 +65,8 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
   // Derive useful values.
   const version = json.version;
   const dir = fsPath.resolve(packageFilePath, '..');
+  const hasScripts = json.scripts !== undefined;
+  const hasPrepublish = hasScripts && json.scripts.prepublish !== undefined;
 
   // Load typescript config.
   const tsconfigPath = fsPath.join(dir, 'tsconfig.json');
@@ -80,6 +82,8 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     version,
     latest: version,
     isTypeScript,
+    hasScripts,
+    hasPrepublish,
     tsconfig,
     isIgnored: false, // NB: Set later once the entire set of modules exists.
     dependencies,

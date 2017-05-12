@@ -91,8 +91,10 @@ const runCommand = async (modules: IModule[], cmd: string, options: IListrOption
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
       task: async () => {
-        const command = `cd ${pkg.dir} && ${cmd}`;
-        return await exec.run(command, { silent: true });
+        if (pkg.hasPrepublish) {
+          const command = `cd ${pkg.dir} && ${cmd}`;
+          return await exec.run(command, { silent: true });
+        }
       },
     };
   };
