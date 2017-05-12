@@ -58,7 +58,7 @@ export async function publish(options: IOptions = {}) {
 
   // Ensure each module can be published.
   log.info.gray(`Running pre-flight checks:\n`);
-  const preflightCommand = 'yarn run prepublish';
+  const preflightCommand = (pkg: IModule) => pkg.hasPrepublish ? 'yarn run prepublish' : 'echo no-prepublish';
   const preflightPassed = await runCommand(modules, preflightCommand, { concurrent: true, exitOnError: false });
   if (!preflightPassed) {
     log.info.yellow(`\nSome preflight checks failed, nothing was published.\n`);
@@ -75,7 +75,7 @@ export async function publish(options: IOptions = {}) {
   // Publish.
   log.info.gray(`Publishing to NPM:\n`);
   const startedAt = new Date();
-  const publishCommand = 'npm publish';
+  const publishCommand = () => 'npm publish';
   const publishedSuccessfully = await runCommand(modules, publishCommand);
   if (publishedSuccessfully) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
@@ -86,15 +86,13 @@ export async function publish(options: IOptions = {}) {
 
 
 
-const runCommand = async (modules: IModule[], cmd: string, options: IListrOptions = {}) => {
+const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, options: IListrOptions = {}) => {
   const prepublish = (pkg: IModule) => {
     return {
-      title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
+      title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
       task: async () => {
-        if (pkg.hasPrepublish) {
-          const command = `cd ${pkg.dir} && ${cmd}`;
-          return await exec.run(command, { silent: true });
-        }
+        const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
+        return await exec.run(command, { silent: true });
       },
     };
   };
