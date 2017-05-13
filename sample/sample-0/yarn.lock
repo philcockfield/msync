@@ -71,15 +71,15 @@ msync.sample-1@^0.0.1:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.5.tgz#081057f1e413d38a76dc7cfa0d8015ad0501dbc9"
 
-msync.sample-1@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.6.tgz#6bc8571aeda53b453aa0ffc432ac3554434df81b"
+msync.sample-1@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.7.tgz#f8fcfb22bb56a949b01843baf4516eb4f0addd76"
 
-msync.sample-3@^2.3.12:
-  version "2.3.12"
-  resolved "https://registry.yarnpkg.com/msync.sample-3/-/msync.sample-3-2.3.12.tgz#0634444d7741b938231c0fd0f06b4b434a95ac37"
+msync.sample-3@^2.3.13:
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/msync.sample-3/-/msync.sample-3-2.3.13.tgz#a08cc03ee8b1c986d3f8218f4f5e264571e38e09"
   dependencies:
-    msync.sample-1 "^0.0.6"
+    msync.sample-1 "^0.0.7"
 
 msync.sample-4-ignored@^0.0.1, msync.sample-4-ignored@^2.0.1:
   version "2.3.6"

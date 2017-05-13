@@ -54,7 +54,7 @@ export async function publish(options: IOptions = {}) {
 
   const total = modules.length;
   if (total === 0) {
-    log.info.gray(`No modules need publishing.\n`);
+    log.info.gray(`✨✨  No modules need to be published.\n`);
     return;
   }
 
