@@ -1,6 +1,6 @@
 {
   "name": "msync.sample-3",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "dependencies": {
     "msync.sample-1": "^0.0.6"
   }

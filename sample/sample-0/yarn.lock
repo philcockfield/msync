@@ -75,9 +75,9 @@ msync.sample-1@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.6.tgz#6bc8571aeda53b453aa0ffc432ac3554434df81b"
 
-msync.sample-3@^2.3.11:
-  version "2.3.11"
-  resolved "https://registry.yarnpkg.com/msync.sample-3/-/msync.sample-3-2.3.11.tgz#551999d8e455c91f8f0b8ce0957978cef120d6e4"
+msync.sample-3@^2.3.12:
+  version "2.3.12"
+  resolved "https://registry.yarnpkg.com/msync.sample-3/-/msync.sample-3-2.3.12.tgz#0634444d7741b938231c0fd0f06b4b434a95ac37"
   dependencies:
     msync.sample-1 "^0.0.6"
 
