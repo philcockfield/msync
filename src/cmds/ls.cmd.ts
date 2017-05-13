@@ -19,6 +19,7 @@ export const args = {
   '-i': 'Include ignored modules.',
   '-p': 'Show path to module.',
   '-n': 'Retrieve registry details from NPM.',
+  '--no-formatting': 'Simple list without table formatting.',
 };
 
 
@@ -33,6 +34,7 @@ export async function cmd(
       i?: boolean;
       p?: boolean;
       n?: boolean;
+      formatting?: boolean;
     },
   },
 ) {
@@ -42,6 +44,7 @@ export async function cmd(
     includeIgnored: options.i,
     showPath: options.p,
     npm: options.n,
+    formatting: options.formatting,
   });
 }
 
@@ -52,6 +55,7 @@ export interface IOptions {
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
   showPath?: boolean;
+  formatting?: boolean;
   dependants?: IModule[];
   npm?: boolean;
   columns?: ITableColumn[];
@@ -68,6 +72,7 @@ export interface ITableColumn {
  */
 export async function ls(options: IOptions = {}) {
   const { includeIgnored = false, npm = false } = options;
+  const formatting = options.formatting === false ? false : true;
 
   const settings = await loadSettings({ npm, spinner: npm });
   if (!settings) {
@@ -78,12 +83,24 @@ export async function ls(options: IOptions = {}) {
     .modules
     .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
-  printTable(modules, {
-    ...options,
-    basePath: fsPath.dirname(settings.path),
-    columns: options.columns,
-  });
-  log.info();
+
+  if (formatting) {
+    // Pretty formatting.
+    printTable(modules, {
+      ...options,
+      basePath: fsPath.dirname(settings.path),
+      columns: options.columns,
+    });
+    log.info();
+
+  } else {
+    // No formatting.
+    log.info();
+    modules.forEach((pkg) => log.info(pkg.name));
+    log.info();
+
+  }
+
   return {
     modules,
     settings: settings as ISettings,
