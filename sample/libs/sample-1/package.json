@@ -1,6 +1,6 @@
 {
   "name": "msync.sample-1",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "build": "rm -rf ./libs && tsc",
     "prepublish": "yarn run build"

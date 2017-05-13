@@ -2,6 +2,6 @@
 # yarn lockfile v1
 
 
-msync.sample-1@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.6.tgz#6bc8571aeda53b453aa0ffc432ac3554434df81b"
+msync.sample-1@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/msync.sample-1/-/msync.sample-1-0.0.7.tgz#f8fcfb22bb56a949b01843baf4516eb4f0addd76"
