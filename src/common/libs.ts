@@ -15,4 +15,5 @@ export {
   exec,
   listr, IListrOptions,
   inquirer,
+  plural,
 } from 'command-interface';

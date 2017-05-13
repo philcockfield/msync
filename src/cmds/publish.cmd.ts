@@ -9,15 +9,14 @@ import {
   elapsed,
   inquirer,
   semver,
+  plural,
 } from '../common';
 import { printTable } from './ls.cmd';
 
 export const name = 'publish';
 export const alias = 'p';
 export const description = 'Publishes all modules that are ahead of NPM.';
-export const args = {
-  '-f': 'Full `install -> publish -> sync` on each module (slower).',
-};
+export const args = {};
 
 
 
@@ -28,20 +27,15 @@ export async function cmd(
   args?: {
     params: string[],
     options: {
-      f?: boolean;
     },
   },
 ) {
-  const options = (args && args.options) || {};
-  await publish({
-    fullInstallAndSync: options.f || false,
-  });
+  // const options = (args && args.options) || {};
+  await publish({});
 }
 
 
-export interface IOptions {
-  fullInstallAndSync?: boolean;
-}
+export interface IOptions { }
 
 
 export async function publish(options: IOptions = {}) {
@@ -58,23 +52,14 @@ export async function publish(options: IOptions = {}) {
     .filter((pkg) => isPublishRequired(pkg));
   printTable(modules);
 
-  if (modules.length === 0) {
+  const total = modules.length;
+  if (total === 0) {
     log.info.gray(`No modules need publishing.\n`);
     return;
   }
 
-  // Ensure each module can be published.
-  log.info.gray(`Running pre-flight checks:\n`);
-  const preflightCommand = (pkg: IModule) => pkg.hasPrepublish ? 'yarn run prepublish' : 'echo no-prepublish';
-  const preflightPassed = await runCommand(modules, preflightCommand, { concurrent: true, exitOnError: false });
-  if (!preflightPassed) {
-    log.info.yellow(`\nSome preflight checks failed, nothing was published.\n`);
-    return;
-  }
-
   // Prompt the user if they want to continue.
-  log.info.gray(`\nAll modules are good to go!\n`);
-  if (!(await promptYesNo('Publish to NPM now?'))) {
+  if (!(await promptYesNo(`Publish ${total} ${plural('module', total)} to NPM now?`))) {
     log.info();
     return;
   }
@@ -82,19 +67,10 @@ export async function publish(options: IOptions = {}) {
   // Publish.
   log.info.gray(`Publishing to NPM:\n`);
   const startedAt = new Date();
-  let publishedSuccessfully = false;
 
-  if (options.fullInstallAndSync) {
-    // Slow.  Full install and sync mode.
-    // install -> prepublish -> publish -> sync
-    const publishCommand = () => 'yarn install && npm publish && msync sync';
-    publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: false, exitOnError: true });
-
-  } else {
-    // Fast.  Publish all concurrently as-is.
-    const publishCommand = () => 'npm publish';
-    publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: true, exitOnError: false });
-  }
+  // Slow.  Full install and sync mode.
+  const publishCommand = () => 'yarn install && npm publish && msync sync';
+  const publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: false, exitOnError: true });
 
   if (publishedSuccessfully) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
