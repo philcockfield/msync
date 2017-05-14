@@ -82,13 +82,14 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
 
   // NPM.
   if (options.npm) {
-    const npmModules = await npm.info(modules);
-    modules.forEach((pkg) => {
-      pkg.npm = npmModules.find((item) => item.name === pkg.name);
-      if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
-        pkg.latest = pkg.npm.latest;
-      }
-    });
+    const npmModules = await npm.info(modules.filter((pkg) => !pkg.isIgnored));
+    modules
+      .forEach((pkg) => {
+        pkg.npm = npmModules.find((item) => item.name === pkg.name);
+        if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
+          pkg.latest = pkg.npm.latest;
+        }
+      });
   }
 
   // Finish up.
