@@ -407,9 +407,9 @@ combined-stream@^1.0.5, combined-stream@~1.0.5:
   dependencies:
     delayed-stream "~1.0.0"
 
-command-interface@^3.0.21:
-  version "3.0.22"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.22.tgz#6d644ebe21e423b4842a3f8e003dd2f9ef28e19e"
+command-interface@^3.0.23:
+  version "3.0.23"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-3.0.23.tgz#c7c856d709a36cf7af4441c325a9b269dcd217a3"
   dependencies:
     "@types/fs-extra-promise" "^1.0.0"
     "@types/inquirer" "^0.0.34"

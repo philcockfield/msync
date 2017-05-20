@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -16,7 +16,7 @@
     "prepublish": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "command-interface": "^3.0.21",
+    "command-interface": "^3.0.23",
     "lodash.debounce": "^4.0.8",
     "rsync": "^0.6.1",
     "semver": "^5.3.0",

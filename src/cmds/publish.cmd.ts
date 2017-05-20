@@ -14,7 +14,7 @@ import {
 import { printTable } from './ls.cmd';
 
 export const name = 'publish';
-export const alias = 'p';
+export const alias = ['p', 'pub'];
 export const description = 'Publishes all modules that are ahead of NPM.';
 export const args = {};
 
