@@ -1,4 +1,4 @@
-import { R, moment } from './libs';
+import { R, moment, log } from './libs';
 
 
 export const compact = <T>(value: T[]) => R.pipe(
@@ -6,6 +6,17 @@ export const compact = <T>(value: T[]) => R.pipe(
   R.reject(R.isEmpty),
 )(value) as T[];
 
+
+
+
+/**
+ * Logs to the console with a `silent` switch.
+ */
+export function write(msg: any, silent?: boolean) {
+  if (silent !== true) {
+    log.info(msg);
+  }
+}
 
 
 

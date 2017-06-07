@@ -12,10 +12,10 @@ import {
   table,
 } from '../common';
 import * as listCommand from './ls.cmd';
+import * as syncCommand from './sync.cmd';
 
 export const name = 'build';
-export const alias = 'b';
-export const description = 'Builds all typescript modules.';
+export const description = 'Builds and syncs all typescript modules in order.';
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
@@ -90,12 +90,13 @@ export async function buildOnce(modules: IModule[]) {
         const tsc = await tscCommand(pkg);
         const cmd = `cd ${pkg.dir} && ${tsc}`;
         await exec.run(cmd, { silent: true });
+        await syncCommand.sync({ includeIgnored: false, updateVersions: false, silent: true });
       },
     };
   });
 
   try {
-    const taskList = listr(tasks, { concurrent: true, exitOnError: false });
+    const taskList = listr(tasks, { concurrent: false, exitOnError: false });
     await taskList.run();
     log.info.gray('', elapsed(startedAt));
     log.info();

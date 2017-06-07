@@ -15,6 +15,7 @@ import {
   updatePackageRef,
   moment,
   fsPath,
+  util,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -57,9 +58,11 @@ export async function cmd(
 
 
 
+
 export interface IOptions {
   includeIgnored?: boolean;
   updateVersions?: boolean;
+  silent?: boolean;
 }
 
 
@@ -68,9 +71,10 @@ export interface IOptions {
  */
 export async function sync(options: IOptions = {}) {
   const { includeIgnored = false } = options;
+  const write = (msg: any) => util.write(msg, options.silent);
   const settings = await loadSettings();
   if (!settings) {
-    log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
+    write(log.yellow(constants.CONFIG_NOT_FOUND_ERROR));
     return;
   }
 
@@ -93,7 +97,8 @@ export async function sync(options: IOptions = {}) {
  */
 export async function syncModules(modules: IModule[], options: IOptions = {}) {
   const startedAt = new Date();
-  const { includeIgnored = false, updateVersions = false } = options;
+  const { includeIgnored = false, updateVersions = false, silent = false } = options;
+  const write = (msg: any) => util.write(msg, options.silent);
 
   const sync = async (sources: IDependency[], target: IModule) => {
     for (const source of sources) {
@@ -119,13 +124,22 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
   });
 
   try {
-    const taskList = listr(tasks, { concurrent: false });
-    await taskList.run();
-    log.info.gray(` ${elapsed(startedAt)}, ${moment().format('h:mm:ssa')}`);
-    log.info();
+    if (silent) {
+      // Run the tasks silently.
+      for (const item of tasks) {
+        await item.task();
+      }
+
+    } else {
+      // Run the tasks with a visual spinner output.
+      const taskList = listr(tasks, { concurrent: false });
+      await taskList.run();
+      write(log.gray(` ${elapsed(startedAt)}, ${moment().format('h:mm:ssa')}`));
+      write('');
+    }
 
   } catch (error) {
-    log.warn(log.yellow(`\nFailed while syncing module '${error.message}'.`));
+    write(log.yellow(`\nFailed while syncing module '${error.message}'.`));
   }
 
   // Finish up.
@@ -139,14 +153,15 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
  */
 export async function syncWatch(options: IOptions = {}) {
   // Setup initial conditions.
-  log.info.magenta('\nSync watching:');
-  const { includeIgnored = false } = options;
+  const { includeIgnored = false, silent = false } = options;
+  const write = (msg: any) => util.write(msg, options.silent);
+  write(log.magenta('\nSync watching:'));
   const result = await listCommand.ls({ dependencies: 'local', includeIgnored });
   if (!result) { return; }
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored));
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored, silent));
 }
 
 
@@ -154,11 +169,17 @@ export async function syncWatch(options: IOptions = {}) {
 /**
  * Watches and syncs a single module.
  */
-function watch(pkg: IModule, modules: IModule[], watchPattern: string, includeIgnored: boolean) {
+function watch(
+  pkg: IModule,
+  modules: IModule[],
+  watchPattern: string,
+  includeIgnored: boolean,
+  silent: boolean,
+) {
   const sync = debounce(() => {
     const dependants = dependsOn(pkg, modules);
     if (dependants.length > 0) {
-      log.info.green(`${pkg.name} changed: `);
+      util.write(log.green(`${pkg.name} changed: `), silent);
       syncModules(dependants, includeIgnored);
     }
   }, 1000);

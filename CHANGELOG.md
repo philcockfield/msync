@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 
+
 ## [Unreleased] - YYYY-MM-DD
 #### Added
 #### Changed
@@ -10,6 +11,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Removed
 #### Fixed
 #### Security
+
+
+
+
+## [1.7.0] - 2017-06-08
+#### Changed
+- `build` command running concurrently and syncing modules after each build.
+
 
 
 
