@@ -85,7 +85,7 @@ export async function buildOnce(modules: IModule[]) {
   const startedAt = new Date();
   const tasks = modules.map((pkg) => {
     return {
-      title: `${log.magenta(pkg.name)}`,
+      title: `${log.magenta(pkg.name)} ${log.gray('=> sync')}`,
       task: async () => {
         const tsc = await tscCommand(pkg);
         const cmd = `cd ${pkg.dir} && ${tsc}`;
