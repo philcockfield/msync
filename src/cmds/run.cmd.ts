@@ -36,8 +36,8 @@ export async function cmd(
   const options = (args && args.options) || {};
 
   const includeIgnored = options.i || false;
-  const isConcurrent = options.c || false;
-  await run(cmd, { includeIgnored, isConcurrent });
+  const concurrent = options.c || false;
+  await run(cmd, { includeIgnored, concurrent });
 }
 
 
@@ -45,7 +45,7 @@ export async function cmd(
 
 export interface IOptions {
   includeIgnored?: boolean;
-  isConcurrent?: boolean;
+  concurrent?: boolean;
 }
 
 
@@ -53,7 +53,7 @@ export interface IOptions {
  * Runs the given command on all modules.
  */
 export async function run(cmd: string, options: IOptions = {}) {
-  const { includeIgnored = false, isConcurrent = false } = options;
+  const { includeIgnored = false, concurrent = false } = options;
   if (!cmd) {
     log.info.red(`No command specified.\n`);
     return;
@@ -84,7 +84,7 @@ export async function run(cmd: string, options: IOptions = {}) {
       },
     };
   });
-  const runner = listr(tasks, { concurrent: isConcurrent, exitOnError: false });
+  const runner = listr(tasks, { concurrent, exitOnError: false });
   try {
     await runner.run();
   } catch (error) {
