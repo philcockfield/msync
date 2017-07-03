@@ -45,6 +45,7 @@ export async function cmd(
 
 export interface IOptions {
   includeIgnored?: boolean;
+  isConcurrent?: boolean;
 }
 
 
