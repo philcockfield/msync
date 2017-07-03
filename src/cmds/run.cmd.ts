@@ -15,6 +15,7 @@ export const description = 'Runs the given command on all modules.';
 export const args = {
   '<command>': 'The shell command to invoke.',
   '-i': 'Include ignored modules.',
+  '-c': 'Run command concurrently against all modules.  (Default: false).',
 };
 
 
@@ -26,6 +27,7 @@ export async function cmd(
     params: string[],
     options: {
       i?: boolean;
+      c?: boolean;
     },
   },
 ) {
@@ -34,7 +36,8 @@ export async function cmd(
   const options = (args && args.options) || {};
 
   const includeIgnored = options.i || false;
-  await run(cmd, { includeIgnored });
+  const isConcurrent = options.c || false;
+  await run(cmd, { includeIgnored, isConcurrent });
 }
 
 
@@ -49,7 +52,7 @@ export interface IOptions {
  * Runs the given command on all modules.
  */
 export async function run(cmd: string, options: IOptions = {}) {
-  const { includeIgnored = false } = options;
+  const { includeIgnored = false, isConcurrent = false } = options;
   if (!cmd) {
     log.info.red(`No command specified.\n`);
     return;
@@ -80,7 +83,7 @@ export async function run(cmd: string, options: IOptions = {}) {
       },
     };
   });
-  const runner = listr(tasks, { concurrent: true, exitOnError: false });
+  const runner = listr(tasks, { concurrent: isConcurrent, exitOnError: false });
   try {
     await runner.run();
   } catch (error) {
