@@ -3,9 +3,6 @@ import { R, fs, fsPath, file } from './libs';
 import { compact } from './util';
 import { IModule, IDependency } from '../types';
 
-
-
-
 /**
  * Converts a set of module-directory globs to package objects.
  */
@@ -23,7 +20,8 @@ export async function toPackages(moduleDirs: string[]) {
   }
 
   // Determine which ones are local.
-  const findPackage = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name);
+  const findPackage = (dep: IDependency) =>
+    packages.find((pkg) => pkg.name === dep.name);
   packages.forEach((pkg) => {
     pkg.dependencies.forEach((dep) => {
       dep.package = findPackage(dep);
@@ -35,26 +33,37 @@ export async function toPackages(moduleDirs: string[]) {
   return packages;
 }
 
-
-
 /**
  * Loads a [package.json] file.
  */
 async function toPackage(packageFilePath: string): Promise<IModule> {
   // Setup initial conditions.
-  const text = (await fs.readFileAsync(packageFilePath)).toString();
-  const json = JSON.parse(text);
+  const parse = async () => {
+    try {
+      const text = (await fs.readFileAsync(packageFilePath)).toString();
+      const json = JSON.parse(text);
+      return json;
+    } catch (error) {
+      throw new Error(`Failed to parse '${packageFilePath}'. ${error.message}`);
+    }
+  };
+
+  const json = await parse();
 
   // Dependencies.
   let dependencies: IDependency[] = [];
   const addDeps = (deps: { [key: string]: string }, isDev: boolean) => {
-    if (!deps) { return; }
-    Object.keys(deps).forEach((name) => dependencies.push({
-      name,
-      version: deps[name],
-      isDev,
-      isLocal: false,
-    }));
+    if (!deps) {
+      return;
+    }
+    Object.keys(deps).forEach((name) =>
+      dependencies.push({
+        name,
+        version: deps[name],
+        isDev,
+        isLocal: false,
+      }),
+    );
   };
   addDeps(json.dependencies, false);
   addDeps(json.peerDependencies, false);
@@ -72,7 +81,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
   const tsconfigPath = fsPath.join(dir, 'tsconfig.json');
   const isTypeScript = await fs.existsAsync(tsconfigPath);
   const tsconfig = isTypeScript
-    ? (await fs.readJSONAsync(tsconfigPath))
+    ? await fs.readJSONAsync(tsconfigPath)
     : undefined;
 
   // Finish up.
@@ -91,20 +100,14 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
   };
 }
 
-
-
 /**
  * Retrieves a depth-first dependency order from the given packages.
  */
 export function orderByDepth(packages: IModule[]): IModule[] {
   const toDependenciesArray = (pkg: IModule) => {
     const deps = pkg.dependencies;
-    const result = deps
-      .map((dep) => dep.name)
-      .map((name) => [pkg.name, name]);
-    return deps.length === 0
-      ? [[pkg.name]]
-      : result;
+    const result = deps.map((dep) => dep.name).map((name) => [pkg.name, name]);
+    return deps.length === 0 ? [[pkg.name]] : result;
   };
 
   const graph = packages
@@ -119,21 +122,16 @@ export function orderByDepth(packages: IModule[]): IModule[] {
   return R.reject(R.isNil, result);
 }
 
-
-
 /**
  * Retrieves the set of modules that depend upon the given package.
  */
 export function dependsOn(pkg: IModule, modules: IModule[]) {
-  const result = modules
-    .filter((module) =>
-      module
-        .dependencies
-        .find((dep) => dep.name === pkg.name) !== undefined);
+  const result = modules.filter(
+    (module) =>
+      module.dependencies.find((dep) => dep.name === pkg.name) !== undefined,
+  );
   return compact<IModule>(result);
 }
-
-
 
 /**
  * Updates the version from the given source module onto the target module.
@@ -148,7 +146,8 @@ export async function updatePackageRef(
   let changed = false;
 
   // Update the version on the target JSON.
-  const prefix = (version: string) => ['^', '~'].filter((p) => version && version.startsWith(p))[0] || '';
+  const prefix = (version: string) =>
+    ['^', '~'].filter((p) => version && version.startsWith(p))[0] || '';
   ['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
     const obj = target.json[key];
     if (obj && obj[moduleName]) {
@@ -166,7 +165,6 @@ export async function updatePackageRef(
     await savePackage(target.dir, target.json);
   }
 }
-
 
 /**
  * Saves the given package JSON.
