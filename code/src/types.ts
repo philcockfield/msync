@@ -13,7 +13,6 @@ export interface IModule {
   npm?: INpmInfo;
 }
 
-
 export interface IDependency {
   name: string;
   version: string;
@@ -21,7 +20,6 @@ export interface IDependency {
   isLocal: boolean;
   package?: IModule;
 }
-
 
 export interface INpmInfo {
   name: string;
