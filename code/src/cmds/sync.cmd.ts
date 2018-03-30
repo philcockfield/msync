@@ -98,6 +98,8 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
     for (const source of sources) {
       if (source.package) {
         await copy.module(source.package, target);
+        await copy.logUpdate(target);
+
         if (updateVersions) {
           await updatePackageRef(
             target,
