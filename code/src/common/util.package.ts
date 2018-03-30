@@ -84,6 +84,12 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     ? await fs.readJSONAsync(tsconfigPath)
     : undefined;
 
+  // Load .gitignore file.
+  const gitignorePath = fsPath.join(dir, '.gitignore');
+  const gitignore = (await fs.existsAsync(gitignorePath))
+    ? (await fs.readFileAsync(gitignorePath)).toString().split('\n')
+    : [];
+
   // Finish up.
   return {
     dir,
@@ -91,6 +97,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     version,
     latest: version,
     isTypeScript,
+    gitignore,
     hasScripts,
     hasPrepublish,
     tsconfig,

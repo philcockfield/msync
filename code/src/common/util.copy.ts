@@ -23,11 +23,11 @@ function rsyncExecute(rsync: any): Promise<IRsyncResult> {
  * Copies the module using RSync.
  */
 export async function module(
-  from: { name: string; dir: string },
+  from: { name: string; dir: string; gitignore: string[] },
   to: { name: string; dir: string },
 ) {
   // Setup initial conditions.
-  const IGNORE = ['.DS_Store', 'node_modules', '.tmp'];
+  const IGNORE = ['.DS_Store', 'node_modules', '.tmp', ...from.gitignore];
   const FROM_DIR = fsPath.join(from.dir, '/');
   const TO_DIR = fsPath.join(to.dir, 'node_modules', from.name, '/');
 

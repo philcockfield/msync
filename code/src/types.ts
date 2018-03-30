@@ -5,6 +5,7 @@ export interface IModule {
   latest: string;
   isIgnored: boolean;
   isTypeScript: boolean;
+  gitignore: string[];
   hasScripts: boolean;
   hasPrepublish: boolean;
   tsconfig?: any;
