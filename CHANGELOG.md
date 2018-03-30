@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - YYYY-MM-DD
 #### Added
 #### Changed
+- Updated Typescript versions (referencing @tdb libs)
 #### Deprecated
 #### Removed
 #### Fixed

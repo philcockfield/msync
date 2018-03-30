@@ -122,7 +122,7 @@ async function bumpModule(options: IBumpOptions) {
   const isRoot = ref === undefined;
 
   if (!version) {
-    throw new Error(`Failed to '${release}' the semver ${pkg.latest}.`)
+    throw new Error(`Failed to '${release}' the semver ${pkg.latest}.`);
   }
 
   // Log output.
