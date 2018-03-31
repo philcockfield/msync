@@ -3,7 +3,6 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 
-
 ## [Unreleased] - YYYY-MM-DD
 #### Added
 #### Changed
@@ -11,6 +10,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Removed
 #### Fixed
 #### Security
+
+
+## [1.8.2] - 2018-03-31
+#### Changed
+- Write `__msync.js` to target typescript lib to force `nodemon` to restart.
+- Updated Typescript versions (referencing @tdb libs)
 
 
 

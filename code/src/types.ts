@@ -5,6 +5,7 @@ export interface IModule {
   latest: string;
   isIgnored: boolean;
   isTypeScript: boolean;
+  gitignore: string[];
   hasScripts: boolean;
   hasPrepublish: boolean;
   tsconfig?: any;
@@ -13,7 +14,6 @@ export interface IModule {
   npm?: INpmInfo;
 }
 
-
 export interface IDependency {
   name: string;
   version: string;
@@ -21,7 +21,6 @@ export interface IDependency {
   isLocal: boolean;
   package?: IModule;
 }
-
 
 export interface INpmInfo {
   name: string;

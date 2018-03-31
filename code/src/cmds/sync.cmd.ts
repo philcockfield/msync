@@ -19,31 +19,27 @@ import {
 } from '../common';
 import * as listCommand from './ls.cmd';
 
-
 export const name = 'sync';
 export const alias = ['s', 'sl'];
-export const description = 'Syncs each module\'s dependency tree within the workspace.';
+export const description =
+  'Syncs each module\'s dependency tree within the workspace.';
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
   '-v': 'Update version reference in package.json files.',
 };
 
-
-
 /**
  * CLI command.
  */
-export async function cmd(
-  args?: {
-    params: string[],
-    options: {
-      i?: boolean;
-      w?: boolean;
-      v?: boolean;
-    },
-  },
-) {
+export async function cmd(args?: {
+  params: string[];
+  options: {
+    i?: boolean;
+    w?: boolean;
+    v?: boolean;
+  };
+}) {
   const options = (args && args.options) || {};
   const watch = options.w || false;
   const includeIgnored = options.i || false;
@@ -56,15 +52,11 @@ export async function cmd(
   }
 }
 
-
-
-
 export interface IOptions {
   includeIgnored?: boolean;
   updateVersions?: boolean;
   silent?: boolean;
 }
-
 
 /**
  * Copies each module's dependency tree locally.
@@ -78,10 +70,9 @@ export async function sync(options: IOptions = {}) {
     return;
   }
 
-  const modules = settings
-    .modules
-    .filter((pkg) => filter.localDeps(pkg).length > 0)
-    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules
+    .filter(pkg => filter.localDeps(pkg).length > 0)
+    .filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
   await syncModules(modules, options);
@@ -91,32 +82,44 @@ export async function sync(options: IOptions = {}) {
   };
 }
 
-
 /**
  * Syncs the given set of modules.
  */
 export async function syncModules(modules: IModule[], options: IOptions = {}) {
   const startedAt = new Date();
-  const { includeIgnored = false, updateVersions = false, silent = false } = options;
+  const {
+    includeIgnored = false,
+    updateVersions = false,
+    silent = false,
+  } = options;
   const write = (msg: any) => util.write(msg, options.silent);
 
   const sync = async (sources: IDependency[], target: IModule) => {
     for (const source of sources) {
       if (source.package) {
         await copy.module(source.package, target);
+        await copy.logUpdate(target);
+
         if (updateVersions) {
-          await updatePackageRef(target, source.package.name, source.package.version, { save: true });
+          await updatePackageRef(
+            target,
+            source.package.name,
+            source.package.version,
+            { save: true },
+          );
         }
       }
     }
   };
 
-  const tasks = modules.map((target) => {
+  const tasks = modules.map(target => {
     const sources = filter
       .localDeps(target)
-      .filter((dep) => filter.includeIgnored(dep.package, includeIgnored));
-    const sourceNames = sources.map((dep) => ` ${log.cyan(dep.name)}`);
-    const title = `${log.magenta(target.name)} ${log.cyan(sourceNames.length > 0 ? '⬅' : '')}${sourceNames}`;
+      .filter(dep => filter.includeIgnored(dep.package, includeIgnored));
+    const sourceNames = sources.map(dep => ` ${log.cyan(dep.name)}`);
+    const title = `${log.magenta(target.name)} ${log.cyan(
+      sourceNames.length > 0 ? '⬅' : '',
+    )}${sourceNames}`;
     return {
       title,
       task: () => sync(sources, target),
@@ -129,7 +132,6 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
       for (const item of tasks) {
         await item.task();
       }
-
     } else {
       // Run the tasks with a visual spinner output.
       const taskList = listr(tasks, { concurrent: false });
@@ -137,7 +139,6 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
       write(log.gray(` ${elapsed(startedAt)}, ${moment().format('h:mm:ssa')}`));
       write('');
     }
-
   } catch (error) {
     write(log.yellow(`\nFailed while syncing module '${error.message}'.`));
   }
@@ -145,8 +146,6 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
   // Finish up.
   return modules;
 }
-
-
 
 /**
  * Copies each module's dependency tree locally.
@@ -156,15 +155,20 @@ export async function syncWatch(options: IOptions = {}) {
   const { includeIgnored = false, silent = false } = options;
   const write = (msg: any) => util.write(msg, options.silent);
   write(log.magenta('\nSync watching:'));
-  const result = await listCommand.ls({ dependencies: 'local', includeIgnored });
-  if (!result) { return; }
+  const result = await listCommand.ls({
+    dependencies: 'local',
+    includeIgnored,
+  });
+  if (!result) {
+    return;
+  }
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored, silent));
+  modules.forEach(pkg =>
+    watch(pkg, modules, settings.watchPattern, includeIgnored, silent),
+  );
 }
-
-
 
 /**
  * Watches and syncs a single module.
@@ -180,12 +184,13 @@ function watch(
     const dependants = dependsOn(pkg, modules);
     if (dependants.length > 0) {
       util.write(log.green(`${pkg.name} changed: `), silent);
-      syncModules(dependants, includeIgnored);
+      syncModules(dependants, { includeIgnored });
     }
   }, 1000);
 
+  // const p = fsPath.join(pkg.dir, watchPattern)
   file
     .watch(fsPath.join(pkg.dir, watchPattern))
-    .filter((path) => !path.includes('node_modules/'))
+    .filter(path => !path.includes('node_modules/'))
     .forEach(() => sync());
 }

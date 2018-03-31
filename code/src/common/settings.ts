@@ -22,17 +22,17 @@ export interface ISettings {
   watchPattern: string;
 }
 
-
 export interface IOptions {
   npm?: boolean;
   spinner?: boolean;
 }
 
-
 /**
  * Initializes the settings.
  */
-export async function loadSettings(options: IOptions = {}): Promise<ISettings | undefined> {
+export async function loadSettings(
+  options: IOptions = {},
+): Promise<ISettings | undefined> {
   const { spinner = false, npm = false } = options;
 
   if (spinner) {
@@ -43,31 +43,39 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
       : 'Loading module info locally.';
     const task = {
       title,
-      task: async () => result = await loadSettingsInternal(options),
+      task: async () => (result = await loadSettingsInternal(options)),
     };
     await listr([task]).run();
     log.info();
     return result;
-
   } else {
     // No spinner.
-    return await loadSettingsInternal(options);
+    return loadSettingsInternal(options);
   }
 }
 
-async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings | undefined> {
+async function loadSettingsInternal(
+  options: IOptions = {},
+): Promise<ISettings | undefined> {
   // Find the configuration YAML file.
-  const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
-  if (!path) { return; }
+  const path = await file.findClosestAncestor(
+    process.cwd(),
+    constants.CONFIG_FILE_NAME,
+  );
+  if (!path) {
+    return;
+  }
 
   // Load the YAML.
   const yaml = await loadYaml(path);
-  if (!yaml) { return; }
+  if (!yaml) {
+    return;
+  }
 
   // Resolve all module-directories in the YAML to
   // be within the "current working directory".
   const dir = fsPath.dirname(path);
-  yaml.modules = yaml.modules.map((path) => fsPath.resolve(dir, path));
+  yaml.modules = yaml.modules.map(path => fsPath.resolve(dir, path));
 
   // Load the [package.json] from files and setup depth order.
   let modules = await toPackages(yaml.modules);
@@ -78,18 +86,17 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
     paths: await ignorePaths(yaml, dir),
     names: yaml.ignore.names,
   };
-  modules.forEach((pkg) => pkg.isIgnored = isIgnored(pkg, ignore));
+  modules.forEach(pkg => (pkg.isIgnored = isIgnored(pkg, ignore)));
 
   // NPM.
   if (options.npm) {
-    const npmModules = await npm.info(modules.filter((pkg) => !pkg.isIgnored));
-    modules
-      .forEach((pkg) => {
-        pkg.npm = npmModules.find((item) => item.name === pkg.name);
-        if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
-          pkg.latest = pkg.npm.latest;
-        }
-      });
+    const npmModules = await npm.info(modules.filter(pkg => !pkg.isIgnored));
+    modules.forEach(pkg => {
+      pkg.npm = npmModules.find(item => item.name === pkg.name);
+      if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
+        pkg.latest = pkg.npm.latest;
+      }
+    });
   }
 
   // Finish up.
@@ -101,29 +108,26 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
   };
 }
 
-
 async function ignorePaths(yaml: IYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
     const paths = await file.glob(fsPath.resolve(dir, pattern));
-    paths.forEach((path) => result.push(path));
+    paths.forEach(path => result.push(path));
   }
   return result;
 }
-
 
 function isIgnored(pkg: IModule, ignore: IIgnore) {
   if (ignore.names.includes(pkg.name)) {
     return true;
   }
   for (const path of ignore.paths) {
-    if (pkg.dir.startsWith(path)) { return true; }
+    if (pkg.dir.startsWith(path)) {
+      return true;
+    }
   }
   return false;
 }
-
-
-
 
 /**
  * Finds and loads the YAML configuration file.
@@ -137,7 +141,8 @@ async function loadYaml(path: string) {
     result.ignore = result.ignore || { paths: [] };
     result.ignore.paths = result.ignore.paths || [];
     result.ignore.names = result.ignore.names || [];
-    result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
+    result.watchPattern =
+      result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
 
     return result;
   } catch (error) {
@@ -147,4 +152,3 @@ async function loadYaml(path: string) {
   }
   return;
 }
-

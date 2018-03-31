@@ -17,7 +17,8 @@ import * as listCommand from './ls.cmd';
 
 export const name = 'bump';
 export const alias = 'b';
-export const description = 'Bumps a module version along with it\'s entire dependency graph.';
+export const description =
+  'Bumps a module version along with it\'s entire dependency graph.';
 export const args = {
   '-i': 'Include ignored modules.',
   '-d': 'Dry run where no files are saved.',
@@ -26,20 +27,17 @@ export const args = {
 
 export type ReleaseType = 'major' | 'minor' | 'patch';
 
-
 /**
  * CLI command.
  */
-export async function cmd(
-  args?: {
-    params: string[],
-    options: {
-      i?: boolean;
-      d?: boolean;
-      l?: boolean;
-    },
-  },
-) {
+export async function cmd(args?: {
+  params: string[];
+  options: {
+    i?: boolean;
+    d?: boolean;
+    l?: boolean;
+  };
+}) {
   const options = (args && args.options) || {};
   await bump({
     includeIgnored: options.i || false,
@@ -48,15 +46,11 @@ export async function cmd(
   });
 }
 
-
-
 export interface IOptions {
   includeIgnored?: boolean;
   local?: boolean;
   dryRun?: boolean;
 }
-
-
 
 /**
  * Bumps a module version and all references to it in dependant modules.
@@ -70,13 +64,15 @@ export async function bump(options: IOptions = {}) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings
-    .modules
-    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules.filter(pkg =>
+    filter.includeIgnored(pkg, includeIgnored),
+  );
 
   // Prompt for the module to bump.
   const module = await promptForModule(modules);
-  if (!module) { return; }
+  if (!module) {
+    return;
+  }
 
   // Retrieve the dependant modules and list them in a table.
   const dependants = dependsOn(module, modules);
@@ -87,7 +83,9 @@ export async function bump(options: IOptions = {}) {
 
   // Get the version number.
   const release = await promptForReleaseType(module.version);
-  if (!release) { return; }
+  if (!release) {
+    return;
+  }
 
   // Update the selected module and all dependant modules.
   log.info();
@@ -106,15 +104,13 @@ export async function bump(options: IOptions = {}) {
   }
 }
 
-
-
 export interface IBumpOptions {
   release: ReleaseType;
   pkg: IModule;
   allModules: IModule[];
   save: boolean;
   level?: number;
-  ref?: { name: string, fromVersion: string, toVersion: string };
+  ref?: { name: string; fromVersion: string; toVersion: string };
   table?: ITable;
 }
 
@@ -125,25 +121,35 @@ async function bumpModule(options: IBumpOptions) {
   const version = semver.inc(pkg.latest, release);
   const isRoot = ref === undefined;
 
+  if (!version) {
+    throw new Error(`Failed to '${release}' the semver ${pkg.latest}.`);
+  }
+
   // Log output.
-  const head = ['update', 'module', 'version', 'ref updated'].map((title) => log.gray(title));
+  const head = ['update', 'module', 'version', 'ref updated'].map(title =>
+    log.gray(title),
+  );
   const tableBuilder = options.table || table({ head });
 
   if (!ref) {
     let msg = '';
     msg += `  ${log.yellow(release.toUpperCase())} `;
-    msg += `update ${log.cyan(pkg.name)} from ${log.gray(pkg.latest)} ${log.gray('=>')} ${log.magenta(version)} `;
+    msg += `update ${log.cyan(pkg.name)} from ${log.gray(
+      pkg.latest,
+    )} ${log.gray('=>')} ${log.magenta(version)} `;
     log.info.gray(msg);
   } else {
-    tableBuilder
-      .add([
-        log.yellow(release.toUpperCase()),
-        log.cyan(pkg.name),
-        log.gray(`${pkg.latest} => ${log.magenta(version)}`),
-        log.gray(`${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(ref.toVersion)}`),
-      ]);
+    tableBuilder.add([
+      log.yellow(release.toUpperCase()),
+      log.cyan(pkg.name),
+      log.gray(`${pkg.latest} => ${log.magenta(version)}`),
+      log.gray(
+        `${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(
+          ref.toVersion,
+        )}`,
+      ),
+    ]);
   }
-
 
   // Update the selected module.
   const json = R.clone<any>(pkg.json);
@@ -172,10 +178,8 @@ async function bumpModule(options: IBumpOptions) {
   return tableBuilder;
 }
 
-
-
 async function promptForModule(modules: IModule[]) {
-  const choices = modules.map((pkg) => ({ name: pkg.name, value: pkg.name }));
+  const choices = modules.map(pkg => ({ name: pkg.name, value: pkg.name }));
   const confirm = {
     type: 'list',
     name: 'name',
@@ -183,10 +187,8 @@ async function promptForModule(modules: IModule[]) {
     choices,
   };
   const name = (await inquirer.prompt(confirm)).name;
-  return modules.find((pkg) => pkg.name === name);
+  return modules.find(pkg => pkg.name === name);
 }
-
-
 
 async function promptForReleaseType(version: string) {
   const choices = ['patch', 'minor', 'major'];

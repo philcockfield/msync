@@ -1,13 +1,5 @@
-import {
-  log,
-  loadSettings,
-  constants,
-  filter,
-  listr,
-  exec,
-} from '../common';
+import { log, loadSettings, constants, filter, listr, exec } from '../common';
 import * as listCommand from './ls.cmd';
-
 
 export const name = 'run';
 export const alias = 'r';
@@ -18,20 +10,16 @@ export const args = {
   '-c': 'Run command concurrently against all modules.  (Default: false).',
 };
 
-
 /**
  * CLI command.
  */
-export async function cmd(
-  args?: {
-    params: string[],
-    options: {
-      i?: boolean;
-      c?: boolean;
-    },
-  },
-) {
-
+export async function cmd(args?: {
+  params: string[];
+  options: {
+    i?: boolean;
+    c?: boolean;
+  };
+}) {
   const cmd = (args && args.params && args.params.join(' ')) || '';
   const options = (args && args.options) || {};
 
@@ -40,14 +28,10 @@ export async function cmd(
   await run(cmd, { includeIgnored, concurrent });
 }
 
-
-
-
 export interface IOptions {
   includeIgnored?: boolean;
   concurrent?: boolean;
 }
-
 
 /**
  * Runs the given command on all modules.
@@ -65,9 +49,9 @@ export async function run(cmd: string, options: IOptions = {}) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings
-    .modules
-    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules.filter(pkg =>
+    filter.includeIgnored(pkg, includeIgnored),
+  );
 
   // Print status:
   log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);
@@ -75,12 +59,12 @@ export async function run(cmd: string, options: IOptions = {}) {
   log.info();
 
   // Run tasks.
-  const tasks = modules.map((pkg) => {
+  const tasks = modules.map(pkg => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd}`;
-        return await exec.run(command, { silent: true });
+        return exec.run(command, { silent: true });
       },
     };
   });

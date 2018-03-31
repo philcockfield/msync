@@ -1,13 +1,7 @@
 import { R, moment, log } from './libs';
 
-
-export const compact = <T>(value: T[]) => R.pipe(
-  R.reject(R.isNil),
-  R.reject(R.isEmpty),
-)(value) as T[];
-
-
-
+export const compact = <T>(value: T[]) =>
+  R.pipe(R.reject(R.isNil), R.reject(R.isEmpty))(value) as T[];
 
 /**
  * Logs to the console with a `silent` switch.
@@ -18,9 +12,6 @@ export function write(msg: any, silent?: boolean) {
   }
 }
 
-
-
-
 /**
  * Creates an elapsed time display string.
  */
@@ -30,14 +21,12 @@ export function elapsed(startedAt: Date) {
   return `${secs}s`;
 }
 
-
 /**
  * Rounds to the given number of decimals.
  */
 export function round(value: number, decimals: number) {
-  return Number(Math.round(value + 'e' + decimals as any) + 'e-' + decimals);
+  return Number(Math.round((value + 'e' + decimals) as any) + 'e-' + decimals);
 }
-
 
 /**
  * Pauses as a promise.

@@ -18,25 +18,15 @@ export const alias = ['p', 'pub'];
 export const description = 'Publishes all modules that are ahead of NPM.';
 export const args = {};
 
-
-
 /**
  * CLI command.
  */
-export async function cmd(
-  args?: {
-    params: string[],
-    options: {
-    },
-  },
-) {
+export async function cmd(args?: { params: string[]; options: {} }) {
   // const options = (args && args.options) || {};
   await publish({});
 }
 
-
-export interface IOptions { }
-
+export interface IOptions {}
 
 export async function publish(options: IOptions = {}) {
   // Retrieve settings.
@@ -47,9 +37,7 @@ export async function publish(options: IOptions = {}) {
   }
 
   // Filter on modules that require publishing.
-  const modules = settings
-    .modules
-    .filter((pkg) => isPublishRequired(pkg));
+  const modules = settings.modules.filter(pkg => isPublishRequired(pkg));
   printTable(modules);
 
   const total = modules.length;
@@ -59,7 +47,11 @@ export async function publish(options: IOptions = {}) {
   }
 
   // Prompt the user if they want to continue.
-  if (!(await promptYesNo(`Publish ${total} ${plural('module', total)} to NPM now?`))) {
+  if (
+    !await promptYesNo(
+      `Publish ${total} ${plural('module', total)} to NPM now?`,
+    )
+  ) {
     log.info();
     return;
   }
@@ -70,7 +62,10 @@ export async function publish(options: IOptions = {}) {
 
   // Slow.  Full install and sync mode.
   const publishCommand = () => 'yarn install && npm publish && msync sync';
-  const publishedSuccessfully = await runCommand(modules, publishCommand, { concurrent: false, exitOnError: true });
+  const publishedSuccessfully = await runCommand(modules, publishCommand, {
+    concurrent: false,
+    exitOnError: true,
+  });
 
   if (publishedSuccessfully) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
@@ -79,19 +74,21 @@ export async function publish(options: IOptions = {}) {
   }
 }
 
-
-
-const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, options: IListrOptions) => {
+const runCommand = async (
+  modules: IModule[],
+  cmd: (pkg: IModule) => string,
+  options: IListrOptions,
+) => {
   const prepublish = (pkg: IModule) => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
-        return await exec.run(command, { silent: true });
+        return exec.run(command, { silent: true });
       },
     };
   };
-  const tasks = modules.map((pkg) => prepublish(pkg));
+  const tasks = modules.map(pkg => prepublish(pkg));
   const runner = listr(tasks, options);
   try {
     await runner.run();
@@ -101,26 +98,16 @@ const runCommand = async (modules: IModule[], cmd: (pkg: IModule) => string, opt
   }
 };
 
-
-
-
 async function promptYesNo(message: string) {
   const confirm = {
     type: 'list',
     name: 'answer',
     message,
-    choices: [
-      { name: 'Yes', value: 'true' },
-      { name: 'No', value: 'false' },
-    ],
+    choices: [{ name: 'Yes', value: 'true' }, { name: 'No', value: 'false' }],
   };
   const answer = (await inquirer.prompt(confirm)).answer;
   return answer === 'true' ? true : false;
 }
 
-
-
 const isPublishRequired = (pkg: IModule) =>
-  pkg.npm
-    ? semver.gt(pkg.version, pkg.npm.latest)
-    : false;
+  pkg.npm ? semver.gt(pkg.version, pkg.npm.latest) : false;
