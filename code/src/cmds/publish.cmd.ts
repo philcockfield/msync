@@ -26,7 +26,7 @@ export async function cmd(args?: { params: string[]; options: {} }) {
   await publish({});
 }
 
-export interface IOptions { }
+export interface IOptions {}
 
 export async function publish(options: IOptions = {}) {
   // Retrieve settings.
@@ -71,7 +71,7 @@ export async function publish(options: IOptions = {}) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
   } else {
     log.info.yellow(`\n💩  Something went wrong while publishing.\n`);
-    log.error(publishResult.error)
+    log.error(publishResult.error);
   }
 }
 
