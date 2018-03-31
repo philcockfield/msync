@@ -27,7 +27,8 @@ export async function module(
   to: { name: string; dir: string },
 ) {
   // Setup initial conditions.
-  const IGNORE = ['.DS_Store', 'node_modules', '.tmp', ...from.gitignore];
+  // const IGNORE = ['.DS_Store', 'node_modules', '.tmp', ...from.gitignore];
+  const IGNORE = ['.DS_Store', 'node_modules', '.tmp'];
   const FROM_DIR = fsPath.join(from.dir, '/');
   const TO_DIR = fsPath.join(to.dir, 'node_modules', from.name, '/');
 
