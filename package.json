@@ -17,6 +17,7 @@
   "dependencies": {
     "command-interface": "3.0.25",
     "lodash.debounce": "4.0.8",
+    "log.server": "2.0.0",
     "rsync": "0.6.1",
     "semver": "5.5.0",
     "toposort": "2.0.2"

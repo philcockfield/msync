@@ -1194,7 +1194,7 @@ log-update@^1.0.2:
     ansi-escapes "^1.0.0"
     cli-cursor "^1.0.2"
 
-log.server@2.0.0:
+log.server@2.0.0, log.server@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/log.server/-/log.server-2.0.0.tgz#7f2f6568c309311723a4568118db3b96e3923651"
   dependencies:
