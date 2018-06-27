@@ -19,7 +19,7 @@
     "lodash.debounce": "4.0.8",
     "rsync": "0.6.1",
     "semver": "5.5.0",
-    "toposort": "1.0.6"
+    "toposort": "2.0.2"
   },
   "devDependencies": {
     "@tdb/test": "1.1.6",
