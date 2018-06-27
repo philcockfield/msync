@@ -82,7 +82,7 @@ export async function bump(options: IOptions = {}) {
   }
 
   // Get the version number.
-  const release = await promptForReleaseType(module.version) as ReleaseType;
+  const release = (await promptForReleaseType(module.version)) as ReleaseType;
   if (!release) {
     return;
   }
@@ -186,7 +186,7 @@ async function promptForModule(modules: IModule[]) {
     message: 'Select a module',
     choices,
   };
-  const res = (await inquirer.prompt(confirm)) as { name: string }
+  const res = (await inquirer.prompt(confirm)) as { name: string };
   const name = res.name;
   return modules.find(pkg => pkg.name === name);
 }
@@ -199,6 +199,6 @@ async function promptForReleaseType(version: string) {
     message: 'Release',
     choices,
   };
-  const res = await inquirer.prompt(confirm) as { name: string }
+  const res = (await inquirer.prompt(confirm)) as { name: string };
   return res.name;
 }

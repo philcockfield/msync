@@ -26,7 +26,7 @@ export async function cmd(args?: { params: string[]; options: {} }) {
   await publish({});
 }
 
-export interface IOptions { }
+export interface IOptions {}
 
 export async function publish(options: IOptions = {}) {
   // Retrieve settings.
@@ -106,7 +106,7 @@ async function promptYesNo(message: string) {
     message,
     choices: [{ name: 'Yes', value: 'true' }, { name: 'No', value: 'false' }],
   };
-  const res = await inquirer.prompt(confirm) as { answer: string }
+  const res = (await inquirer.prompt(confirm)) as { answer: string };
   const answer = res.answer;
   return answer === 'true' ? true : false;
 }

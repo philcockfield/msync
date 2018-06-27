@@ -34,7 +34,6 @@ export async function cmd(args?: {
     formatting?: boolean;
   };
 }) {
-
   const options = (args && args.options) || {};
   await ls({
     dependencies: options.D ? 'all' : 'local',
@@ -119,7 +118,7 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
           dep.package
             ? filter.includeIgnored(dep.package, includeIgnored)
             : true,
-    )
+      )
       .map(dep => {
         const isIgnored = dep.package && dep.package.isIgnored;
         const bullet = isIgnored ? log.gray('-') : log.magenta('-');
