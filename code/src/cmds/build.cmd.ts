@@ -106,7 +106,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   listCommand.printTable(modules, { includeIgnored });
   log.info();
 
-  const state: { [key: string]: number } = {};
+  const state: { [key: string]: { count: number } } = {};
 
   modules.forEach(async pkg => {
     const tsc = await tscCommand(pkg);
@@ -126,8 +126,9 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
       if (isCompiling) {
         const key = pkg.name;
-        const count = state[key] === undefined ? 1 : state[key] + 1;
-        state[key] = count;
+        const obj = state[key] || { count: 0 };
+        const count = obj.count + 1;
+        state[key] = { ...obj, count };
       }
 
       if (isError && !isWatching) {
@@ -142,8 +143,9 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
         log.clear();
         const keys = Object.keys(state).sort();
         keys.forEach(key => {
-          text = log.gray(`Build (${state[key]})`);
-          log.info(`${log.cyan(pkg.name)} ${text}`);
+          const count = state[key].count;
+          text = log.gray(`Build (${log.magenta(count)})`);
+          log.info(`${log.cyan(key)} ${text}`);
         });
       }
     });
