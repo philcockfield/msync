@@ -9,7 +9,6 @@ import {
   fs,
   fsPath,
   exec,
-  table,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -133,7 +132,8 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
       if (isError && !isWatching) {
         log.clear();
-        table()
+        log
+          .table()
           .add([log.yellow(pkg.name), formatError(text)])
           .log();
       }

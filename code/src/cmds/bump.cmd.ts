@@ -10,8 +10,7 @@ import {
   dependsOn,
   updatePackageRef,
   savePackage,
-  table,
-  ITable,
+  ILogTable,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -111,7 +110,7 @@ export interface IBumpOptions {
   save: boolean;
   level?: number;
   ref?: { name: string; fromVersion: string; toVersion: string };
-  table?: ITable;
+  table?: ILogTable;
 }
 
 async function bumpModule(options: IBumpOptions) {
@@ -129,7 +128,7 @@ async function bumpModule(options: IBumpOptions) {
   const head = ['update', 'module', 'version', 'ref updated'].map(title =>
     log.gray(title),
   );
-  const tableBuilder = options.table || table({ head });
+  const tableBuilder = options.table || log.table({ head });
 
   if (!ref) {
     let msg = '';

@@ -15,9 +15,9 @@
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "command-interface": "3.0.25",
+    "command-interface": "4.0.0",
     "lodash.debounce": "4.0.8",
-    "log.server": "2.0.0",
+    "log.server": "3.0.0",
     "rsync": "0.6.1",
     "semver": "5.5.0",
     "toposort": "2.0.2"
