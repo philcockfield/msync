@@ -37,15 +37,15 @@ export async function cmd(args?: {
   await build({ includeIgnored, watch });
 }
 
-export interface IOptions {
-  includeIgnored?: boolean;
-  watch?: boolean;
-}
-
 /**
  * Builds all typescript modules.
  */
-export async function build(options: IOptions = {}) {
+export async function build(
+  options: {
+    includeIgnored?: boolean;
+    watch?: boolean;
+  } = {},
+) {
   const { includeIgnored = false, watch = false } = options;
   const settings = await loadSettings();
   if (!settings) {

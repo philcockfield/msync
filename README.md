@@ -8,6 +8,7 @@ A powerful toolkit for managing multiple node-modules in a flexibly defined work
 - `sync` and watch (dependency graph)
 - `bump` (versions in dependency graph order)
 - `publish` (to NPM)
+- `outdated` (list all outdated modules)
 
 ![Video](https://user-images.githubusercontent.com/185555/41953183-5378ca3c-7a28-11e8-8056-a921a0cf9565.gif)
 
@@ -41,11 +42,21 @@ Run the command line using `msync` within your workspace folder to list, sync or
 
 ![Image](https://cloud.githubusercontent.com/assets/185555/25559109/ff123b14-2d88-11e7-8781-3f150f54c2a8.png)
 
+### outdated
+
+![Image](https://user-images.githubusercontent.com/185555/42003427-769d282c-7abf-11e8-85cd-fac2177541e6.png)
+
+### watch
+
+Starts watchers for `build` and `sync` in new tabs. Requires a terminal like [iTerm2](https://www.iterm2.com/) that can recieve "new tab" instructions.
+
+## Help
+
 Use the `--help` (`-h`) flag to see the options for each command, eg:
 
     msync sync --help
 
-# Ignore
+## Ignore
 
 You can ignore file `paths` and module `names` by declaring an `ignore` block in the `sync.yaml` definition:
 

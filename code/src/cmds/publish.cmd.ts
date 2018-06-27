@@ -22,13 +22,10 @@ export const args = {};
  * CLI command.
  */
 export async function cmd(args?: { params: string[]; options: {} }) {
-  // const options = (args && args.options) || {};
   await publish({});
 }
 
-export interface IOptions {}
-
-export async function publish(options: IOptions = {}) {
+export async function publish(options: {} = {}) {
   // Retrieve settings.
   const settings = await loadSettings({ npm: true, spinner: true });
   if (!settings) {
