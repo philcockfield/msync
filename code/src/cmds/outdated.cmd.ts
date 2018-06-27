@@ -50,7 +50,7 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   );
 
   // Print status:
-  log.info.magenta(`\nChecking for outdated references:`);
+  log.info.magenta(`\nChecking for outdated modules:`);
 
   // const results: { [key: string]: IOutdated } = {};
   const results: IOutdated[] = [];
