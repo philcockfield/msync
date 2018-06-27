@@ -9,6 +9,7 @@ import {
   fs,
   fsPath,
   exec,
+  Subject,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -106,14 +107,47 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   listCommand.printTable(modules, { includeIgnored });
   log.info();
 
-  const state: { [key: string]: { count: number } } = {};
+  const state: {
+    [key: string]: {
+      count: number;
+      error?: string;
+      message?: string;
+    };
+  } = {};
+
+  const updates$ = new Subject();
+  updates$.debounceTime(100).subscribe(() => {
+    log.clear();
+    const items = Object.keys(state)
+      .sort()
+      .map(key => ({ key, value: state[key] }));
+
+    // Print build summary.
+    items.forEach(({ key, value }) => {
+      const text = value.error
+        ? `${log.red('✘')} ${value.error}`
+        : value.message;
+      log.info(`${log.cyan(key)} ${text}`);
+    });
+
+    // Print errors.
+    const errors = items.filter(item => Boolean(item.value.error));
+    if (errors.length > 0) {
+      log.info();
+      errors.forEach(({ key, value }) => {
+        log
+          .table()
+          .add([log.yellow(key), formatError(value.error as string)])
+          .log();
+      });
+    }
+  });
 
   modules.forEach(async pkg => {
     const tsc = await tscCommand(pkg);
     const cmd = `cd ${pkg.dir} && ${tsc} --watch`;
     exec.run$(cmd).subscribe(data => {
       let text = data.text;
-      const isWatching = text.includes('Watching for file changes.');
       const isCompiling =
         text.includes('Starting compilation in watch') ||
         text.includes('Starting incremental compilation');
@@ -124,30 +158,23 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
       //    - Remove trailing new-lines.
       text = text.replace(/\n*$/, '');
 
+      const key = pkg.name;
+      const obj = state[key] || { count: 0 };
+
       if (isCompiling) {
-        const key = pkg.name;
-        const obj = state[key] || { count: 0 };
         const count = obj.count + 1;
-        state[key] = { ...obj, count };
+        const message = log.gray(`Build (${log.magenta(count)})`);
+        state[key] = { ...obj, count, message };
+      }
+      if (isError) {
+        obj.error = text;
+        obj.message = log.warn('Error');
+      }
+      if (!isError) {
+        delete obj.error;
       }
 
-      if (isError && !isWatching) {
-        log.clear();
-        log
-          .table()
-          .add([log.yellow(pkg.name), formatError(text)])
-          .log();
-      }
-
-      if (!isError && !isWatching) {
-        log.clear();
-        const keys = Object.keys(state).sort();
-        keys.forEach(key => {
-          const count = state[key].count;
-          text = log.gray(`Build (${log.magenta(count)})`);
-          log.info(`${log.cyan(key)} ${text}`);
-        });
-      }
+      updates$.next();
     });
   });
 }
