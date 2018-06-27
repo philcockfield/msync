@@ -103,7 +103,7 @@ export async function bump(options: IOptions = {}) {
   }
 }
 
-export interface IBumpOptions {
+async function bumpModule(options: {
   release: ReleaseType;
   pkg: IModule;
   allModules: IModule[];
@@ -111,9 +111,7 @@ export interface IBumpOptions {
   level?: number;
   ref?: { name: string; fromVersion: string; toVersion: string };
   table?: ILogTable;
-}
-
-async function bumpModule(options: IBumpOptions) {
+}) {
   // Setup initial conditions.
   const { release, pkg, allModules, save, level = 0, ref } = options;
   const dependants = dependsOn(pkg, allModules);

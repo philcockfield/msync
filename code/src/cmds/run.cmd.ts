@@ -28,15 +28,16 @@ export async function cmd(args?: {
   await run(cmd, { includeIgnored, concurrent });
 }
 
-export interface IOptions {
-  includeIgnored?: boolean;
-  concurrent?: boolean;
-}
-
 /**
  * Runs the given command on all modules.
  */
-export async function run(cmd: string, options: IOptions = {}) {
+export async function run(
+  cmd: string,
+  options: {
+    includeIgnored?: boolean;
+    concurrent?: boolean;
+  } = {},
+) {
   const { includeIgnored = false, concurrent = false } = options;
   if (!cmd) {
     log.info.red(`No command specified.\n`);

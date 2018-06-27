@@ -44,7 +44,13 @@ export async function cmd(args?: {
 }
 
 export type DisplayDependencies = 'none' | 'local' | 'all';
-export interface IOptions {
+
+export interface ITableColumn {
+  head?: string;
+  render: (data: any) => string;
+}
+
+export interface IListOptions {
   basePath?: string;
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
@@ -55,15 +61,10 @@ export interface IOptions {
   columns?: ITableColumn[];
 }
 
-export interface ITableColumn {
-  head?: string;
-  render: (data: any) => string;
-}
-
 /**
  * List modules in dependency order.
  */
-export async function ls(options: IOptions = {}) {
+export async function ls(options: IListOptions = {}) {
   const { includeIgnored = false, npm = false } = options;
   const formatting = options.formatting === false ? false : true;
 
@@ -97,7 +98,7 @@ export async function ls(options: IOptions = {}) {
   };
 }
 
-export function printTable(modules: IModule[], options: IOptions = {}) {
+export function printTable(modules: IModule[], options: IListOptions = {}) {
   const {
     dependencies = 'none',
     includeIgnored = false,

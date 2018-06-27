@@ -51,7 +51,7 @@ export async function cmd(args?: {
   }
 }
 
-export interface IOptions {
+export interface ISyncOptions {
   includeIgnored?: boolean;
   updateVersions?: boolean;
   silent?: boolean;
@@ -60,7 +60,7 @@ export interface IOptions {
 /**
  * Copies each module's dependency tree locally.
  */
-export async function sync(options: IOptions = {}) {
+export async function sync(options: ISyncOptions = {}) {
   const { includeIgnored = false } = options;
   const write = (msg: any) => util.write(msg, options.silent);
   const settings = await loadSettings();
@@ -84,7 +84,10 @@ export async function sync(options: IOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(modules: IModule[], options: IOptions = {}) {
+export async function syncModules(
+  modules: IModule[],
+  options: ISyncOptions = {},
+) {
   const startedAt = new Date();
   const {
     includeIgnored = false,
@@ -149,7 +152,7 @@ export async function syncModules(modules: IModule[], options: IOptions = {}) {
 /**
  * Copies each module's dependency tree locally.
  */
-export async function syncWatch(options: IOptions = {}) {
+export async function syncWatch(options: ISyncOptions = {}) {
   // Setup initial conditions.
   const { includeIgnored = false, silent = false } = options;
   const write = (msg: any) => util.write(msg, options.silent);
