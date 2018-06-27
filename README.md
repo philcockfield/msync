@@ -2,7 +2,7 @@
 
 ![msync](https://cloud.githubusercontent.com/assets/185555/25552911/06c09016-2cfa-11e7-910c-a3723dff3f12.png)
 
-A powerful toolkit for managing multiple node-modules in a flexibly defined workspace, the way you like it.
+A powerful toolkit for managing multiple node-modules in a flexibly defined workspace, just the way you like it.
 
 - `build` and watch (typescript)
 - `sync` and watch (dependency graph)
