@@ -15,15 +15,15 @@
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "command-interface": "3.0.24",
+    "command-interface": "3.0.25",
     "lodash.debounce": "4.0.8",
     "rsync": "0.6.1",
     "semver": "5.5.0",
     "toposort": "1.0.6"
   },
   "devDependencies": {
-    "@tdb/test": "1.1.4",
-    "@tdb/typescript": "2.8.0",
+    "@tdb/test": "1.1.6",
+    "@tdb/typescript": "2.8.1",
     "@types/lodash.debounce": "4.0.3",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"

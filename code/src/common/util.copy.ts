@@ -55,14 +55,14 @@ export async function logUpdate(target: IModule) {
 
   // Get the transpiled typsecript directory to write to.
   const dir = fsPath.join(target.dir, target.tsconfig.compilerOptions.outDir);
-  if (!await fs.existsAsync(dir)) {
+  if (!(await fs.existsAsync(dir))) {
     return;
   }
 
   // Write the file.
   const file = fsPath.join(dir, '__msync.js');
   const getTotal = async () => {
-    if (!await fs.existsAsync(file)) {
+    if (!(await fs.existsAsync(file))) {
       return 0;
     }
     const text = (await fs.readFileAsync(file)).toString();

@@ -48,9 +48,9 @@ export async function publish(options: IOptions = {}) {
 
   // Prompt the user if they want to continue.
   if (
-    !await promptYesNo(
+    !(await promptYesNo(
       `Publish ${total} ${plural('module', total)} to NPM now?`,
-    )
+    ))
   ) {
     log.info();
     return;

@@ -186,7 +186,8 @@ async function promptForModule(modules: IModule[]) {
     message: 'Select a module',
     choices,
   };
-  const name = (await inquirer.prompt(confirm)).name;
+  const res = (await inquirer.prompt(confirm)) as any
+  const name = res.name;
   return modules.find(pkg => pkg.name === name);
 }
 

@@ -124,7 +124,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
         const bullet = isIgnored ? log.gray('-') : log.magenta('-');
         const name = isIgnored
           ? log.gray(dep.name)
-          : dep.isLocal ? log.cyan(dep.name) : log.gray(dep.name);
+          : dep.isLocal
+            ? log.cyan(dep.name)
+            : log.gray(dep.name);
         return `${bullet} ${name} ${log.gray(dep.version)}`;
       })
       .join('\n');
