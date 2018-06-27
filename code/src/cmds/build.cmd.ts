@@ -9,7 +9,6 @@ import {
   fs,
   fsPath,
   exec,
-  table,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -107,26 +106,45 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   listCommand.printTable(modules, { includeIgnored });
   log.info();
 
+  const state: { [key: string]: number } = {};
+
   modules.forEach(async pkg => {
     const tsc = await tscCommand(pkg);
     const cmd = `cd ${pkg.dir} && ${tsc} --watch`;
-    exec.run$(cmd).forEach(data => {
-      const isError = data.text.includes('error');
+    exec.run$(cmd).subscribe(data => {
+      let text = data.text;
+      const isWatching = text.includes('Watching for file changes.');
+      const isCompiling =
+        text.includes('Starting compilation in watch') ||
+        text.includes('Starting incremental compilation');
+      const isError =
+        text.includes('error') && !text.includes('Found 0 errors.');
 
       // Clean up text output from TS compiler:
-      //    - Remove training new-lines.
-      //    - Remove date prefix.
-      let text = data.text.replace(/\n*$/, '');
-      if (!isError) {
-        text = text.substring(text.indexOf(' - ') + 3, text.length);
+      //    - Remove trailing new-lines.
+      text = text.replace(/\n*$/, '');
+
+      if (isCompiling) {
+        const key = pkg.name;
+        const count = state[key] === undefined ? 1 : state[key] + 1;
+        state[key] = count;
       }
 
-      if (isError) {
-        table()
+      if (isError && !isWatching) {
+        log.clear();
+        log
+          .table()
           .add([log.yellow(pkg.name), formatError(text)])
           .log();
-      } else {
-        log.info(`${log.cyan(pkg.name)} ${text}`);
+      }
+
+      if (!isError && !isWatching) {
+        log.clear();
+        const keys = Object.keys(state).sort();
+        keys.forEach(key => {
+          text = log.gray(`Build (${state[key]})`);
+          log.info(`${log.cyan(pkg.name)} ${text}`);
+        });
       }
     });
   });

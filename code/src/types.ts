@@ -27,3 +27,5 @@ export interface INpmInfo {
   latest: string;
   json: any;
 }
+
+export { ILogTable } from 'log.server';

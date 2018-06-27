@@ -10,8 +10,7 @@ import {
   dependsOn,
   updatePackageRef,
   savePackage,
-  table,
-  ITable,
+  ILogTable,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -82,7 +81,7 @@ export async function bump(options: IOptions = {}) {
   }
 
   // Get the version number.
-  const release = await promptForReleaseType(module.version);
+  const release = (await promptForReleaseType(module.version)) as ReleaseType;
   if (!release) {
     return;
   }
@@ -111,7 +110,7 @@ export interface IBumpOptions {
   save: boolean;
   level?: number;
   ref?: { name: string; fromVersion: string; toVersion: string };
-  table?: ITable;
+  table?: ILogTable;
 }
 
 async function bumpModule(options: IBumpOptions) {
@@ -129,7 +128,7 @@ async function bumpModule(options: IBumpOptions) {
   const head = ['update', 'module', 'version', 'ref updated'].map(title =>
     log.gray(title),
   );
-  const tableBuilder = options.table || table({ head });
+  const tableBuilder = options.table || log.table({ head });
 
   if (!ref) {
     let msg = '';
@@ -186,7 +185,8 @@ async function promptForModule(modules: IModule[]) {
     message: 'Select a module',
     choices,
   };
-  const name = (await inquirer.prompt(confirm)).name;
+  const res = (await inquirer.prompt(confirm)) as { name: string };
+  const name = res.name;
   return modules.find(pkg => pkg.name === name);
 }
 
@@ -198,5 +198,6 @@ async function promptForReleaseType(version: string) {
     message: 'Release',
     choices,
   };
-  return (await inquirer.prompt(confirm)).name;
+  const res = (await inquirer.prompt(confirm)) as { name: string };
+  return res.name;
 }

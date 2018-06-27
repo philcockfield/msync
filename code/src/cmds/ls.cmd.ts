@@ -3,7 +3,6 @@ import {
   loadSettings,
   ISettings,
   constants,
-  table,
   IModule,
   filter,
   fsPath,
@@ -124,7 +123,9 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
         const bullet = isIgnored ? log.gray('-') : log.magenta('-');
         const name = isIgnored
           ? log.gray(dep.name)
-          : dep.isLocal ? log.cyan(dep.name) : log.gray(dep.name);
+          : dep.isLocal
+            ? log.cyan(dep.name)
+            : log.gray(dep.name);
         return `${bullet} ${name} ${log.gray(dep.version)}`;
       })
       .join('\n');
@@ -198,7 +199,7 @@ export function printTable(modules: IModule[], options: IOptions = {}) {
     (columns || []).forEach(col => addColumn(col));
 
     const head = cols.map(col => log.gray(col.head));
-    const builder = table({ head });
+    const builder = log.table({ head });
     modules.forEach(pkg => {
       const row = [] as string[];
       cols.forEach(col => row.push(col.render(pkg)));
