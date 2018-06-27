@@ -10,7 +10,6 @@ import {
   IDependency,
   elapsed,
   filter,
-  debounce,
   dependsOn,
   updatePackageRef,
   moment,
@@ -180,17 +179,17 @@ function watch(
   includeIgnored: boolean,
   silent: boolean,
 ) {
-  const sync = debounce(() => {
+  const sync = () => {
     const dependants = dependsOn(pkg, modules);
     if (dependants.length > 0) {
       util.write(log.green(`${pkg.name} changed: `), silent);
       syncModules(dependants, { includeIgnored });
     }
-  }, 1000);
+  };
 
-  // const p = fsPath.join(pkg.dir, watchPattern)
   file
     .watch(fsPath.join(pkg.dir, watchPattern))
     .filter(path => !path.includes('node_modules/'))
+    .debounceTime(1000)
     .forEach(() => sync());
 }

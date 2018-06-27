@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "command-interface": "4.0.0",
-    "lodash.debounce": "4.0.8",
     "log.server": "3.0.0",
     "rsync": "0.6.1",
     "semver": "5.5.0",
@@ -25,7 +24,6 @@
   "devDependencies": {
     "@tdb/test": "1.1.6",
     "@tdb/typescript": "2.8.1",
-    "@types/lodash.debounce": "4.0.3",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
