@@ -110,7 +110,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
   const state: {
     [key: string]: {
       count: number;
-      error?: string;
+      errors: string[];
       message?: string;
     };
   } = {};
@@ -124,19 +124,21 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
     // Print build summary.
     items.forEach(({ key, value }) => {
-      const bullet = value.error ? log.red('✘') : log.green('✔');
+      const bullet = value.errors.length > 0 ? log.red('✘') : log.green('✔');
       log.info(`${bullet} ${log.cyan(key)} ${value.message}`);
     });
 
     // Print errors.
-    const errors = items.filter(item => Boolean(item.value.error));
+    const errors = items.filter(({ value }) => value.errors.length > 0);
     if (errors.length > 0) {
       log.info();
       errors.forEach(({ key, value }) => {
-        log
-          .table()
-          .add([log.yellow(key), formatError(value.error as string)])
-          .log();
+        value.errors.forEach(error => {
+          log
+            .table()
+            .add([log.yellow(key), formatError(error)])
+            .log();
+        });
       });
     }
   });
@@ -152,12 +154,15 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
       const isError =
         text.includes('error') && !text.includes('Found 0 errors.');
 
+      const isSuccess = text.includes('Found 0 errors.');
+      const isWatching = text.includes('Watching for file changes.');
+
       // Clean up text output from TS compiler:
       //    - Remove trailing new-lines.
       text = text.replace(/\n*$/, '');
 
       const key = pkg.name;
-      const obj = state[key] || { count: 0 };
+      const obj = state[key] || { count: 0, errors: [] };
 
       if (isCompiling) {
         const count = obj.count + 1;
@@ -165,11 +170,13 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
         state[key] = { ...obj, count, message };
       }
       if (isError) {
-        obj.error = text;
         obj.message = log.gray(`Error (${log.red(obj.count)})`);
+        if (!isWatching) {
+          obj.errors = [...obj.errors, text];
+        }
       }
-      if (!isError) {
-        delete obj.error;
+      if (isSuccess) {
+        obj.errors = [];
       }
 
       updates$.next();
