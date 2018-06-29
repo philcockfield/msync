@@ -19,6 +19,7 @@ export const description = 'Builds and syncs all typescript modules in order.';
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
+  '-v': 'Verbose mode. Prints all error details.',
 };
 
 /**
@@ -29,12 +30,14 @@ export async function cmd(args?: {
   options: {
     i?: boolean;
     w?: boolean;
+    v?: boolean;
   };
 }) {
   const options = (args && args.options) || {};
   const watch = options.w || false;
   const includeIgnored = options.i || false;
-  await build({ includeIgnored, watch });
+  const verbose = options.v || false;
+  await build({ includeIgnored, watch, verbose });
 }
 
 /**
@@ -44,9 +47,10 @@ export async function build(
   options: {
     includeIgnored?: boolean;
     watch?: boolean;
+    verbose?: boolean;
   } = {},
 ) {
-  const { includeIgnored = false, watch = false } = options;
+  const { includeIgnored = false, watch = false, verbose = false } = options;
   const settings = await loadSettings();
   if (!settings) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
@@ -57,7 +61,7 @@ export async function build(
     .filter(pkg => pkg.isTypeScript);
 
   if (watch) {
-    return buildWatch(modules, includeIgnored);
+    return buildWatch(modules, includeIgnored, verbose);
   } else {
     return buildOnce(modules);
   }
@@ -102,7 +106,11 @@ export async function buildOnce(modules: IModule[]) {
 /**
  * Builds watches the typescript for the given set of modules.
  */
-export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
+export async function buildWatch(
+  modules: IModule[],
+  includeIgnored: boolean,
+  verbose: boolean,
+) {
   log.info.magenta('\nBuild watching:');
   listCommand.printTable(modules, { includeIgnored });
   log.info();
@@ -130,7 +138,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
     // Print errors.
     const errors = items.filter(({ value }) => value.errors.length > 0);
-    if (errors.length > 0) {
+    if (verbose && errors.length > 0) {
       log.info();
       errors.forEach(({ key, value }) => {
         value.errors.forEach(error => {
