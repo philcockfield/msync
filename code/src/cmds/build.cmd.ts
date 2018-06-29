@@ -125,8 +125,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
     // Print build summary.
     items.forEach(({ key, value }) => {
       const bullet = value.error ? log.red('✘') : log.green('✔');
-      const text = value.error ? log.red(`Error`) : value.message;
-      log.info(`${bullet} ${log.cyan(key)} ${text}`);
+      log.info(`${bullet} ${log.cyan(key)} ${value.message}`);
     });
 
     // Print errors.
@@ -162,12 +161,12 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
       if (isCompiling) {
         const count = obj.count + 1;
-        const message = log.gray(`Build (${log.magenta(count)})`);
+        const message = log.gray(`Built (${log.green(count)})`);
         state[key] = { ...obj, count, message };
       }
       if (isError) {
         obj.error = text;
-        obj.message = log.warn('Error');
+        obj.message = log.gray(`Error (${log.red(obj.count)})`);
       }
       if (!isError) {
         delete obj.error;
