@@ -178,10 +178,11 @@ export async function buildWatch(
         state[key] = { ...obj, count, message };
       }
       if (isError) {
-        obj.message = log.gray(`Error (${log.red(obj.count)})`);
         if (!isWatching) {
           obj.errors = [...obj.errors, text];
         }
+        const error = obj.errors.length === 1 ? 'Error' : 'Errors';
+        obj.message = log.red(`${obj.errors.length} ${error}`);
       }
       if (isSuccess) {
         obj.errors = [];
