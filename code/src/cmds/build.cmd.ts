@@ -124,8 +124,9 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean) {
 
     // Print build summary.
     items.forEach(({ key, value }) => {
-      const text = value.error ? log.red(`✘ Error`) : value.message;
-      log.info(`${log.cyan(key)} ${text}`);
+      const bullet = value.error ? log.red('✘') : log.green('✔');
+      const text = value.error ? log.red(`Error`) : value.message;
+      log.info(`${bullet} ${log.cyan(key)} ${text}`);
     });
 
     // Print errors.
