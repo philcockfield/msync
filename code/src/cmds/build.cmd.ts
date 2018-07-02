@@ -120,6 +120,7 @@ export async function buildWatch(
       count: number;
       errors: string[];
       message?: string;
+      isBuilding?: boolean;
     };
   } = {};
 
@@ -132,7 +133,12 @@ export async function buildWatch(
 
     // Print build summary.
     items.forEach(({ key, value }) => {
-      const bullet = value.errors.length > 0 ? log.red('✘') : log.green('✔');
+      const hasErrors = value.errors.length > 0;
+      const bullet = hasErrors
+        ? log.red('✘')
+        : value.isBuilding
+          ? log.gray('✎')
+          : log.green('✔');
       log.info(`${bullet} ${log.cyan(key)} ${value.message}`);
     });
 
@@ -156,29 +162,32 @@ export async function buildWatch(
     const cmd = `cd ${pkg.dir} && ${tsc} --watch`;
     exec.run$(cmd).subscribe(data => {
       let text = data.text;
-      const isCompiling =
+      const isBuilding =
         text.includes('Starting compilation in watch') ||
         text.includes('Starting incremental compilation');
       const isError =
         text.includes('error') && !text.includes('Found 0 errors.');
 
       const isSuccess = text.includes('Found 0 errors.');
-      const isWatching = text.includes('Watching for file changes.');
+      const isBuilt = text.includes('Watching for file changes.');
 
       // Clean up text output from TS compiler:
       //    - Remove trailing new-lines.
       text = text.replace(/\n*$/, '');
 
       const key = pkg.name;
-      const obj = state[key] || { count: 0, errors: [] };
+      let obj = state[key] || { count: 0, errors: [] };
+      obj.isBuilding = isBuilding;
 
-      if (isCompiling) {
-        const count = obj.count + 1;
-        const message = log.gray(`Built (${log.green(count)})`);
-        state[key] = { ...obj, count, message };
+      if (isBuilding || isBuilt) {
+        const count = isBuilding ? obj.count + 1 : obj.count;
+        const status = isBuilding ? 'Building...' : 'Built';
+        const countStatus = isBuilding ? log.gray(count) : log.green(count);
+        const message = log.gray(`${status} (${countStatus})`);
+        obj = { ...obj, count, message };
       }
       if (isError) {
-        if (!isWatching) {
+        if (!isBuilt) {
           obj.errors = [...obj.errors, text];
         }
         const error = obj.errors.length === 1 ? 'Error' : 'Errors';
@@ -188,6 +197,7 @@ export async function buildWatch(
         obj.errors = [];
       }
 
+      state[key] = obj;
       updates$.next();
     });
   });
