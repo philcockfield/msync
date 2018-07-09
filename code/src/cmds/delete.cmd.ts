@@ -3,7 +3,6 @@ import {
   constants,
   loadSettings,
   filter,
-  file,
   inquirer,
   fs,
   flatten,
@@ -14,19 +13,16 @@ export const name = 'delete';
 export const description = `Deletes transient files across projects (such as logs, yarn.lock, node_modules etc).`;
 export const args = {
   '-i': 'Include ignored modules.',
-  '-c': 'Run command concurrently against all modules.  (Default: false).',
 };
 
 export async function cmd(args?: {
   params: string[];
   options: {
     i?: boolean;
-    c?: boolean;
   };
 }) {
   const options = (args && args.options) || {};
   const includeIgnored = options.i || false;
-  const concurrent = options.c || false;
 
   // Retrieve modules.
   const settings = await loadSettings();

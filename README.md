@@ -50,6 +50,10 @@ Run the command line using `msync` within your workspace folder to list, sync or
 
 Starts watchers for `build` and `sync` in new tabs. Requires a terminal like [iTerm2](https://www.iterm2.com/) that can recieve "new tab" instructions.
 
+### delete
+
+Deletes common transient folders from across all modules, such as logs (`yarn-error.log` and `npm-debug.log`) or `yarn.lock` files, or `node_modules` folder etc.
+
 ## Help
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:
