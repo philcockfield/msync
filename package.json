@@ -22,8 +22,8 @@
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@tdb/test": "1.1.6",
-    "@tdb/typescript": "2.8.1",
+    "@tdb/test": "1.1.9",
+    "@tdb/typescript": "2.9.1",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
