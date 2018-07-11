@@ -1,5 +1,19 @@
 import { R, moment, log } from './libs';
 
+/**
+ * Converts a nested set of arrays into a flat single-level array.
+ */
+export function flatten<T>(list: any): T[] {
+  if (!Array.isArray(list)) {
+    return list;
+  }
+  const result: any = list.reduce((a, b) => {
+    const value: any = Array.isArray(b) ? flatten(b) : b;
+    return a.concat(value);
+  }, []);
+  return result as T[];
+}
+
 export const compact = <T>(value: T[]) =>
   R.pipe(
     R.reject(R.isNil),

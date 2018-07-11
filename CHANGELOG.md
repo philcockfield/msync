@@ -3,11 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.9.0] - 2018-06-28
+## [Unreleased] - YYYY-MM-DD
 
 #### Added
-
-- `msync outdated` runs an `npm outdated` command on each module.
 
 #### Changed
 
@@ -18,6 +16,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Fixed
 
 #### Security
+
+## [1.10.0] - 2018-07-9
+
+#### Added
+
+- `msync outdated` runs an `npm outdated` command on each module.
+- `msync deleted` deletes transient files across projects (such as logs, yarn.lock, node_modules etc).
 
 ## [1.8.2] - 2018-03-31
 

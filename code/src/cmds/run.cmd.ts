@@ -22,7 +22,6 @@ export async function cmd(args?: {
 }) {
   const cmd = (args && args.params && args.params.join(' ')) || '';
   const options = (args && args.options) || {};
-
   const includeIgnored = options.i || false;
   const concurrent = options.c || false;
   await run(cmd, { includeIgnored, concurrent });
