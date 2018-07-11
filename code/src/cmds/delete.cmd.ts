@@ -10,6 +10,7 @@ import {
 } from '../common';
 
 export const name = 'delete';
+export const alias = 'del';
 export const description = `Deletes transient files across projects (such as logs, yarn.lock, node_modules etc).`;
 export const args = {
   '-i': 'Include ignored modules.',
