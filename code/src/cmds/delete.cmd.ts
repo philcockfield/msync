@@ -79,7 +79,7 @@ export async function cmd(args?: {
  */
 async function deleteAfterPrompt(paths: string[]) {
   // Ensure all the paths exist.
-  paths = await filterExists(paths);
+  paths = await filter.fileExists(paths);
   if (paths.length === 0) {
     log.info.gray('No files to delete.');
     return false;
@@ -123,13 +123,4 @@ async function deleteFiles(paths: string[]) {
     await fs.removeAsync(path);
     log.info.magenta(`Deleted ${log.gray(path)}`);
   }
-}
-
-async function filterExists(paths: string[]) {
-  const checking = paths.map(async path => {
-    const exists = await fs.existsAsync(path);
-    return { path, exists };
-  });
-  const results = await Promise.all(checking);
-  return results.filter(result => result.exists).map(result => result.path);
 }
