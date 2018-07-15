@@ -54,6 +54,10 @@ Starts watchers for `build` and `sync` in new tabs. Requires a terminal like [iT
 
 Deletes common transient folders from across all modules, such as logs (`yarn-error.log` and `npm-debug.log`) or `yarn.lock` files, or `node_modules` folder etc.
 
+### tsconfig
+
+Common transformations across typescript configuration files, eg flipping the `noUnusedLocals` switch.
+
 ## Help
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:

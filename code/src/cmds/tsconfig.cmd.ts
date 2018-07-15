@@ -12,9 +12,9 @@ import {
 
 type ConfigValue = string | boolean | number;
 
-export const name = 'typescript';
+export const name = 'tsconfig';
 export const alias = 'ts';
-export const description = `Common transformations on typescript configuration.`;
+export const description = `Common transformations across typescript configuration files.`;
 export const args = {
   '-i': 'Include ignored modules.',
 };
