@@ -3,19 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] - YYYY-MM-DD
+## [1.11.0] - 2018-07-16
 
 #### Added
 
-#### Changed
-
-#### Deprecated
-
-#### Removed
-
-#### Fixed
-
-#### Security
+- `typescript` (`ts`) comment for changing values in tsconfig.json files.
+  Initial option used to flip the `noUnusedLocals` switch.
 
 ## [1.10.0] - 2018-07-9
 
