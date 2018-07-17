@@ -4,7 +4,7 @@ import {
   loadSettings,
   filter,
   inquirer,
-  fs,
+  tryDelete,
   flatten,
   fsPath,
 } from '../common';
@@ -120,7 +120,7 @@ async function deleteAfterPrompt(paths: string[]) {
 
 async function deleteFiles(paths: string[]) {
   for (const path of paths) {
-    await fs.removeAsync(path);
+    await tryDelete(path, { retry: 3 });
     log.info.magenta(`Deleted ${log.gray(path)}`);
   }
 }
