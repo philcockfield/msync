@@ -14,6 +14,15 @@
   dependencies:
     samsam "1.3.0"
 
+"@tdb/log@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.0.0.tgz#1708a67e43e820f0fe119dc5530416168affa3e8"
+  dependencies:
+    chalk "2.4.1"
+    cli-table "0.3.1"
+    ramda "0.25.0"
+    rxjs "6.2.2"
+
 "@tdb/test@1.1.9":
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/@tdb/test/-/test-1.1.9.tgz#4c6e9ff0744211a3306b58ff9e9694824e19b5de"
@@ -27,19 +36,6 @@
     nock "9.3.3"
     sinon "6.0.1"
 
-"@tdb/test@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@tdb/test/-/test-1.1.6.tgz#f79be46bde126c98deee12086e1e58a6ac84844b"
-  dependencies:
-    "@types/chai" "4.1.4"
-    "@types/mocha" "5.2.2"
-    "@types/nock" "9.1.3"
-    "@types/sinon" "4.3.0"
-    chai "4.1.2"
-    mocha "5.2.0"
-    nock "9.3.3"
-    sinon "4.4.2"
-
 "@tdb/typescript@2.9.1":
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/@tdb/typescript/-/typescript-2.9.1.tgz#e53a585870f5ab5f3285cef84aaf3e7fa479b7d4"
@@ -47,18 +43,6 @@
     "@types/node" "10.5.2"
     prettier "1.13.7"
     ts-node "7.0.0"
-    tslint "5.10.0"
-    tslint-config-prettier "1.13.0"
-    tslint-react "3.6.0"
-    typescript "2.9.2"
-
-"@tdb/typescript@^2.8.1":
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/@tdb/typescript/-/typescript-2.8.1.tgz#ec5d8b9442ff1ad10593abf4fc00145a324237ef"
-  dependencies:
-    "@types/node" "10.3.3"
-    prettier "1.13.5"
-    ts-node "6.1.1"
     tslint "5.10.0"
     tslint-config-prettier "1.13.0"
     tslint-react "3.6.0"
@@ -93,20 +77,6 @@
     "@types/rx" "*"
     "@types/through" "*"
 
-"@types/lodash.debounce@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@types/lodash.debounce/-/lodash.debounce-4.0.3.tgz#d712aee9e6136be77f70523ed9f0fc049a6cf15a"
-  dependencies:
-    "@types/lodash" "*"
-
-"@types/lodash@*":
-  version "4.14.110"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.110.tgz#fb07498f84152947f30ea09d89207ca07123461e"
-
-"@types/mocha@5.2.2":
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.2.tgz#202d2b8fe1364c5b617b439b26a54f0e75eac0a7"
-
 "@types/mocha@5.2.3":
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.3.tgz#11f3a5629d67cd444fa6c94536576244e6a52ea9"
@@ -120,10 +90,6 @@
 "@types/node@*":
   version "10.5.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.0.tgz#f5b61395c09b47ac46aaa1452750c9a72b3d3673"
-
-"@types/node@10.3.3":
-  version "10.3.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.3.tgz#8798d9e39af2fa604f715ee6a6b19796528e46c3"
 
 "@types/node@10.5.2":
   version "10.5.2"
@@ -230,10 +196,6 @@
 "@types/semver@5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.5.0.tgz#146c2a29ee7d3bae4bf2fcb274636e264c813c45"
-
-"@types/sinon@4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-4.3.0.tgz#7f53915994a00ccea24f4e0c24709822ed11a3b1"
 
 "@types/sinon@5.0.1":
   version "5.0.1"
@@ -546,13 +508,13 @@ colors@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
 
-command-interface@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.0.tgz#8f891cd8d89350c5b59cb434e1d4267d850939f6"
+command-interface@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.1.tgz#b4bc786d92d2334dcdaaca5103b5bfd135b4f23e"
   dependencies:
+    "@tdb/log" "1.0.0"
     "@types/fs-extra-promise" "1.0.6"
     "@types/inquirer" "0.0.42"
-    "@types/lodash.debounce" "4.0.3"
     "@types/ramda" "0.25.34"
     chokidar "2.0.4"
     execa "0.10.0"
@@ -561,9 +523,6 @@ command-interface@4.0.0:
     inquirer "6.0.0"
     js-yaml "3.12.0"
     listr "0.14.1"
-    lodash "4.17.10"
-    lodash.debounce "4.0.8"
-    log.server "3.0.0"
     minimist "1.2.0"
     moment "2.22.2"
     pluralize "7.0.0"
@@ -1197,7 +1156,7 @@ listr@0.14.1:
     rxjs "^6.1.0"
     strip-ansi "^3.0.1"
 
-lodash.debounce@4.0.8, lodash.debounce@^4.0.8:
+lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
@@ -1205,7 +1164,7 @@ lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
 
-lodash@4.17.10, lodash@^4.17.5, lodash@^4.3.0:
+lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -1222,17 +1181,7 @@ log-update@^1.0.2:
     ansi-escapes "^1.0.0"
     cli-cursor "^1.0.2"
 
-log.server@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/log.server/-/log.server-3.0.0.tgz#4da52461e5341e4114c7a203a5ac9a4e7e164f79"
-  dependencies:
-    "@tdb/test" "^1.1.6"
-    "@tdb/typescript" "^2.8.1"
-    chalk "2.4.1"
-    cli-table "0.3.1"
-    ramda "0.25.0"
-
-lolex@^2.2.0, lolex@^2.3.2:
+lolex@^2.3.2:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.7.0.tgz#9c087a69ec440e39d3f796767cf1b2cdc43d5ea5"
 
@@ -1376,7 +1325,7 @@ nice-try@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
 
-nise@^1.2.0, nise@^1.3.3:
+nise@^1.3.3:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/nise/-/nise-1.4.2.tgz#a9a3800e3994994af9e452333d549d60f72b8e8c"
   dependencies:
@@ -1568,10 +1517,6 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
 
-prettier@1.13.5:
-  version "1.13.5"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.5.tgz#7ae2076998c8edce79d63834e9b7b09fead6bfd0"
-
 prettier@1.13.7:
   version "1.13.7"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.7.tgz#850f3b8af784a49a6ea2d2eaa7ed1428a34b7281"
@@ -1697,6 +1642,12 @@ rxjs@5.5.8:
   dependencies:
     symbol-observable "1.0.1"
 
+rxjs@6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.2.tgz#eb75fa3c186ff5289907d06483a77884586e1cf9"
+  dependencies:
+    tslib "^1.9.0"
+
 rxjs@^6.1.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.1.tgz#246cebec189a6cbc143a3ef9f62d6f4c91813ca1"
@@ -1768,18 +1719,6 @@ shebang-regex@^1.0.0:
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
-
-sinon@4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-4.4.2.tgz#c4c41d4bd346e1d33594daec2d5df0548334fc65"
-  dependencies:
-    "@sinonjs/formatio" "^2.0.0"
-    diff "^3.1.0"
-    lodash.get "^4.4.2"
-    lolex "^2.2.0"
-    nise "^1.2.0"
-    supports-color "^5.1.0"
-    type-detect "^4.0.5"
 
 sinon@6.0.1:
   version "6.0.1"
@@ -1911,7 +1850,7 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-supports-color@5.4.0, supports-color@^5.1.0, supports-color@^5.3.0, supports-color@^5.4.0:
+supports-color@5.4.0, supports-color@^5.3.0, supports-color@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.4.0.tgz#1c6b337402c2137605efe19f10fec390f6faab54"
   dependencies:
@@ -1981,18 +1920,6 @@ toposort@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
 
-ts-node@6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.1.1.tgz#19607140acb06150441fcdb61be11f73f7b6657e"
-  dependencies:
-    arrify "^1.0.0"
-    diff "^3.1.0"
-    make-error "^1.1.1"
-    minimist "^1.2.0"
-    mkdirp "^0.5.1"
-    source-map-support "^0.5.6"
-    yn "^2.0.0"
-
 ts-node@7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-7.0.0.tgz#a94a13c75e5e1aa6b82814b84c68deb339ba7bff"
@@ -2043,7 +1970,7 @@ tsutils@^2.12.1, tsutils@^2.13.1:
   dependencies:
     tslib "^1.8.1"
 
-type-detect@^4.0.0, type-detect@^4.0.5, type-detect@^4.0.8:
+type-detect@^4.0.0, type-detect@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
 

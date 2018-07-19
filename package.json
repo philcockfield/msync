@@ -15,8 +15,8 @@
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "command-interface": "4.0.0",
-    "log.server": "3.0.0",
+    "@tdb/log": "1.0.0",
+    "command-interface": "4.0.1",
     "rsync": "0.6.1",
     "semver": "5.5.0",
     "toposort": "2.0.2"

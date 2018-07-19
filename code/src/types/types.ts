@@ -28,4 +28,4 @@ export interface INpmInfo {
   json: any;
 }
 
-export { ILogTable } from 'log.server';
+export { LogTable } from '@tdb/log/lib/server';

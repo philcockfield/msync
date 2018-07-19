@@ -10,7 +10,7 @@ import {
   dependsOn,
   updatePackageRef,
   savePackage,
-  ILogTable,
+  LogTable,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -109,7 +109,7 @@ async function bumpModule(options: {
   save: boolean;
   level?: number;
   ref?: { name: string; fromVersion: string; toVersion: string };
-  table?: ILogTable;
+  table?: LogTable;
 }) {
   // Setup initial conditions.
   const { release, pkg, allModules, save, level = 0, ref } = options;
