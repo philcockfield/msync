@@ -14,14 +14,14 @@
   dependencies:
     samsam "1.3.0"
 
-"@tdb/log@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.0.0.tgz#1708a67e43e820f0fe119dc5530416168affa3e8"
+"@tdb/log@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.0.3.tgz#771ce751ce548a23b0aa84c8a91425ad7a1b9b1b"
   dependencies:
     chalk "2.4.1"
     cli-table "0.3.1"
     ramda "0.25.0"
-    rxjs "6.2.2"
+    rxjs "5.5.8"
 
 "@tdb/test@1.1.9":
   version "1.1.9"
@@ -49,16 +49,16 @@
     typescript "2.9.2"
 
 "@types/bluebird@*":
-  version "3.5.21"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.21.tgz#567615589cc913e84a28ecf9edb031732bdf2634"
+  version "3.5.22"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.22.tgz#519b87fe3c9d290ca6c06381ffc3040770ab452b"
 
 "@types/chai@4.1.4":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.4.tgz#5ca073b330d90b4066d6ce18f60d57f2084ce8ca"
 
-"@types/fs-extra-promise@1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@types/fs-extra-promise/-/fs-extra-promise-1.0.6.tgz#b9efc3a99b65510dfdcf19ca814003590c818d51"
+"@types/fs-extra-promise@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/fs-extra-promise/-/fs-extra-promise-1.0.7.tgz#0028a11e2f26a5a2391954bf199bfbb0c9806a1f"
   dependencies:
     "@types/bluebird" "*"
     "@types/fs-extra" "^4"
@@ -87,17 +87,13 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*":
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.0.tgz#f5b61395c09b47ac46aaa1452750c9a72b3d3673"
-
-"@types/node@10.5.2":
+"@types/node@*", "@types/node@10.5.2":
   version "10.5.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.2.tgz#f19f05314d5421fe37e74153254201a7bf00a707"
 
-"@types/ramda@0.25.34":
-  version "0.25.34"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.25.34.tgz#6fae4a009123c2db810711b416da9b597cc5c54c"
+"@types/ramda@0.25.35":
+  version "0.25.35"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.25.35.tgz#94500755a8dd7365f80e9e99e31331add41e9880"
 
 "@types/rsync@0.4.30":
   version "0.4.30"
@@ -508,14 +504,14 @@ colors@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
 
-command-interface@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.1.tgz#b4bc786d92d2334dcdaaca5103b5bfd135b4f23e"
+command-interface@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.2.tgz#f1e71bcc0699b41bc31d5f795bf8b048ed893525"
   dependencies:
-    "@tdb/log" "1.0.0"
-    "@types/fs-extra-promise" "1.0.6"
+    "@tdb/log" "1.0.3"
+    "@types/fs-extra-promise" "1.0.7"
     "@types/inquirer" "0.0.42"
-    "@types/ramda" "0.25.34"
+    "@types/ramda" "0.25.35"
     chokidar "2.0.4"
     execa "0.10.0"
     fs-extra-promise "1.0.1"
@@ -529,9 +525,13 @@ command-interface@4.0.1:
     ramda "0.25.0"
     rxjs "5.5.8"
 
-commander@2.15.1, commander@^2.12.1:
+commander@2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
+
+commander@^2.12.1:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.16.0.tgz#f16390593996ceb4f3eeb020b31d78528f7f8a50"
 
 component-emitter@^1.2.1:
   version "1.2.1"
@@ -637,8 +637,8 @@ escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
 esprima@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.0.tgz#4499eddcd1110e0b218bacf2fa7f7f59f55ca804"
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
 
 esutils@^2.0.2:
   version "2.0.2"
@@ -1181,11 +1181,7 @@ log-update@^1.0.2:
     ansi-escapes "^1.0.0"
     cli-cursor "^1.0.2"
 
-lolex@^2.3.2:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.7.0.tgz#9c087a69ec440e39d3f796767cf1b2cdc43d5ea5"
-
-lolex@^2.4.2:
+lolex@^2.3.2, lolex@^2.4.2:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.7.1.tgz#e40a8c4d1f14b536aa03e42a537c7adbaf0c20be"
 
@@ -1313,7 +1309,7 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-needle@^2.2.0:
+needle@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/needle/-/needle-2.2.1.tgz#b5e325bd3aae8c2678902fa296f729455d1d3a7d"
   dependencies:
@@ -1350,12 +1346,12 @@ nock@9.3.3:
     semver "^5.5.0"
 
 node-pre-gyp@^0.10.0:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.10.2.tgz#e8945c20ef6795a20aac2b44f036eb13cf5146e3"
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.10.3.tgz#3070040716afdc778747b61b6887bf78880b80fc"
   dependencies:
     detect-libc "^1.0.2"
     mkdirp "^0.5.1"
-    needle "^2.2.0"
+    needle "^2.2.1"
     nopt "^4.0.1"
     npm-packlist "^1.1.6"
     npmlog "^4.0.2"
@@ -1642,15 +1638,9 @@ rxjs@5.5.8:
   dependencies:
     symbol-observable "1.0.1"
 
-rxjs@6.2.2:
+rxjs@^6.1.0:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.2.tgz#eb75fa3c186ff5289907d06483a77884586e1cf9"
-  dependencies:
-    tslib "^1.9.0"
-
-rxjs@^6.1.0:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.1.tgz#246cebec189a6cbc143a3ef9f62d6f4c91813ca1"
   dependencies:
     tslib "^1.9.0"
 
@@ -1965,8 +1955,8 @@ tslint@5.10.0:
     tsutils "^2.12.1"
 
 tsutils@^2.12.1, tsutils@^2.13.1:
-  version "2.27.1"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.27.1.tgz#ab0276ac23664f36ce8fd4414daec4aebf4373ee"
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.28.0.tgz#6bd71e160828f9d019b6f4e844742228f85169a1"
   dependencies:
     tslib "^1.8.1"
 
@@ -2003,10 +1993,8 @@ urix@^0.1.0:
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
 
 use@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/use/-/use-3.1.0.tgz#14716bf03fdfefd03040aef58d8b4b85f3a7c544"
-  dependencies:
-    kind-of "^6.0.2"
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
