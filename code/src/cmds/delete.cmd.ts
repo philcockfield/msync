@@ -7,6 +7,7 @@ import {
   tryDelete,
   flatten,
   fsPath,
+  listr,
 } from '../common';
 
 export const name = 'delete';
@@ -88,8 +89,7 @@ async function deleteAfterPrompt(paths: string[]) {
   // List files.
   log.info.cyan(`\nDelete files:`);
   paths.forEach(path => {
-    const parts = fsPath.parse(path);
-    log.info.gray(` ${parts.dir}/${log.cyan(parts.base)}`);
+    log.info(` ${toDisplayPath(path)}`);
   });
   log.info();
 
@@ -99,17 +99,18 @@ async function deleteAfterPrompt(paths: string[]) {
       type: 'list',
       name: 'confirm',
       message: 'Are you sure?',
-      choices: ['no', 'yes'],
+      choices: ['No', 'Yes'],
     },
   ])) as { confirm: string };
 
   // Perform operation.
   switch (response.confirm) {
-    case 'no':
+    case 'No':
       log.info.gray(`Nothing deleted.`);
       return false;
 
-    case 'yes':
+    case 'Yes':
+      log.info();
       await deleteFiles(paths);
       return true;
 
@@ -118,9 +119,22 @@ async function deleteAfterPrompt(paths: string[]) {
   }
 }
 
+function toDisplayPath(path: string) {
+  const root = fsPath.parse(path);
+  const dir = fsPath.parse(root.dir);
+  return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
+}
+
 async function deleteFiles(paths: string[]) {
-  for (const path of paths) {
-    await tryDelete(path, { retry: 3 });
-    log.info.magenta(`Deleted ${log.gray(path)}`);
+  const tasks = paths.map(path => {
+    return {
+      title: `${log.cyan('Delete')} ${toDisplayPath(path)}`,
+      task: async () => tryDelete(path, { retry: 3 }),
+    };
+  });
+  try {
+    await listr(tasks, { concurrent: true, exitOnError: false }).run();
+  } catch (error) {
+    // Ignore.
   }
 }
