@@ -8,6 +8,7 @@ import {
   fsPath,
   ISettings,
   value as valueUtil,
+  listr,
 } from '../common';
 
 type ConfigValue = string | boolean | number;
@@ -91,8 +92,7 @@ async function saveChangesWithPrompt(
   // List files.
   log.info.cyan(`\nChange files:`);
   paths.forEach(path => {
-    const parts = fsPath.parse(path);
-    log.info.gray(` ${parts.dir}/${log.cyan(parts.base)}`);
+    log.info(` ${toDisplayPath(path)}`);
   });
   log.info();
 
@@ -102,23 +102,29 @@ async function saveChangesWithPrompt(
       type: 'list',
       name: 'confirm',
       message: 'Are you sure?',
-      choices: ['no', 'yes'],
+      choices: ['No', 'Yes'],
     },
   ])) as { confirm: string };
 
   // Perform operation.
   switch (response.confirm) {
-    case 'no':
+    case 'No':
       log.info.gray(`Nothing changed.`);
       return false;
 
-    case 'yes':
+    case 'Yes':
       await saveChanges(paths, changes);
       return true;
 
     default:
       return false;
   }
+}
+
+function toDisplayPath(path: string) {
+  const root = fsPath.parse(path);
+  const dir = fsPath.parse(root.dir);
+  return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
 }
 
 async function saveChanges(
@@ -132,8 +138,18 @@ async function saveChanges(
     const text = `${JSON.stringify(tsConfig, null, '  ')}\n`;
     await fs.writeFileAsync(path, text);
   };
-  const wait = paths.map(path => saveChange(path));
-  await Promise.all(wait);
+
+  const tasks = paths.map(path => {
+    return {
+      title: `${log.cyan('Updated')} ${toDisplayPath(path)}`,
+      task: async () => saveChange(path),
+    };
+  });
+  try {
+    await listr(tasks, { concurrent: true, exitOnError: false }).run();
+  } catch (error) {
+    // Ignore.
+  }
 }
 
 function toChoiceParts(choice: string) {
