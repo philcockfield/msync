@@ -23,6 +23,15 @@
     ramda "0.25.0"
     rxjs "5.5.8"
 
+"@tdb/log@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.0.7.tgz#e716abd016709742f9eff69cb965585812ccd7f8"
+  dependencies:
+    chalk "2.4.1"
+    cli-table "0.3.1"
+    ramda "0.25.0"
+    rxjs "5.5.8"
+
 "@tdb/test@1.1.9":
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/@tdb/test/-/test-1.1.9.tgz#4c6e9ff0744211a3306b58ff9e9694824e19b5de"
@@ -1666,7 +1675,11 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-semver@5.5.0, semver@^5.3.0, semver@^5.5.0:
+semver@5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.1.tgz#7dfdd8814bdb7cabc7be0fb1d734cfb66c940477"
+
+semver@^5.3.0, semver@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
