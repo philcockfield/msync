@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "1.11.8",
+  "version": "1.11.9",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@tdb/log": "1.0.7",
-    "command-interface": "4.0.2",
+    "command-interface": "4.0.3",
     "rsync": "0.6.1",
     "semver": "5.5.1",
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@tdb/test": "1.1.9",
-    "@tdb/typescript": "2.9.1",
+    "@tdb/test": "1.1.14",
+    "@tdb/typescript": "3.0.1",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
