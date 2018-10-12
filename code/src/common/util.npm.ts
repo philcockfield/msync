@@ -15,7 +15,7 @@ export async function info(pkg: IModule | IModule[]) {
 }
 
 async function getInfo(pkg: IModule): Promise<INpmInfo | undefined> {
-  const cmd = `yarn info ${pkg.name} --json`;
+  const cmd = `npm info ${pkg.name} --json`;
 
   const parseJson = (text: string) => {
     try {
@@ -34,8 +34,8 @@ async function getInfo(pkg: IModule): Promise<INpmInfo | undefined> {
       return undefined;
     }
     const json = parseJson(result.stdout);
-    const latest = json.data['dist-tags'].latest;
-    const name = json.data.name;
+    const latest = json['dist-tags'].latest;
+    const name = json.name;
     return {
       name,
       latest,
