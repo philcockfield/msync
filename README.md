@@ -58,6 +58,12 @@ Deletes common transient folders from across all modules, such as logs (`yarn-er
 
 Common transformations across typescript configuration files, eg flipping the `noUnusedLocals` switch.
 
+### audit
+
+Runs an NPM security audit across all modules.
+
+![Audit](https://user-images.githubusercontent.com/185555/46844051-dd84fe00-ce31-11e8-998f-45145a55e092.png)
+
 ## Help
 
 Use the `--help` (`-h`) flag to see the options for each command, eg:

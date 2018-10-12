@@ -25,7 +25,7 @@ export interface IAuditResult {
 
 export const name = 'audit';
 export const alias = ['a'];
-export const description = 'Runs an NPM security audit across all modules';
+export const description = 'Runs an NPM security audit across all modules.';
 export const args = {};
 
 /**
