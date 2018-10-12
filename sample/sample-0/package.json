@@ -2,24 +2,15 @@
   "name": "msync.sample-0",
   "version": "0.0.8",
   "scripts": {
-    "build": "rm -rf ./libs && tsc",
-    "prepublish": "yarn run build"
+    "build": "sh ./node_modules/@tdb/typescript/sh/build.sh",
+    "prepare": "yarn run build"
   },
   "dependencies": {
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
     "msync.sample-1": "^0.0.7",
     "msync.sample-3": "^2.3.13",
-    "msync.sample-4-ignored": "^2.0.1",
-    "msync.sample-5-ignored": "^2.0.0"
-  },
-  "peerDependencies": {
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "msync.sample-4-ignored": "^2.3.7"
   },
   "devDependencies": {
-    "@types/node": "^7.0.14",
-    "@types/react": "^15.0.23",
-    "@types/react-dom": "^15.5.0"
+    "@tdb/typescript": "^3.1.2"
   }
 }
