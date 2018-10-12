@@ -51,12 +51,16 @@ export async function audit(options: {} = {}) {
     exitOnError: false,
   });
 
-  // Finish up.
-  if (res.data) {
+  // Print results.
+  const totalIssues = res.data.reduce((acc, next) => acc + next.issues, 0);
+  if (totalIssues > 0) {
     printAudit(res.data);
   }
+
+  // Finish up.
   if (res.success) {
-    log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
+    const msg = totalIssues === 0 ? log.green(`All modules are safe.`) : 'Done';
+    log.info(`\n✨✨  ${msg} ${log.gray(elapsed(startedAt))}\n`);
   } else {
     log.info.yellow(`\n💩  Something went wrong while running the audit.\n`);
     log.error(res.error);
@@ -84,13 +88,11 @@ function levelColor(level: Level) {
 }
 
 function printAudit(results: IAuditResult[]) {
-  const head = ['module', 'vulnerabilities'].map(title => log.gray(title));
+  const head = [log.gray('module'), log.red('vulnerabilities')];
   const builder = log.table({ head });
 
-  results.forEach(audit => {
+  results.filter(audit => !audit.ok).forEach(audit => {
     const bullet = audit.ok ? log.green('✔') : log.red('✖');
-    const moduleColor = audit.ok ? log.green : log.red;
-
     const output = Object.keys(audit.vulnerabilities)
       .map(key => ({ key: key as Level, value: audit.vulnerabilities[key] }))
       .reduce((acc, next) => {
@@ -98,13 +100,12 @@ function printAudit(results: IAuditResult[]) {
           next.value > 0
             ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`)
             : '';
-
         return text ? `${acc} ${text}` : acc;
       }, '')
       .trim();
 
     builder.add([
-      log.gray(`${bullet} ${moduleColor(audit.module)} ${audit.version}`),
+      log.gray(`${bullet} ${log.cyan(audit.module)} ${audit.version}`),
       output || log.green('safe'),
     ]);
   });
@@ -115,10 +116,10 @@ function printAudit(results: IAuditResult[]) {
 }
 
 async function runAudits(modules: IModule[], options: IListrOptions) {
-  let results: IAuditResult[] = [];
+  let data: IAuditResult[] = [];
   const task = (pkg: IModule) => {
     return {
-      title: `${log.cyan(pkg.name)}`,
+      title: `${log.cyan(pkg.name)} ${log.gray('npm audit')}`,
       task: async () => {
         const cmd = (text: string) => `cd ${pkg.dir} && ${text}`;
         const commands = {
@@ -146,7 +147,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
           issues,
           vulnerabilities,
         };
-        results = [...results, result];
+        data = [...data, result];
         return result;
       },
     };
@@ -155,9 +156,9 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
   const runner = listr(tasks, options);
   try {
     await runner.run();
-    return { success: true, error: null, data: results };
+    return { success: true, data, error: null };
   } catch (error) {
-    return { success: false, error }; // Fail.
+    return { success: false, data, error }; // Fail.
   }
 }
 
