@@ -11,18 +11,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Changed
 
-- Swapped out `yarn` commands to use `npm` not that NPM is as fast as yarn
+- Swapped out `yarn` commands to use `npm` now that NPM is as fast as yarn
   Effected commands:
   - `delete`
   - `publish`
-
-#### Deprecated
-
-#### Removed
-
-#### Fixed
-
-#### Security
 
 ## [1.11.0] - 2018-07-16
 
