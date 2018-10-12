@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0] - 2018-10-12
+
+#### Added
+
+#### Changed
+
+- Swapped out `yarn` commands to use `npm` not that NPM is as fast as yarn
+  Effected commands:
+  - `delete`
+  - `publish`
+
+#### Deprecated
+
+#### Removed
+
+#### Fixed
+
+#### Security
+
 ## [1.11.0] - 2018-07-16
 
 #### Added
