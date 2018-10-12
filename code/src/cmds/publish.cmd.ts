@@ -57,8 +57,8 @@ export async function publish(options: {} = {}) {
   log.info.gray(`Publishing to NPM:\n`);
   const startedAt = new Date();
 
-  // Slow.  Full install and sync mode.
-  const publishCommand = () => 'yarn install && npm publish && msync sync';
+  // [Slow] Full install and sync mode.
+  const publishCommand = () => 'npm install && npm publish && msync sync';
   const publishResult = await runCommand(modules, publishCommand, {
     concurrent: false,
     exitOnError: true,
@@ -77,7 +77,7 @@ const runCommand = async (
   cmd: (pkg: IModule) => string,
   options: IListrOptions,
 ) => {
-  const prepublish = (pkg: IModule) => {
+  const task = (pkg: IModule) => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
       task: async () => {
@@ -86,7 +86,7 @@ const runCommand = async (
       },
     };
   };
-  const tasks = modules.map(pkg => prepublish(pkg));
+  const tasks = modules.map(pkg => task(pkg));
   const runner = listr(tasks, options);
   try {
     await runner.run();

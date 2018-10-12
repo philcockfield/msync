@@ -6,6 +6,6 @@
     "msync.sample-1": "^0.0.7"
   },
   "scripts": {
-    "prepublish": "echo no-op"
+    "prepare": "echo no-op"
   }
 }

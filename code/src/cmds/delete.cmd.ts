@@ -38,7 +38,7 @@ export async function cmd(args?: {
       type: 'list',
       name: 'type',
       message: 'Delete?',
-      choices: ['logs', 'yarn.lock', 'node_modules'],
+      choices: ['logs', 'yarn.lock', 'package-lock.json', 'node_modules'],
     },
   ])) as { type: string };
   log.info();
@@ -52,6 +52,10 @@ export async function cmd(args?: {
   switch (response.type) {
     case 'yarn.lock':
       await deleteAfterPrompt(modules.map(dir => `${dir}/yarn.lock`));
+      break;
+
+    case 'package-lock.json':
+      await deleteAfterPrompt(modules.map(dir => `${dir}/package-lock.json`));
       break;
 
     case 'logs':

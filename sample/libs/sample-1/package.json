@@ -2,7 +2,10 @@
   "name": "msync.sample-1",
   "version": "0.0.7",
   "scripts": {
-    "build": "rm -rf ./libs && tsc",
-    "prepublish": "yarn run build"
+    "build": "sh ./node_modules/@tdb/typescript/sh/build.sh",
+    "prepare": "yarn run build"
+  },
+  "dependencies": {
+    "@tdb/typescript": "^3.1.2"
   }
 }
