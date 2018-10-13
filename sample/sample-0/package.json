@@ -8,8 +8,7 @@
   "dependencies": {
     "msync.sample-1": "^0.0.7",
     "msync.sample-3": "^2.3.13",
-    "msync.sample-4-ignored": "^2.3.7",
-    "string": "^3.3.3"
+    "msync.sample-4-ignored": "^2.3.7"
   },
   "devDependencies": {
     "@tdb/typescript": "^3.1.2"
