@@ -7,6 +7,8 @@ import {
   constants,
   IModule,
   elapsed,
+  fs,
+  fsPath,
 } from '../common';
 
 export interface IAuditResult {
@@ -121,6 +123,9 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
     return {
       title: `${log.cyan(pkg.name)} ${log.gray('npm audit')}`,
       task: async () => {
+        const npmLockFile = fsPath.join(pkg.dir, 'package-lock.json');
+        const hasNpmLock = await fs.existsAsync(npmLockFile);
+
         const cmd = (text: string) => `cd ${pkg.dir} && ${text}`;
         const commands = {
           audit: cmd(`npm audit --json`),
@@ -140,6 +145,12 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
           .map(key => ({ key, value: vulnerabilities[key] }))
           .reduce((acc, next) => (next.value > 0 ? acc + next.value : acc), 0);
 
+        // Clean up.
+        if (!hasNpmLock) {
+          await fs.removeAsync(npmLockFile);
+        }
+
+        // Finish up.
         const result: IAuditResult = {
           module: pkg.name,
           version: pkg.version,

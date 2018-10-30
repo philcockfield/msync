@@ -90,8 +90,12 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     ? (await fs.readFileAsync(gitignorePath)).toString().split('\n')
     : [];
 
+  // Determine which CLI engine to use.
+  const engine = await getEngine(dir);
+
   // Finish up.
   return {
+    engine,
     dir,
     name: json.name,
     version,
@@ -105,6 +109,20 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     dependencies,
     json,
   };
+}
+
+/**
+ * Determine which CLI engine the module is using (YARN or NPM).
+ */
+async function getEngine(dir: string): Promise<IModule['engine']> {
+  const exists = (file: string) => fs.existsAsync(fsPath.join(dir, file));
+  if (await exists('yarn.lock')) {
+    return 'YARN';
+  }
+  if (await exists('package-lock.json')) {
+    return 'NPM';
+  }
+  return 'NPM'; // Default.
 }
 
 /**

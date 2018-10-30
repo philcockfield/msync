@@ -1,4 +1,5 @@
 export interface IModule {
+  engine: 'NPM' | 'YARN';
   dir: string;
   name: string;
   version: string;

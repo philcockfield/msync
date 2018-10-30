@@ -73,6 +73,7 @@ export async function ls(options: IListOptions = {}) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
+
   const modules = settings.modules.filter(pkg =>
     filter.includeIgnored(pkg, includeIgnored),
   );

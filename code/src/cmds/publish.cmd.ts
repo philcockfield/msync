@@ -58,7 +58,10 @@ export async function publish(options: {} = {}) {
   const startedAt = new Date();
 
   // [Slow] Full install and sync mode.
-  const publishCommand = () => 'npm install && npm publish && msync sync';
+  const publishCommand = (pkg: IModule) => {
+    const install = pkg.engine === 'YARN' ? 'yarn install' : 'npm install';
+    return `${install} && npm publish && msync sync`;
+  };
   const publishResult = await runCommand(modules, publishCommand, {
     concurrent: false,
     exitOnError: true,

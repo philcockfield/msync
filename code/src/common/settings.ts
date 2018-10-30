@@ -102,9 +102,9 @@ async function loadSettingsInternal(
   // Finish up.
   return {
     path,
-    modules,
     ignored: ignore,
     watchPattern: yaml.watchPattern,
+    modules,
   };
 }
 
