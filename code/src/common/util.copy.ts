@@ -33,7 +33,7 @@ export async function module(
   const TO_DIR = fsPath.join(to.dir, 'node_modules', from.name, '/');
 
   // Perform high-speed copy operation.
-  await fs.ensureDirAsync(TO_DIR);
+  await fs.ensureDir(TO_DIR);
   const rsync = new Rsync()
     .source(FROM_DIR)
     .destination(TO_DIR)
@@ -58,17 +58,17 @@ export async function logUpdate(target: IModule) {
     target.dir,
     target.tsconfig.compilerOptions.outDir || '',
   );
-  if (!(await fs.existsAsync(dir))) {
+  if (!(await fs.pathExists(dir))) {
     return;
   }
 
   // Write the file.
   const file = fsPath.join(dir, '__msync.js');
   const getTotal = async () => {
-    if (!(await fs.existsAsync(file))) {
+    if (!(await fs.pathExists(file))) {
       return 0;
     }
-    const text = (await fs.readFileAsync(file)).toString();
+    const text = (await fs.readFile(file)).toString();
     for (const line of text.split('\n')) {
       if (line.trim().startsWith('saveTotal')) {
         return parseInt(line.split(':')[1], 10) + 1;
@@ -87,5 +87,5 @@ export async function logUpdate(target: IModule) {
   saveTotal: ${total}
 */
 `;
-  await fs.writeFileAsync(file, text);
+  await fs.writeFile(file, text);
 }

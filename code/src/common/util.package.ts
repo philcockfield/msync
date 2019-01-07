@@ -40,7 +40,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
   // Setup initial conditions.
   const parse = async () => {
     try {
-      const text = (await fs.readFileAsync(packageFilePath)).toString();
+      const text = (await fs.readFile(packageFilePath)).toString();
       const json = JSON.parse(text);
       return json;
     } catch (error) {
@@ -79,15 +79,13 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
 
   // Load typescript config.
   const tsconfigPath = fsPath.join(dir, 'tsconfig.json');
-  const isTypeScript = await fs.existsAsync(tsconfigPath);
-  const tsconfig = isTypeScript
-    ? await fs.readJSONAsync(tsconfigPath)
-    : undefined;
+  const isTypeScript = await fs.pathExists(tsconfigPath);
+  const tsconfig = isTypeScript ? await fs.readJson(tsconfigPath) : undefined;
 
   // Load .gitignore file.
   const gitignorePath = fsPath.join(dir, '.gitignore');
-  const gitignore = (await fs.existsAsync(gitignorePath))
-    ? (await fs.readFileAsync(gitignorePath)).toString().split('\n')
+  const gitignore = (await fs.pathExists(gitignorePath))
+    ? (await fs.readFile(gitignorePath)).toString().split('\n')
     : [];
 
   // Determine which CLI engine to use.
@@ -115,7 +113,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
  * Determine which CLI engine the module is using (YARN or NPM).
  */
 async function getEngine(dir: string): Promise<IModule['engine']> {
-  const exists = (file: string) => fs.existsAsync(fsPath.join(dir, file));
+  const exists = (file: string) => fs.pathExists(fsPath.join(dir, file));
   if (await exists('yarn.lock')) {
     return 'YARN';
   }
@@ -196,5 +194,5 @@ export async function updatePackageRef(
  */
 export async function savePackage(dir: string, json: object) {
   const text = `${JSON.stringify(json, null, '  ')}\n`;
-  await fs.writeFileAsync(fsPath.join(dir, 'package.json'), text);
+  await fs.writeFile(fsPath.join(dir, 'package.json'), text);
 }

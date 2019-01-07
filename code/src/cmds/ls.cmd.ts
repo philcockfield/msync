@@ -114,11 +114,8 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
   const listDependences = (pkg: IModule, modules: IModule[]) =>
     pkg.dependencies
       .filter(dep => (showAllDependencies ? true : dep.isLocal))
-      .filter(
-        dep =>
-          dep.package
-            ? filter.includeIgnored(dep.package, includeIgnored)
-            : true,
+      .filter(dep =>
+        dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true,
       )
       .map(dep => {
         const isIgnored = dep.package && dep.package.isIgnored;
@@ -126,8 +123,8 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
         const name = isIgnored
           ? log.gray(dep.name)
           : dep.isLocal
-            ? log.cyan(dep.name)
-            : log.gray(dep.name);
+          ? log.cyan(dep.name)
+          : log.gray(dep.name);
         return `${bullet} ${name} ${log.gray(dep.version)}`;
       })
       .join('\n');

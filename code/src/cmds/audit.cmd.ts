@@ -93,24 +93,26 @@ function printAudit(results: IAuditResult[]) {
   const head = [log.gray('module'), log.red('vulnerabilities')];
   const builder = log.table({ head });
 
-  results.filter(audit => !audit.ok).forEach(audit => {
-    const bullet = audit.ok ? log.green('✔') : log.red('✖');
-    const output = Object.keys(audit.vulnerabilities)
-      .map(key => ({ key: key as Level, value: audit.vulnerabilities[key] }))
-      .reduce((acc, next) => {
-        const text =
-          next.value > 0
-            ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`)
-            : '';
-        return text ? `${acc} ${text}` : acc;
-      }, '')
-      .trim();
+  results
+    .filter(audit => !audit.ok)
+    .forEach(audit => {
+      const bullet = audit.ok ? log.green('✔') : log.red('✖');
+      const output = Object.keys(audit.vulnerabilities)
+        .map(key => ({ key: key as Level, value: audit.vulnerabilities[key] }))
+        .reduce((acc, next) => {
+          const text =
+            next.value > 0
+              ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`)
+              : '';
+          return text ? `${acc} ${text}` : acc;
+        }, '')
+        .trim();
 
-    builder.add([
-      log.gray(`${bullet} ${log.cyan(audit.module)} ${audit.version}`),
-      output || log.green('safe'),
-    ]);
-  });
+      builder.add([
+        log.gray(`${bullet} ${log.cyan(audit.module)} ${audit.version}`),
+        output || log.green('safe'),
+      ]);
+    });
 
   // Finish up.
   log.info();
@@ -124,7 +126,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
       title: `${log.cyan(pkg.name)} ${log.gray('npm audit')}`,
       task: async () => {
         const npmLockFile = fsPath.join(pkg.dir, 'package-lock.json');
-        const hasNpmLock = await fs.existsAsync(npmLockFile);
+        const hasNpmLock = await fs.pathExists(npmLockFile);
 
         const cmd = (text: string) => `cd ${pkg.dir} && ${text}`;
         const commands = {
@@ -147,7 +149,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
 
         // Clean up.
         if (!hasNpmLock) {
-          await fs.removeAsync(npmLockFile);
+          await fs.remove(npmLockFile);
         }
 
         // Finish up.

@@ -9,8 +9,6 @@ export {
   file,
   fs,
   fsPath,
-  Observable,
-  Subject,
   exec,
   listr,
   IListrOptions,

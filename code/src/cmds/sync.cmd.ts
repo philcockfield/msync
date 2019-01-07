@@ -1,19 +1,21 @@
+import { debounceTime, filter } from 'rxjs/operators';
+
 import {
-  log,
-  loadSettings,
-  ISettings,
-  file,
-  listr,
-  copy,
   constants,
-  IModule,
-  IDependency,
-  elapsed,
-  filter,
+  copy,
   dependsOn,
-  updatePackageRef,
-  moment,
+  elapsed,
+  file,
+  filter as filterUtil,
   fsPath,
+  IDependency,
+  IModule,
+  ISettings,
+  listr,
+  loadSettings,
+  log,
+  moment,
+  updatePackageRef,
   util,
 } from '../common';
 import * as listCommand from './ls.cmd';
@@ -70,8 +72,8 @@ export async function sync(options: ISyncOptions = {}) {
   }
 
   const modules = settings.modules
-    .filter(pkg => filter.localDeps(pkg).length > 0)
-    .filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+    .filter(pkg => filterUtil.localDeps(pkg).length > 0)
+    .filter(pkg => filterUtil.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
   await syncModules(modules, options);
@@ -115,9 +117,9 @@ export async function syncModules(
   };
 
   const tasks = modules.map(target => {
-    const sources = filter
+    const sources = filterUtil
       .localDeps(target)
-      .filter(dep => filter.includeIgnored(dep.package, includeIgnored));
+      .filter(dep => filterUtil.includeIgnored(dep.package, includeIgnored));
     const sourceNames = sources.map(dep => ` ${log.cyan(dep.name)}`);
     const title = `${log.magenta(target.name)} ${log.cyan(
       sourceNames.length > 0 ? '⬅' : '',
@@ -192,7 +194,9 @@ function watch(
 
   file
     .watch(fsPath.join(pkg.dir, watchPattern))
-    .filter(path => !path.includes('node_modules/'))
-    .debounceTime(1000)
-    .forEach(() => sync());
+    .pipe(
+      filter(path => !path.includes('node_modules/')),
+      debounceTime(1000),
+    )
+    .subscribe(() => sync());
 }

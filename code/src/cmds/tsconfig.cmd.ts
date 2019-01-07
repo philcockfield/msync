@@ -132,11 +132,11 @@ async function saveChanges(
   changes: { [key: string]: ConfigValue },
 ) {
   const saveChange = async (path: string) => {
-    const json = await fs.readJsonAsync(path);
+    const json = await fs.readJson(path);
     const compilerOptions = { ...json.compilerOptions, ...changes };
     const tsConfig = { ...json, compilerOptions };
     const text = `${JSON.stringify(tsConfig, null, '  ')}\n`;
-    await fs.writeFileAsync(path, text);
+    await fs.writeFile(path, text);
   };
 
   const tasks = paths.map(path => {

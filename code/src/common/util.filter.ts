@@ -17,7 +17,7 @@ export const includeIgnored = (
 
 export async function fileExists(paths: string[]) {
   const checking = paths.map(async path => {
-    const exists = await fs.existsAsync(path);
+    const exists = await fs.pathExists(path);
     return { path, exists };
   });
   const results = await Promise.all(checking);

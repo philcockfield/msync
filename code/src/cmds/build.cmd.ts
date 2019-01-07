@@ -1,15 +1,17 @@
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import {
-  log,
-  loadSettings,
   constants,
-  filter,
-  IModule,
-  listr,
   elapsed,
+  exec,
+  filter as filterUtil,
   fs,
   fsPath,
-  exec,
-  Subject,
+  IModule,
+  listr,
+  loadSettings,
+  log,
 } from '../common';
 import * as listCommand from './ls.cmd';
 import * as syncCommand from './sync.cmd';
@@ -57,7 +59,7 @@ export async function build(
     return;
   }
   const modules = settings.modules
-    .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
+    .filter(pkg => filterUtil.includeIgnored(pkg, includeIgnored))
     .filter(pkg => pkg.isTypeScript);
 
   if (watch) {
@@ -69,7 +71,7 @@ export async function build(
 
 const tscCommand = async (pkg: IModule) => {
   const path = fsPath.join(pkg.dir, 'node_modules/typescript/bin/tsc');
-  return (await fs.existsAsync(path)) ? path : 'tsc';
+  return (await fs.pathExists(path)) ? path : 'tsc';
 };
 
 /**
@@ -125,7 +127,7 @@ export async function buildWatch(
   } = {};
 
   const updates$ = new Subject();
-  updates$.debounceTime(100).subscribe(() => {
+  updates$.pipe(debounceTime(100)).subscribe(() => {
     log.clear();
     const items = Object.keys(state)
       .sort()
@@ -137,8 +139,8 @@ export async function buildWatch(
       const bullet = hasErrors
         ? log.red('✘')
         : value.isBuilding
-          ? log.gray('✎')
-          : log.green('✔');
+        ? log.gray('✎')
+        : log.green('✔');
       log.info(`${bullet} ${log.cyan(key)} ${value.message}`);
     });
 

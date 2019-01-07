@@ -12,7 +12,7 @@ export async function tryDelete(
   do {
     count++;
     try {
-      await fs.removeAsync(path);
+      await fs.remove(path);
     } catch (error) {
       if (count >= retry) {
         throw error;
