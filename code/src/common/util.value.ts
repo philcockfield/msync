@@ -2,6 +2,13 @@ import { R } from './libs';
 import { compact } from './util';
 
 /**
+ * Conveninent way of processing a value and flipping to a default value if it doesn't exist.
+ */
+export function defaultValue<T>(value: T | undefined, defaultValue?: T) {
+  return (value === undefined ? defaultValue : value) as T;
+}
+
+/**
  * A safe way to test any value as to wheather is is 'blank'
  * meaning it can be either:
  *   - null
