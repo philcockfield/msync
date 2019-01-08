@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
