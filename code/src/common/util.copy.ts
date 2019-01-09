@@ -63,7 +63,7 @@ export async function logUpdate(target: IModule) {
   }
 
   // Write the file.
-  const file = fsPath.join(dir, '__msync.js');
+  const file = fsPath.join(dir, '.__msync.js');
   const getTotal = async () => {
     if (!(await fs.pathExists(file))) {
       return 0;
