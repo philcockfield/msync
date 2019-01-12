@@ -58,7 +58,8 @@ export async function logUpdate(target: IModule) {
     target.dir,
     target.tsconfig.compilerOptions.outDir || '',
   );
-  if (!(await fs.pathExists(dir))) {
+  const parentDir = fsPath.basename(fsPath.dirname(dir));
+  if (parentDir !== 'node_modules' || !(await fs.pathExists(dir))) {
     return;
   }
 
