@@ -32,21 +32,21 @@
     array-from "^2.1.1"
     lodash.get "^4.4.2"
 
-"@tdb/log@1.1.14":
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.1.14.tgz#fac2a647580314e2330e69bcb7530c061e1dc5dd"
-  integrity sha512-1jkjxegBIQTwWs0+XDKdgPzhMYisvgr3U57X8zossndbpDqr2pRnam+EKLGcey2jgZh5AWXoLYlVR2h+V6czgA==
+"@tdb/log@1.1.17":
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/@tdb/log/-/log-1.1.17.tgz#9eded8dbd6fe2bec3ddc7614b132c45640ecf9e1"
+  integrity sha512-Ea1TISw8Wx88E/r4SON0MJePv4n/0n0uLCFkQl4BMFxFriB/haTpeqkhlmOvFqEXMSOlkgSyVBoGwFlgW0tvXw==
   dependencies:
-    "@types/ramda" "0.25.43"
+    "@types/ramda" "0.25.46"
     chalk "2.4.1"
     cli-table "0.3.1"
     ramda "0.26.1"
     rxjs "6.3.3"
 
-"@tdb/test@1.2.7":
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/@tdb/test/-/test-1.2.7.tgz#a01a039db93abe177958b8636d35d58967d9f2bc"
-  integrity sha512-t73QSFwu0APuFupgqnDfL8HOwk0OmpQigiYVou+kF6ZirJbPx06gvi7NkbOpN7YeHewbpr9agbcXVLuItfa+IA==
+"@tdb/test@1.2.10":
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/@tdb/test/-/test-1.2.10.tgz#191648f6e40c7bbdbb56310e663ab943aeaa2d68"
+  integrity sha512-HrtDUxWfg/Rb7sBrziTDzj7hCBOIkyb66c7NInyFAXimO3pu+dbGa2NnZkqgFMKCU8iHoNswiE4MdzLyasPytA==
   dependencies:
     "@types/chai" "4.1.7"
     "@types/mocha" "5.2.5"
@@ -57,10 +57,10 @@
     nock "10.0.4"
     sinon "7.2.2"
 
-"@tdb/typescript@3.2.2":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@tdb/typescript/-/typescript-3.2.2.tgz#c0b167ac66694d7c338cc1aec48229074d8ae24a"
-  integrity sha512-Hki3IGTCiKs1BlqT3v8C6mKNAneCwcIMUaDZ97fxO9iPH6MkiNXqLdd/UpUROIuwcAL1CrlYCl1ANe2H0EJWCA==
+"@tdb/typescript@3.2.5":
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@tdb/typescript/-/typescript-3.2.5.tgz#2e294d71b130887d5bb3456f8dda37443131860c"
+  integrity sha512-CcsJAHbLFqmJz0sSa+7JnJRT9NQhsRbvAPagqJwvk2U1hTIKC2XgDcJlEWFcV8oV3OPgTShorQcnc/JRD0BuNQ==
   dependencies:
     "@types/node" "10.12.15"
     prettier "1.15.3"
@@ -112,11 +112,6 @@
   version "10.12.15"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.15.tgz#20e85651b62fd86656e57c9c9bc771ab1570bc59"
   integrity sha512-9kROxduaN98QghwwHmxXO2Xz3MaWf+I1sLVAA6KJDF5xix+IyXVhds0MAfdNwtcpSrzhaTsNB0/jnL86fgUhqA==
-
-"@types/ramda@0.25.43":
-  version "0.25.43"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.25.43.tgz#bca6bed049f1eae33f8698dacedefc6999f37161"
-  integrity sha512-Ydtfw8yQpbpmgdqP8Bmby7o4NOgqCQz1QEEdKU73rdrwBje9NO5Pm+TP3j33YomHOybGhP176YwqfE+SrfO/Ww==
 
 "@types/ramda@0.25.46":
   version "0.25.46"
@@ -597,12 +592,12 @@ colors@1.0.3:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
   integrity sha1-BDP0TYCWgP3rYO0mDxsMJi6CpAs=
 
-command-interface@4.0.6:
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.6.tgz#eacdc0a80d03a82766513f58f3ba27367595e471"
-  integrity sha512-4cjp88uh6aZCnGlFWO+0ybjQ2SSCfxZ6l2ZW4U8OdseC3erZ+bmuPaFNrI2utJP7jCujz09N3U2Aj6ivR7KbZQ==
+command-interface@4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/command-interface/-/command-interface-4.0.7.tgz#b3f23c17a4b46a13d28f0f46d86b7bdbfc83affc"
+  integrity sha512-9OR0q7zhzEqYTQBJ21vh+Xi8eQBlRq0USSrUjqZLUOuxFn6bcHxpjVMmHLmGhJx19bP7+dw9jASrUJbTDZ57KQ==
   dependencies:
-    "@tdb/log" "1.1.14"
+    "@tdb/log" "1.1.17"
     "@types/fs-extra" "^5.0.4"
     "@types/inquirer" "0.0.43"
     "@types/ramda" "0.25.46"
