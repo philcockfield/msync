@@ -142,7 +142,7 @@ export function orderByDepth(packages: IModule[]): IModule[] {
 
   const names = toposort<string>(graph).reverse();
   const result = names.map(name => R.find(R.propEq('name', name), packages));
-  return R.reject(R.isNil, result);
+  return R.reject(R.isNil, result) as IModule[];
 }
 
 /**
