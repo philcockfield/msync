@@ -16,6 +16,7 @@
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
+    "@platform/test": "^0.0.27",
     "command-interface": "4.0.7",
     "rsync": "0.6.1",
     "semver": "5.6.0",
