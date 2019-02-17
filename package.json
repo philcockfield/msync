@@ -16,15 +16,14 @@
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "@platform/test": "^0.0.27",
     "command-interface": "4.0.7",
     "rsync": "0.6.1",
     "semver": "5.6.0",
     "toposort": "2.0.2"
   },
   "devDependencies": {
+    "@platform/test": "0.0.27",
     "@platform/ts.cli": "3.3.42",
-    "@tdb/test": "1.2.10",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
