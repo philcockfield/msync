@@ -2,7 +2,7 @@
   "name": "msync",
   "version": "2.1.5",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
-  "main": "./lib/index.js",
+  "main": "./lib/index",
   "types": "./lib/index.d.ts",
   "bin": {
     "msync": "./bin-cli"
@@ -11,7 +11,8 @@
     "test": "sh ./sh/test.sh",
     "tdd": "yarn run test --reporter min --watch",
     "lint": "sh ./sh/lint.sh",
-    "build": "sh ./sh/build.sh",
+    "build__": "sh ./sh/build.sh",
+    "build": "ts build $@",
     "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
@@ -21,8 +22,8 @@
     "toposort": "2.0.2"
   },
   "devDependencies": {
+    "@platform/ts.cli": "3.3.42",
     "@tdb/test": "1.2.10",
-    "@tdb/typescript": "3.2.5",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
