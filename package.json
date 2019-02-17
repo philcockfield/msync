@@ -5,15 +5,15 @@
   "main": "./lib/index",
   "types": "./lib/index.d.ts",
   "bin": {
-    "msync": "./bin-cli"
+    "msync": "bin.js"
   },
   "scripts": {
-    "test": "sh ./sh/test.sh",
+    "test": "ts test",
     "tdd": "yarn run test --reporter min --watch",
-    "lint": "sh ./sh/lint.sh",
+    "lint": "ts lint",
     "build__": "sh ./sh/build.sh",
     "build": "ts build $@",
-    "prepare": "yarn run lint && yarn test && yarn run build"
+    "prepare": "ts prepare"
   },
   "dependencies": {
     "command-interface": "4.0.7",

@@ -23,7 +23,7 @@ import * as listCommand from './ls.cmd';
 export const name = 'sync';
 export const alias = ['s', 'sl'];
 export const description =
-  'Syncs each module\'s dependency tree within the workspace.';
+  "Syncs each module's dependency tree within the workspace.";
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
