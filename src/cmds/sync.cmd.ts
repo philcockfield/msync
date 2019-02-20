@@ -22,8 +22,7 @@ import * as listCommand from './ls.cmd';
 
 export const name = 'sync';
 export const alias = ['s', 'sl'];
-export const description =
-  'Syncs each module\'s dependency tree within the workspace.';
+export const description = "Syncs each module's dependency tree within the workspace.";
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
@@ -86,16 +85,9 @@ export async function sync(options: ISyncOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-export async function syncModules(
-  modules: IModule[],
-  options: ISyncOptions = {},
-) {
+export async function syncModules(modules: IModule[], options: ISyncOptions = {}) {
   const startedAt = new Date();
-  const {
-    includeIgnored = false,
-    updateVersions = false,
-    silent = false,
-  } = options;
+  const { includeIgnored = false, updateVersions = false, silent = false } = options;
   const write = (msg: any) => util.write(msg, options.silent);
 
   const sync = async (sources: IDependency[], target: IModule) => {
@@ -105,12 +97,9 @@ export async function syncModules(
         await copy.logUpdate(target);
 
         if (updateVersions) {
-          await updatePackageRef(
-            target,
-            source.package.name,
-            source.package.version,
-            { save: true },
-          );
+          await updatePackageRef(target, source.package.name, source.package.version, {
+            save: true,
+          });
         }
       }
     }
@@ -169,9 +158,7 @@ export async function syncWatch(options: ISyncOptions = {}) {
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach(pkg =>
-    watch(pkg, modules, settings.watchPattern, includeIgnored, silent),
-  );
+  modules.forEach(pkg => watch(pkg, modules, settings.watchPattern, includeIgnored, silent));
 }
 
 /**
