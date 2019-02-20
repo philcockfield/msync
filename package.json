@@ -21,14 +21,11 @@
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@platform/test": "0.0.27",
-    "@platform/ts.cli": "3.3.42",
+    "@platform/test": "0.0.28",
+    "@platform/ts": "3.3.53",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/philcockfield/msync"
-  },
+  "repository": "philcockfield/msync",
   "license": "MIT"
 }

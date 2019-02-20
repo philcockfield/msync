@@ -25,10 +25,30 @@
     "@types/yargs" "12.0.9"
     yargs "13.2.0"
 
+"@platform/cli@0.0.53":
+  version "0.0.53"
+  resolved "https://registry.yarnpkg.com/@platform/cli/-/cli-0.0.53.tgz#3d3b4e0a1f39fa53c4773bc1e178c220fb9a41e4"
+  integrity sha512-+ySD22Ar20taP3HbC5jhZammLcCgxIOcoNd4tTQnda6S5zrCgWw1D9II2azh7HZZ6XRFVm2bVmQ2eG14544IjQ==
+  dependencies:
+    "@platform/fs" "0.0.35"
+    "@platform/util.exec" "0.0.14"
+    "@types/yargs" "12.0.9"
+    yargs "13.2.0"
+
 "@platform/fs@0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@platform/fs/-/fs-0.0.34.tgz#5ab3737b224c4b3ac766763c1007c0f7342428e9"
   integrity sha512-oR60ZIWAK30zyZLG7EIhEqfQjQp4zWsbGLoff0QNiOS5ZnH8H4/+aZX0g60orxJh+5dkNaY5ytaXOVPKgBx2sw==
+  dependencies:
+    "@types/fs-extra" "5.0.5"
+    fast-glob "2.2.6"
+    fs-extra "7.0.1"
+    js-yaml "3.12.1"
+
+"@platform/fs@0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@platform/fs/-/fs-0.0.35.tgz#0f1f7c447d5c27abfd75bae208075feda66fd4ac"
+  integrity sha512-ChE9JYSL/OphulFwq5N020UNnXURVUtdIbDkOg+OrkMqTpMhVEdX2hOXBPPyngA06t/G9as7wRup6diQ7WEPAw==
   dependencies:
     "@types/fs-extra" "5.0.5"
     fast-glob "2.2.6"
@@ -45,10 +65,20 @@
     rxjs "6.4.0"
     tslib "1.9.3"
 
-"@platform/test@^0.0.27":
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/@platform/test/-/test-0.0.27.tgz#2fc1026202dacd00ebace50ab837f46fec3583af"
-  integrity sha512-J/DvHJxZ/cXZFsvmz1c+eZYe3WgQxvE29DIZdujk8udKOOEUopfF6NJrd5+7+LVLR6zJT3Uhd4Jf57/BEuzwuQ==
+"@platform/libs@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@platform/libs/-/libs-0.0.6.tgz#8d91ce59a9823583a93d781e46a41f4de79f7064"
+  integrity sha512-4sqIglqkN7rIKSWaPt7gAh0IpmUDN1O+hD5FiC5p2DwTO9KNCKFulqs9SF07ENdJ9EAhUB50tOlRqWJQSdRP2w==
+  dependencies:
+    "@types/ramda" "0.25.50"
+    ramda "0.26.1"
+    rxjs "6.4.0"
+    tslib "1.9.3"
+
+"@platform/test@0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@platform/test/-/test-0.0.28.tgz#b1f39d2ed52df8a190858641781e40cfa8b8dc58"
+  integrity sha512-2APLc5oHmNZshXXMSjlGtui4efz3hvDPfQmiCGsDAJFxdLf6o64eITyGoAgEospHgPg8JT9Eq/Gc68YREkVEog==
   dependencies:
     "@types/chai" "4.1.7"
     "@types/mocha" "5.2.6"
@@ -66,6 +96,20 @@
     "@platform/ts" "3.3.42"
     "@platform/util.exec" "0.0.9"
 
+"@platform/ts.libs@3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@platform/ts.libs/-/ts.libs-3.3.1.tgz#f19f6bb1b38115c2477d3bb922023d163918f733"
+  integrity sha512-n62pEESdEmxE7dQ7XbNL9tMEs5d3Bi8TLs1AgB+ydulTCuITOOgq4j8OQd239kmH7XpDfOUbEi0T1O4Bi02YKA==
+  dependencies:
+    "@types/node" "11.9.4"
+    prettier "1.16.4"
+    ts-node "8.0.2"
+    tslib "1.9.3"
+    tslint "5.12.1"
+    tslint-config-prettier "1.18.0"
+    tslint-react "3.6.0"
+    typescript "3.3.3"
+
 "@platform/ts@3.3.42":
   version "3.3.42"
   resolved "https://registry.yarnpkg.com/@platform/ts/-/ts-3.3.42.tgz#7091980a6d8762c02bab87ba67b8c08c2f3e6b4d"
@@ -79,6 +123,29 @@
     tslint-config-prettier "1.18.0"
     tslint-react "3.6.0"
     typescript "3.3.3"
+
+"@platform/ts@^3.3.53":
+  version "3.3.53"
+  resolved "https://registry.yarnpkg.com/@platform/ts/-/ts-3.3.53.tgz#2ac8156d171e1acfd0c6f2143cbbce8453d4bf41"
+  integrity sha512-3FWqAVPJwQRca1jvtYwvJO1LVWCvmdmSkhlSTKGel5CqQUG8z0GGHZaGEllbPKEAqLZ+s/xPvUmflgiIQX0BKw==
+  dependencies:
+    "@platform/cli" "0.0.53"
+    "@platform/fs" "0.0.35"
+    "@platform/libs" "0.0.6"
+    "@platform/ts.libs" "3.3.1"
+    "@platform/util.exec" "0.0.14"
+
+"@platform/util.exec@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@platform/util.exec/-/util.exec-0.0.14.tgz#9f74d2810f6cd8fa1b7fc07bc760763f84d9e7f2"
+  integrity sha512-9RI0gEU8xC2+ekqEE67/TqUFfa1JAQQTY4ygQ147W9XyZz3aZmUfwvq5ouY1N4yKFUmePvvV1Dwkd0IEMRTTSg==
+  dependencies:
+    "@platform/libs" "0.0.6"
+    "@types/chalk" "2.2.0"
+    "@types/listr" "0.13.0"
+    ansi-regex "4.0.0"
+    chalk "2.4.2"
+    listr "0.14.3"
 
 "@platform/util.exec@0.0.9":
   version "0.0.9"
@@ -523,7 +590,7 @@ chai@4.2.0:
     pathval "^1.1.0"
     type-detect "^4.0.5"
 
-chalk@*, chalk@^2.0.0, chalk@^2.3.0, chalk@^2.4.1:
+chalk@*, chalk@2.4.2, chalk@^2.0.0, chalk@^2.3.0, chalk@^2.4.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
