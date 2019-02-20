@@ -74,9 +74,7 @@ export async function ls(options: IListOptions = {}) {
     return;
   }
 
-  const modules = settings.modules.filter(pkg =>
-    filter.includeIgnored(pkg, includeIgnored),
-  );
+  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   if (formatting) {
     // Pretty formatting.
@@ -114,9 +112,7 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
   const listDependences = (pkg: IModule, modules: IModule[]) =>
     pkg.dependencies
       .filter(dep => (showAllDependencies ? true : dep.isLocal))
-      .filter(dep =>
-        dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true,
-      )
+      .filter(dep => (dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true))
       .map(dep => {
         const isIgnored = dep.package && dep.package.isIgnored;
         const bullet = isIgnored ? log.gray('-') : log.magenta('-');
@@ -153,13 +149,9 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
       render: (pkg: IModule) => {
         const npmVersion = pkg.npm && pkg.npm.latest;
         if (npmVersion && semver.gt(pkg.version, npmVersion)) {
-          return (
-            log.yellow(`${pkg.version}`) + log.gray(` (NPM ${npmVersion})`)
-          );
+          return log.yellow(`${pkg.version}`) + log.gray(` (NPM ${npmVersion})`);
         } else if (npmVersion && semver.lt(pkg.version, npmVersion)) {
-          return (
-            log.gray(`${pkg.version}`) + log.magenta(` (NPM ${npmVersion})`)
-          );
+          return log.gray(`${pkg.version}`) + log.magenta(` (NPM ${npmVersion})`);
         } else {
           return log.magenta(pkg.version);
         }
@@ -187,8 +179,7 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
 
   const logModules = (modules: IModule[]) => {
     const cols = [] as ITableColumn[];
-    const addColumn = (col: ITableColumn, include = true) =>
-      include && cols.push(col);
+    const addColumn = (col: ITableColumn, include = true) => include && cols.push(col);
 
     addColumn(column.module);
     addColumn(column.version);

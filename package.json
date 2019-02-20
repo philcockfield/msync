@@ -26,6 +26,9 @@
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
+  "files": [
+    "lib"
+  ],
   "repository": "philcockfield/msync",
   "license": "MIT"
 }

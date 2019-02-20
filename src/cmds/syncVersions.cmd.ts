@@ -23,10 +23,7 @@ export const args = {
 /**
  * CLI command.
  */
-export async function cmd(args?: {
-  params: string[];
-  options: { i?: boolean };
-}) {
+export async function cmd(args?: { params: string[]; options: { i?: boolean } }) {
   const options = (args && args.options) || {};
   const includeIgnored = options.i || false;
   const config = { includeIgnored };
@@ -65,10 +62,7 @@ export async function syncVersions(options: ISyncVersionOptions = {}) {
 /**
  * Syncs the given set of modules.
  */
-async function syncModules(
-  modules: IModule[],
-  options: ISyncVersionOptions = {},
-) {
+async function syncModules(modules: IModule[], options: ISyncVersionOptions = {}) {
   const startedAt = new Date();
   const { includeIgnored = false, silent = false } = options;
 
@@ -77,12 +71,7 @@ async function syncModules(
   const sync = async (sources: IDependency[], target: IModule) => {
     for (const source of sources) {
       if (source.package) {
-        await updatePackageRef(
-          target,
-          source.package.name,
-          source.package.version,
-          { save: true },
-        );
+        await updatePackageRef(target, source.package.name, source.package.version, { save: true });
       }
     }
   };

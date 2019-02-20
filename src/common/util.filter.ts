@@ -5,10 +5,7 @@ export const localDeps = (pkg: IModule) => {
   return pkg.dependencies.filter((dep: IDependency) => dep.isLocal);
 };
 
-export const includeIgnored = (
-  pkg: IModule | undefined,
-  includeIgnored: boolean,
-) => {
+export const includeIgnored = (pkg: IModule | undefined, includeIgnored: boolean) => {
   if (!pkg) {
     return true;
   }

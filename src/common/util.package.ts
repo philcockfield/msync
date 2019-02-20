@@ -20,8 +20,7 @@ export async function toPackages(moduleDirs: string[]) {
   }
 
   // Determine which ones are local.
-  const findPackage = (dep: IDependency) =>
-    packages.find(pkg => pkg.name === dep.name);
+  const findPackage = (dep: IDependency) => packages.find(pkg => pkg.name === dep.name);
   packages.forEach(pkg => {
     pkg.dependencies.forEach(dep => {
       dep.package = findPackage(dep);
@@ -150,8 +149,7 @@ export function orderByDepth(packages: IModule[]): IModule[] {
  */
 export function dependsOn(pkg: IModule, modules: IModule[]) {
   const result = modules.filter(
-    module =>
-      module.dependencies.find(dep => dep.name === pkg.name) !== undefined,
+    module => module.dependencies.find(dep => dep.name === pkg.name) !== undefined,
   );
   return compact<IModule>(result);
 }

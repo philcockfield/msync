@@ -49,9 +49,7 @@ export async function run(
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg =>
-    filter.includeIgnored(pkg, includeIgnored),
-  );
+  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
   log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);

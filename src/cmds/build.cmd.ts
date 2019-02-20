@@ -108,11 +108,7 @@ export async function buildOnce(modules: IModule[]) {
 /**
  * Builds watches the typescript for the given set of modules.
  */
-export async function buildWatch(
-  modules: IModule[],
-  includeIgnored: boolean,
-  verbose: boolean,
-) {
+export async function buildWatch(modules: IModule[], includeIgnored: boolean, verbose: boolean) {
   log.info.magenta('\nBuild watching:');
   listCommand.printTable(modules, { includeIgnored });
   log.info();
@@ -136,11 +132,7 @@ export async function buildWatch(
     // Print build summary.
     items.forEach(({ key, value }) => {
       const hasErrors = value.errors.length > 0;
-      const bullet = hasErrors
-        ? log.red('✘')
-        : value.isBuilding
-        ? log.gray('✎')
-        : log.green('✔');
+      const bullet = hasErrors ? log.red('✘') : value.isBuilding ? log.gray('✎') : log.green('✔');
       log.info(`${bullet} ${log.cyan(key)} ${value.message}`);
     });
 
@@ -167,8 +159,7 @@ export async function buildWatch(
       const isBuilding =
         text.includes('Starting compilation in watch') ||
         text.includes('Starting incremental compilation');
-      const isError =
-        text.includes('error') && !text.includes('Found 0 errors.');
+      const isError = text.includes('error') && !text.includes('Found 0 errors.');
 
       const isSuccess = text.includes('Found 0 errors.');
       const isBuilt = text.includes('Watching for file changes.');

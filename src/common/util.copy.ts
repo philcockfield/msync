@@ -54,10 +54,7 @@ export async function logUpdate(target: IModule) {
   }
 
   // Get the transpiled typsecript directory to write to.
-  const dir = fsPath.join(
-    target.dir,
-    target.tsconfig.compilerOptions.outDir || '',
-  );
+  const dir = fsPath.join(target.dir, target.tsconfig.compilerOptions.outDir || '');
   const parentDir = fsPath.basename(fsPath.dirname(dir));
   if (parentDir !== 'node_modules' || !(await fs.pathExists(dir))) {
     return;

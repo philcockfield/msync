@@ -68,10 +68,7 @@ export async function cmd(args?: {
 /**
  * INTERNAL
  */
-async function getTsconfigPaths(
-  settings: ISettings,
-  options: { includeIgnored?: boolean },
-) {
+async function getTsconfigPaths(settings: ISettings, options: { includeIgnored?: boolean }) {
   const { includeIgnored = false } = options;
   const paths = settings.modules
     .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
@@ -80,10 +77,7 @@ async function getTsconfigPaths(
   return filter.fileExists(paths);
 }
 
-async function saveChangesWithPrompt(
-  paths: string[],
-  changes: { [key: string]: ConfigValue },
-) {
+async function saveChangesWithPrompt(paths: string[], changes: { [key: string]: ConfigValue }) {
   if (paths.length === 0) {
     log.info.gray('No files to change.');
     return false;
@@ -127,10 +121,7 @@ function toDisplayPath(path: string) {
   return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
 }
 
-async function saveChanges(
-  paths: string[],
-  changes: { [key: string]: ConfigValue },
-) {
+async function saveChanges(paths: string[], changes: { [key: string]: ConfigValue }) {
   const saveChange = async (path: string) => {
     const json = await fs.readJson(path);
     const compilerOptions = { ...json.compilerOptions, ...changes };
