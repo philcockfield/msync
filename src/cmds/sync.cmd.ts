@@ -1,6 +1,7 @@
 import { debounceTime, filter } from 'rxjs/operators';
 
 import {
+  exec,
   constants,
   copy,
   dependsOn,
@@ -141,11 +142,23 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
 }
 
 /**
- * Runs a chmod777 on all synced bin files.
+ * Runs a `chmod 777` on all synced bin files.
  */
 export async function chmod(module: IModule) {
-  console.log('chmod', module);
-  console.log(`\nTODO 🐷   \n`);
+  const dir = fs.join(module.dir, 'node_modules/.bin');
+  if (!(await fs.pathExistsSync(dir))) {
+    return [];
+  }
+  const cmd = exec.command(`chmod 777`);
+  const files = (await fs.readdir(dir)).map(name => fs.join(dir, name));
+  const wait = files.map(path => {
+    return cmd
+      .clone()
+      .add(path)
+      .run({ silent: true });
+  });
+  await Promise.all(wait);
+  return files;
 }
 
 /**
