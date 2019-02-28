@@ -74,35 +74,30 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   log.info();
 }
 
+/**
+ * [INTERNAL]
+ */
 async function getOutdated(pkg: IModule) {
   const result: IOutdated = { name: pkg.name, modules: [] };
-  const cmd = `cd ${pkg.dir} && npm outdated`;
+  const cmd = `cd ${pkg.dir} && npm outdated --json`;
   try {
-    await exec.cmd.run(cmd, { silent: true });
+    const res = await exec.cmd.run(cmd, { silent: true });
+    result.modules = parseOutdated(res.info);
   } catch (error) {
-    // NB: Error occurs if there is outdated modules.
-    const text = error.message;
-    if (hasOutdatedModules(text)) {
-      result.modules = parseOutdated(text);
-    } else {
-      result.error = text; // Some other error occured.
-    }
+    result.error = error.message; // Some other error occured.
   }
   return result;
 }
 
-function hasOutdatedModules(text: string) {
-  const titles = ['Package', 'Current', 'Wanted', 'Latest', 'Location'];
-  return titles.some(title => text.includes(title));
-}
-
-function parseOutdated(text: string): IOutdated['modules'] {
-  text = text.substr(text.indexOf('Package'));
-  const lines = util.compact(text.split('\n')).slice(1);
-  return lines.map(line => {
-    const parts = line.replace(/\s+/g, ' ').split(' ');
-    const [name, current, wanted, latest, location] = parts;
-    return { name, current, wanted, latest, location };
+function parseOutdated(stdout: string[]): IOutdatedModule[] {
+  if (!stdout || stdout.length === 0) {
+    return [];
+  }
+  const json = JSON.parse(stdout.join('\n'));
+  return Object.keys(json).map(name => {
+    const { current, wanted, latest, location } = json[name];
+    const outdated: IOutdatedModule = { name, current, wanted, latest, location };
+    return outdated;
   });
 }
 
