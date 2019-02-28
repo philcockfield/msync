@@ -22,7 +22,7 @@ import * as listCommand from './ls.cmd';
 
 export const name = 'sync';
 export const alias = ['s', 'sl'];
-export const description = "Syncs each module's dependency tree within the workspace.";
+export const description = `Syncs each module's dependency tree within the workspace.`;
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
@@ -95,7 +95,7 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
       if (source.package) {
         await copy.module(source.package, target);
         await copy.logUpdate(target);
-
+        await chmod(target);
         if (updateVersions) {
           await updatePackageRef(target, source.package.name, source.package.version, {
             save: true,
@@ -138,6 +138,14 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
 
   // Finish up.
   return modules;
+}
+
+/**
+ * Runs a chmod777 on all synced bin files.
+ */
+export async function chmod(module: IModule) {
+  console.log('chmod', module);
+  console.log(`\nTODO 🐷   \n`);
 }
 
 /**
