@@ -1,13 +1,4 @@
-import {
-  log,
-  loadSettings,
-  ISettings,
-  constants,
-  IModule,
-  filter,
-  fsPath,
-  semver,
-} from '../common';
+import { log, loadSettings, ISettings, constants, IModule, filter, fs, semver } from '../common';
 
 export const name = 'ls';
 export const alias = 'l';
@@ -80,7 +71,7 @@ export async function ls(options: IListOptions = {}) {
     // Pretty formatting.
     printTable(modules, {
       ...options,
-      basePath: fsPath.dirname(settings.path),
+      basePath: fs.dirname(settings.path),
       columns: options.columns,
     });
     log.info();

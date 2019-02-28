@@ -1,6 +1,6 @@
 import * as constants from './constants';
 import * as npm from './util.npm';
-import { fsPath, log, file, semver, listr } from './libs';
+import { fs, log, file, semver, listr } from './libs';
 import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
 
@@ -67,8 +67,8 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
 
   // Resolve all module-directories in the YAML to
   // be within the "current working directory".
-  const dir = fsPath.dirname(path);
-  yaml.modules = yaml.modules.map(path => fsPath.resolve(dir, path));
+  const dir = fs.dirname(path);
+  yaml.modules = yaml.modules.map(path => fs.resolve(dir, path));
 
   // Load the [package.json] from files and setup depth order.
   let modules = await toPackages(yaml.modules);
@@ -104,7 +104,7 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
 async function ignorePaths(yaml: IYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
-    const paths = await file.glob(fsPath.resolve(dir, pattern));
+    const paths = await file.glob(fs.resolve(dir, pattern));
     paths.forEach(path => result.push(path));
   }
   return result;

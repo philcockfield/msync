@@ -6,9 +6,9 @@ import {
   inquirer,
   tryDelete,
   flatten,
-  fsPath,
   listr,
 } from '../common';
+import { parse } from 'path';
 
 export const name = 'delete';
 export const alias = 'del';
@@ -124,8 +124,8 @@ async function deleteAfterPrompt(paths: string[]) {
 }
 
 function toDisplayPath(path: string) {
-  const root = fsPath.parse(path);
-  const dir = fsPath.parse(root.dir);
+  const root = parse(path);
+  const dir = parse(root.dir);
   return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
 }
 

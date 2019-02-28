@@ -7,7 +7,6 @@ import {
   exec,
   filter as filterUtil,
   fs,
-  fsPath,
   IModule,
   listr,
   loadSettings,
@@ -70,7 +69,7 @@ export async function build(
 }
 
 const tscCommand = async (pkg: IModule) => {
-  const path = fsPath.join(pkg.dir, 'node_modules/typescript/bin/tsc');
+  const path = fs.join(pkg.dir, 'node_modules/typescript/bin/tsc');
   return (await fs.pathExists(path)) ? path : 'tsc';
 };
 

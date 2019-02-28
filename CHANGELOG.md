@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Updated to use `@platform/util.exec`
 - Updated to use `@platform/npm`
 - Updated to use `@platform/log`
+- Updated to use `@platform/fs`
 #### Deprecated
 #### Removed
 #### Fixed

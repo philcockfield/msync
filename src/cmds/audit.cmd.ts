@@ -8,7 +8,6 @@ import {
   IModule,
   elapsed,
   fs,
-  fsPath,
 } from '../common';
 
 export interface IAuditResult {
@@ -122,7 +121,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
     return {
       title: `${log.cyan(pkg.name)} ${log.gray('npm audit')}`,
       task: async () => {
-        const npmLockFile = fsPath.join(pkg.dir, 'package-lock.json');
+        const npmLockFile = fs.join(pkg.dir, 'package-lock.json');
         const hasNpmLock = await fs.pathExists(npmLockFile);
 
         const cmd = (text: string) => `cd ${pkg.dir} && ${text}`;

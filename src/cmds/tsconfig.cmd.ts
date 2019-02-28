@@ -5,11 +5,11 @@ import {
   filter,
   inquirer,
   fs,
-  fsPath,
   ISettings,
   value as valueUtil,
   listr,
 } from '../common';
+import { parse } from 'path';
 
 type ConfigValue = string | boolean | number;
 
@@ -73,7 +73,7 @@ async function getTsconfigPaths(settings: ISettings, options: { includeIgnored?:
   const paths = settings.modules
     .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
     .map(m => m.dir)
-    .map(dir => fsPath.join(dir, 'tsconfig.json'));
+    .map(dir => fs.join(dir, 'tsconfig.json'));
   return filter.fileExists(paths);
 }
 
@@ -116,8 +116,8 @@ async function saveChangesWithPrompt(paths: string[], changes: { [key: string]: 
 }
 
 function toDisplayPath(path: string) {
-  const root = fsPath.parse(path);
-  const dir = fsPath.parse(root.dir);
+  const root = parse(path);
+  const dir = parse(root.dir);
   return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
 }
 

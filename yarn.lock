@@ -35,7 +35,7 @@
     fs-extra "7.0.1"
     js-yaml "3.12.1"
 
-"@platform/fs@0.0.36":
+"@platform/fs@0.0.36", "@platform/fs@^0.0.36":
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/@platform/fs/-/fs-0.0.36.tgz#034218116dff7a5d57cca3be651e40c09764c69c"
   integrity sha512-Bj5212hG6sfL51m1OHNKxkT2pCILpomzsulreK3MGJ8zpxu8Rm63ngYprJlacchWhTGl36XhRhweoIQwNFxZsg==

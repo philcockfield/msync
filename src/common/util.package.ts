@@ -1,5 +1,5 @@
 import * as toposort from 'toposort';
-import { R, fs, fsPath, file } from './libs';
+import { R, fs, file } from './libs';
 import { compact } from './util';
 import { IModule, IDependency } from '../types';
 
@@ -72,17 +72,17 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
 
   // Derive useful values.
   const version = json.version;
-  const dir = fsPath.resolve(packageFilePath, '..');
+  const dir = fs.resolve(packageFilePath, '..');
   const hasScripts = json.scripts !== undefined;
   const hasPrepublish = hasScripts && json.scripts.prepublish !== undefined;
 
   // Load typescript config.
-  const tsconfigPath = fsPath.join(dir, 'tsconfig.json');
+  const tsconfigPath = fs.join(dir, 'tsconfig.json');
   const isTypeScript = await fs.pathExists(tsconfigPath);
   const tsconfig = isTypeScript ? await fs.readJson(tsconfigPath) : undefined;
 
   // Load .gitignore file.
-  const gitignorePath = fsPath.join(dir, '.gitignore');
+  const gitignorePath = fs.join(dir, '.gitignore');
   const gitignore = (await fs.pathExists(gitignorePath))
     ? (await fs.readFile(gitignorePath)).toString().split('\n')
     : [];
@@ -112,7 +112,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
  * Determine which CLI engine the module is using (YARN or NPM).
  */
 async function getEngine(dir: string): Promise<IModule['engine']> {
-  const exists = (file: string) => fs.pathExists(fsPath.join(dir, file));
+  const exists = (file: string) => fs.pathExists(fs.join(dir, file));
   if (await exists('yarn.lock')) {
     return 'YARN';
   }
@@ -192,5 +192,5 @@ export async function updatePackageRef(
  */
 export async function savePackage(dir: string, json: object) {
   const text = `${JSON.stringify(json, null, '  ')}\n`;
-  await fs.writeFile(fsPath.join(dir, 'package.json'), text);
+  await fs.writeFile(fs.join(dir, 'package.json'), text);
 }

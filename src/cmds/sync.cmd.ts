@@ -7,7 +7,7 @@ import {
   elapsed,
   file,
   filter as filterUtil,
-  fsPath,
+  fs,
   IDependency,
   IModule,
   ISettings,
@@ -188,7 +188,7 @@ function watch(
   };
 
   file
-    .watch(fsPath.join(pkg.dir, watchPattern))
+    .watch(fs.join(pkg.dir, watchPattern))
     .pipe(
       filter(path => !path.includes('node_modules/')),
       debounceTime(1000),
