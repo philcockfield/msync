@@ -26,8 +26,8 @@
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@platform/test": "0.0.28",
-    "@platform/ts": "3.3.53",
+    "@platform/test": "0.0.29",
+    "@platform/ts": "3.3.57",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
