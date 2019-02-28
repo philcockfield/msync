@@ -1,13 +1,4 @@
-import {
-  log,
-  loadSettings,
-  constants,
-  filter,
-  listr,
-  exec,
-  util,
-  IModule,
-} from '../common';
+import { log, loadSettings, constants, filter, listr, exec, util, IModule } from '../common';
 
 interface IOutdated {
   name: string;
@@ -45,9 +36,7 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg =>
-    filter.includeIgnored(pkg, includeIgnored),
-  );
+  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
   log.info.magenta(`\nChecking for outdated modules:`);
@@ -123,9 +112,7 @@ function printOutdatedModule(outdated: IOutdated) {
   log.info.yellow(`${outdated.name}`);
 
   const table = log.table({
-    head: ['Package', 'Current', 'Wanted', 'Latest'].map(label =>
-      log.gray(label),
-    ),
+    head: ['Package', 'Current', 'Wanted', 'Latest'].map(label => log.gray(label)),
   });
 
   outdated.modules.forEach(item => {

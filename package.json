@@ -1,18 +1,18 @@
 {
   "name": "msync",
-  "version": "2.1.5",
+  "version": "2.1.7",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
-  "main": "./lib/index.js",
+  "main": "./lib/index",
   "types": "./lib/index.d.ts",
   "bin": {
-    "msync": "./bin-cli"
+    "msync": "bin.js"
   },
   "scripts": {
-    "test": "sh ./sh/test.sh",
+    "test": "ts test",
     "tdd": "yarn run test --reporter min --watch",
-    "lint": "sh ./sh/lint.sh",
-    "build": "sh ./sh/build.sh",
-    "prepare": "yarn run lint && yarn test && yarn run build"
+    "lint": "ts lint",
+    "build": "ts build $@",
+    "prepare": "ts prepare"
   },
   "dependencies": {
     "command-interface": "4.0.7",
@@ -21,14 +21,14 @@
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@tdb/test": "1.2.10",
-    "@tdb/typescript": "3.2.5",
+    "@platform/test": "0.0.28",
+    "@platform/ts": "3.3.53",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/philcockfield/msync"
-  },
+  "files": [
+    "lib"
+  ],
+  "repository": "philcockfield/msync",
   "license": "MIT"
 }

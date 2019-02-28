@@ -2,7 +2,7 @@
   "name": "msync.sample-0",
   "version": "0.0.8",
   "scripts": {
-    "build": "sh ./node_modules/@tdb/typescript/sh/build.sh",
+    "build": "sh ./node_modules/@platform/ts/sh/build.sh",
     "prepare": "yarn run build"
   },
   "dependencies": {
@@ -11,6 +11,6 @@
     "msync.sample-4-ignored": "^2.3.7"
   },
   "devDependencies": {
-    "@tdb/typescript": "^3.1.2"
+    "@platform/ts": "3"
   }
 }

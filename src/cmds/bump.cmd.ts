@@ -62,9 +62,7 @@ export async function bump(options: IOptions = {}) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg =>
-    filter.includeIgnored(pkg, includeIgnored),
-  );
+  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Prompt for the module to bump.
   const module = await promptForModule(modules);
@@ -122,28 +120,22 @@ async function bumpModule(options: {
   }
 
   // Log output.
-  const head = ['update', 'module', 'version', 'ref updated'].map(title =>
-    log.gray(title),
-  );
+  const head = ['update', 'module', 'version', 'ref updated'].map(title => log.gray(title));
   const tableBuilder = options.table || log.table({ head });
 
   if (!ref) {
     let msg = '';
     msg += `  ${log.yellow(release.toUpperCase())} `;
-    msg += `update ${log.cyan(pkg.name)} from ${log.gray(
-      pkg.latest,
-    )} ${log.gray('=>')} ${log.magenta(version)} `;
+    msg += `update ${log.cyan(pkg.name)} from ${log.gray(pkg.latest)} ${log.gray(
+      '=>',
+    )} ${log.magenta(version)} `;
     log.info.gray(msg);
   } else {
     tableBuilder.add([
       log.yellow(release.toUpperCase()),
       log.cyan(pkg.name),
       log.gray(`${pkg.latest} => ${log.magenta(version)}`),
-      log.gray(
-        `${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(
-          ref.toVersion,
-        )}`,
-      ),
+      log.gray(`${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(ref.toVersion)}`),
     ]);
   }
 

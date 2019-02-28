@@ -30,9 +30,7 @@ export interface IOptions {
 /**
  * Initializes the settings.
  */
-export async function loadSettings(
-  options: IOptions = {},
-): Promise<ISettings | undefined> {
+export async function loadSettings(options: IOptions = {}): Promise<ISettings | undefined> {
   const { spinner = false, npm = false } = options;
 
   if (spinner) {
@@ -54,14 +52,9 @@ export async function loadSettings(
   }
 }
 
-async function loadSettingsInternal(
-  options: IOptions = {},
-): Promise<ISettings | undefined> {
+async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings | undefined> {
   // Find the configuration YAML file.
-  const path = await file.findClosestAncestor(
-    process.cwd(),
-    constants.CONFIG_FILE_NAME,
-  );
+  const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
   if (!path) {
     return;
   }
@@ -141,8 +134,7 @@ async function loadYaml(path: string) {
     result.ignore = result.ignore || { paths: [] };
     result.ignore.paths = result.ignore.paths || [];
     result.ignore.names = result.ignore.names || [];
-    result.watchPattern =
-      result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
+    result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
 
     return result;
   } catch (error) {

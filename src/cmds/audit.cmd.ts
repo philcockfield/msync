@@ -101,9 +101,7 @@ function printAudit(results: IAuditResult[]) {
         .map(key => ({ key: key as Level, value: audit.vulnerabilities[key] }))
         .reduce((acc, next) => {
           const text =
-            next.value > 0
-              ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`)
-              : '';
+            next.value > 0 ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`) : '';
           return text ? `${acc} ${text}` : acc;
         }, '')
         .trim();
