@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - YYYY-MM-DD
 #### Added
+- User prompts for modules to update the `package.json` files for after running `msync outdated`.
 #### Changed
 - Updated to use `@platform/util.exec`
 - Updated to use `@platform/npm`
