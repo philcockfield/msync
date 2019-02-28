@@ -15,6 +15,7 @@
     "prepare": "ts prepare"
   },
   "dependencies": {
+    "@platform/npm": "0.0.27",
     "@platform/util.exec": "0.0.18",
     "command-interface": "4.0.7",
     "rsync": "0.6.1",

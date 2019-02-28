@@ -71,8 +71,6 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     log.info.gray(`All modules up-to-date.`);
   }
 
-  // console.log('results', results);
-
   log.info();
 }
 
