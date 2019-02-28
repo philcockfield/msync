@@ -80,7 +80,7 @@ async function getOutdated(pkg: IModule) {
   const result: IOutdated = { name: pkg.name, modules: [] };
   const cmd = `cd ${pkg.dir} && npm outdated`;
   try {
-    await exec.run(cmd, { silent: true });
+    await exec.cmd.run(cmd, { silent: true });
   } catch (error) {
     // NB: Error occurs if there is outdated modules.
     const text = error.message;

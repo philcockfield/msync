@@ -9,9 +9,11 @@ export {
   file,
   fs,
   fsPath,
-  exec,
+  // exec,
   listr,
   IListrOptions,
   inquirer,
   plural,
 } from 'command-interface';
+
+export { exec } from '@platform/util.exec';

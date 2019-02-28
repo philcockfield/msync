@@ -1,4 +1,4 @@
-import { exec } from '../common';
+import { exec } from 'command-interface';
 
 export const name = 'watch';
 export const alias = 'w';

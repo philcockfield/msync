@@ -27,11 +27,12 @@ async function getInfo(pkg: IModule): Promise<INpmInfo | undefined> {
   };
 
   try {
-    const result = await exec.run(cmd, { silent: true });
-    if (!result.stdout) {
+    const result = await exec.cmd.run(cmd, { silent: true });
+    const stdout = result.info.join('\n');
+    if (!stdout) {
       return undefined;
     }
-    const json = parseJson(result.stdout);
+    const json = parseJson(stdout);
     const latest = json['dist-tags'].latest;
     const name = json.name;
     return {

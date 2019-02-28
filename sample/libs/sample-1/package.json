@@ -2,7 +2,7 @@
   "name": "msync.sample-1",
   "version": "0.0.7",
   "scripts": {
-    "build": "sh ./node_modules/@platform/ts/build.sh",
+    "build": "tsc",
     "prepare": "yarn run build"
   },
   "dependencies": {

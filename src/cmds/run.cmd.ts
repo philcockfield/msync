@@ -62,7 +62,7 @@ export async function run(
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd}`;
-        return exec.run(command, { silent: true });
+        return exec.cmd.run(command, { silent: true });
       },
     };
   });
