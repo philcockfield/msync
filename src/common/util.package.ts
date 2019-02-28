@@ -182,10 +182,13 @@ export async function updatePackageRef(
     }
   });
 
-  // Save the package.json file.
+  // Save the [package.json] file.
   if (save && changed) {
     await savePackage(target.dir, target.json);
   }
+
+  // Finish up.
+  return changed;
 }
 
 /**

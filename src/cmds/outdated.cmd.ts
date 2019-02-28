@@ -8,7 +8,7 @@ import {
   log,
   inquirer,
   semver,
-  value as valueUtil,
+  updatePackageRef,
 } from '../common';
 
 type IOutdated = {
@@ -26,7 +26,6 @@ type IOutdatedModule = {
 type IUpdate = {
   name: string;
   latest: string;
-  count: number;
 };
 
 export const name = 'outdated';
@@ -78,13 +77,13 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     // Ignore.
   }
 
-  // console.log('results', results);
-
   // Print outdated modules.
   if (results.length > 0) {
     log.info();
     results.forEach(item => printOutdatedModule(item));
-    await update(modules, await promptToUpdate(results));
+
+    // Prompt the use for which [package.json] files to update.
+    await updatePackageJsonRefs(modules, await promptToUpdate(results));
   } else {
     log.info();
     log.info.gray(`All modules up-to-date.`);
@@ -108,8 +107,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
       const { name, latest } = m;
       const current = updates[name] ? updates[name].latest : undefined;
       if (!current || semver.gt(latest, current)) {
-        const count = updates[name] ? updates[name].count + 1 : 1;
-        updates[name] = { name, latest, count };
+        updates[name] = { name, latest };
       }
     });
   });
@@ -117,8 +115,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
   // Format checkbox choices.
   const choices = Object.keys(updates).map(key => {
     const update = updates[key];
-    const modules = valueUtil.plural(update.count, 'module', 'modules');
-    const name = `${key} ➜ ${update.latest} (${update.count} ${modules})`;
+    const name = `${key} ➜ ${update.latest}`;
     return { name, value: update.name };
   });
 
@@ -135,14 +132,20 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
     .filter(update => answer.update.includes(update.name));
 }
 
-export function update(modules: IModule[], updates: IUpdate[]) {
-  console.log('update', updates);
+async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
   if (updates.length === 0) {
     return;
   }
 
+  const wait = updates.map(async update => {
+    return Promise.all(
+      modules.map(async module => {
+        updatePackageRef(module, update.name, update.latest, { save: true });
+      }),
+    );
+  });
 
-
+  await Promise.all(wait);
 }
 
 async function getOutdated(pkg: IModule) {
