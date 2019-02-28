@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index",
   "types": "./lib/index.d.ts",
@@ -15,14 +15,19 @@
     "prepare": "ts prepare"
   },
   "dependencies": {
+    "@platform/fs": "0.0.36",
+    "@platform/log": "0.0.81",
+    "@platform/npm": "0.0.28",
+    "@platform/util.exec": "0.0.18",
+    "@platform/util.value": "0.0.31",
     "command-interface": "4.0.7",
     "rsync": "0.6.1",
     "semver": "5.6.0",
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@platform/test": "0.0.28",
-    "@platform/ts": "3.3.53",
+    "@platform/test": "0.0.29",
+    "@platform/ts": "3.3.57",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },

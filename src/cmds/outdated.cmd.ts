@@ -1,17 +1,32 @@
-import { log, loadSettings, constants, filter, listr, exec, util, IModule } from '../common';
+import {
+  constants,
+  exec,
+  filter,
+  IModule,
+  listr,
+  loadSettings,
+  log,
+  inquirer,
+  semver,
+  updatePackageRef,
+} from '../common';
 
-interface IOutdated {
+type IOutdated = {
   name: string;
   error?: string;
   modules: IOutdatedModule[];
-}
-interface IOutdatedModule {
+};
+type IOutdatedModule = {
   name: string;
   current: string;
   wanted: string;
   latest: string;
   location: string;
-}
+};
+type IUpdate = {
+  name: string;
+  latest: string;
+};
 
 export const name = 'outdated';
 export const alias = 'o';
@@ -66,45 +81,94 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   if (results.length > 0) {
     log.info();
     results.forEach(item => printOutdatedModule(item));
+
+    // Prompt the use for which [package.json] files to update.
+    await updatePackageJsonRefs(modules, await promptToUpdate(results));
   } else {
     log.info();
     log.info.gray(`All modules up-to-date.`);
   }
 
-  // console.log('results', results);
-
   log.info();
+}
+
+/**
+ * [INTERNAL]
+ */
+async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
+  if (outdated.length === 0) {
+    return [];
+  }
+
+  // Build a list of all modules that need updating.
+  const updates: { [key: string]: IUpdate } = {};
+  outdated.forEach(outdated => {
+    outdated.modules.forEach(m => {
+      const { name, latest } = m;
+      const current = updates[name] ? updates[name].latest : undefined;
+      if (!current || semver.gt(latest, current)) {
+        updates[name] = { name, latest };
+      }
+    });
+  });
+
+  // Format checkbox choices.
+  const choices = Object.keys(updates).map(key => {
+    const update = updates[key];
+    const name = `${key} ➜ ${update.latest}`;
+    return { name, value: update.name };
+  });
+
+  // Prompt the user.
+  const answer: { update: string[] } = await inquirer.prompt({
+    name: 'update',
+    type: 'checkbox',
+    choices,
+  });
+
+  // Finish up.
+  return Object.keys(updates)
+    .map(key => updates[key])
+    .filter(update => answer.update.includes(update.name));
+}
+
+async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
+  if (updates.length === 0) {
+    return;
+  }
+
+  const wait = updates.map(async update => {
+    return Promise.all(
+      modules.map(async module => {
+        updatePackageRef(module, update.name, update.latest, { save: true });
+      }),
+    );
+  });
+
+  await Promise.all(wait);
 }
 
 async function getOutdated(pkg: IModule) {
   const result: IOutdated = { name: pkg.name, modules: [] };
-  const cmd = `cd ${pkg.dir} && npm outdated`;
+  const cmd = `cd ${pkg.dir} && npm outdated --json`;
   try {
-    await exec.run(cmd, { silent: true });
+    const res = await exec.cmd.run(cmd, { silent: true });
+    result.modules = parseOutdated(res.info);
   } catch (error) {
-    // NB: Error occurs if there is outdated modules.
-    const text = error.message;
-    if (hasOutdatedModules(text)) {
-      result.modules = parseOutdated(text);
-    } else {
-      result.error = text; // Some other error occured.
-    }
+    result.error = error.message; // Some other error occured.
   }
   return result;
 }
 
-function hasOutdatedModules(text: string) {
-  const titles = ['Package', 'Current', 'Wanted', 'Latest', 'Location'];
-  return titles.some(title => text.includes(title));
-}
-
-function parseOutdated(text: string): IOutdated['modules'] {
-  text = text.substr(text.indexOf('Package'));
-  const lines = util.compact(text.split('\n')).slice(1);
-  return lines.map(line => {
-    const parts = line.replace(/\s+/g, ' ').split(' ');
-    const [name, current, wanted, latest, location] = parts;
-    return { name, current, wanted, latest, location };
+function parseOutdated(stdout: string[]): IOutdatedModule[] {
+  if (!stdout || stdout.length === 0) {
+    return [];
+  }
+  const json = JSON.parse(stdout.join('\n'));
+  return Object.keys(json).map(name => {
+    const { current, wanted, latest, location } = json[name];
+    const outdated: IOutdatedModule = { name, current, wanted, latest, location };
+    return outdated;
   });
 }
 

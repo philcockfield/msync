@@ -1,4 +1,4 @@
-import { log, loadSettings, constants, filter, listr, exec } from '../common';
+import { constants, exec, filter, listr, loadSettings, log } from '../common';
 import * as listCommand from './ls.cmd';
 
 export const name = 'run';
@@ -62,7 +62,7 @@ export async function run(
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd}`;
-        return exec.run(command, { silent: true });
+        return exec.cmd.run(command, { silent: true });
       },
     };
   });

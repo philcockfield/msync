@@ -1,13 +1,14 @@
+import { parse } from 'path';
+
 import {
-  log,
   constants,
-  loadSettings,
   filter,
-  inquirer,
-  tryDelete,
   flatten,
-  fsPath,
+  inquirer,
   listr,
+  loadSettings,
+  log,
+  tryDelete,
 } from '../common';
 
 export const name = 'delete';
@@ -124,8 +125,8 @@ async function deleteAfterPrompt(paths: string[]) {
 }
 
 function toDisplayPath(path: string) {
-  const root = fsPath.parse(path);
-  const dir = fsPath.parse(root.dir);
+  const root = parse(path);
+  const dir = parse(root.dir);
   return log.gray(`${dir.dir}/${log.magenta(dir.base)}/${log.cyan(root.base)}`);
 }
 

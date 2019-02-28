@@ -1,3 +1,6 @@
+import { INpmInfo } from '@platform/npm/lib/types';
+export { INpmInfo };
+
 export interface IModule {
   engine: 'NPM' | 'YARN';
   dir: string;
@@ -21,12 +24,6 @@ export interface IDependency {
   isDev: boolean;
   isLocal: boolean;
   package?: IModule;
-}
-
-export interface INpmInfo {
-  name: string;
-  latest: string;
-  json: any;
 }
 
 export { LogTable } from '@tdb/log/lib/server';

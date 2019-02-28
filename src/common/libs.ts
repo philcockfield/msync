@@ -1,17 +1,10 @@
 import * as semver from 'semver';
 export { semver };
 
-export { log } from '@tdb/log/lib/server';
+export { log } from '@platform/log/lib/server';
+export { exec } from '@platform/util.exec';
+export { value } from '@platform/util.value';
+export { npm } from '@platform/npm';
+export { fs } from '@platform/fs';
 
-export {
-  R,
-  moment,
-  file,
-  fs,
-  fsPath,
-  exec,
-  listr,
-  IListrOptions,
-  inquirer,
-  plural,
-} from 'command-interface';
+export { R, moment, file, listr, IListrOptions, inquirer, plural } from 'command-interface';

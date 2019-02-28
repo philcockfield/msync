@@ -1,14 +1,13 @@
 import {
-  log,
-  loadSettings,
-  exec,
-  listr,
-  IListrOptions,
   constants,
-  IModule,
   elapsed,
+  exec,
   fs,
-  fsPath,
+  IListrOptions,
+  IModule,
+  listr,
+  loadSettings,
+  log,
 } from '../common';
 
 export interface IAuditResult {
@@ -65,7 +64,6 @@ export async function audit(options: {} = {}) {
     log.info(`\n✨✨  ${msg} ${log.gray(elapsed(startedAt))}\n`);
   } else {
     log.info.yellow(`\n💩  Something went wrong while running the audit.\n`);
-    log.error(res.error);
   }
 }
 
@@ -123,20 +121,25 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
     return {
       title: `${log.cyan(pkg.name)} ${log.gray('npm audit')}`,
       task: async () => {
-        const npmLockFile = fsPath.join(pkg.dir, 'package-lock.json');
+        const npmLockFile = fs.join(pkg.dir, 'package-lock.json');
         const hasNpmLock = await fs.pathExists(npmLockFile);
 
         const cmd = (text: string) => `cd ${pkg.dir} && ${text}`;
         const commands = {
-          audit: cmd(`npm audit --json`),
           install: cmd(`npm install`),
+          audit: cmd(`npm audit --json`),
         };
 
         // Ensure the NPM lock file exists.
-        await exec.run(commands.install, { silent: true });
+        await exec.cmd.run(commands.install, { silent: true });
 
         // Run the audit.
         const json = await execToJson(commands.audit);
+
+        if (json && json.error) {
+          throw new Error(json.error.summary);
+        }
+
         const vulnerabilities: IAuditResult['vulnerabilities'] = json
           ? json.metadata.vulnerabilities
           : [];
@@ -182,8 +185,8 @@ async function execToJson(cmd: string) {
     }
   };
   try {
-    const res = await exec.run(cmd, { silent: true });
-    return done(res.stdout);
+    const res = await exec.cmd.run(cmd, { silent: true });
+    return done(res.info.join('\n'));
   } catch (error) {
     return done(error.stdout);
   }

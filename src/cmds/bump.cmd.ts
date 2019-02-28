@@ -1,16 +1,16 @@
 import {
-  R,
-  log,
-  loadSettings,
   constants,
+  dependsOn,
   filter,
   IModule,
   inquirer,
-  semver,
-  dependsOn,
-  updatePackageRef,
-  savePackage,
+  loadSettings,
+  log,
   LogTable,
+  R,
+  savePackage,
+  semver,
+  updatePackageRef,
 } from '../common';
 import * as listCommand from './ls.cmd';
 

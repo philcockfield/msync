@@ -1,13 +1,14 @@
 import { debounceTime, filter } from 'rxjs/operators';
 
 import {
+  exec,
   constants,
   copy,
   dependsOn,
   elapsed,
   file,
   filter as filterUtil,
-  fsPath,
+  fs,
   IDependency,
   IModule,
   ISettings,
@@ -22,7 +23,7 @@ import * as listCommand from './ls.cmd';
 
 export const name = 'sync';
 export const alias = ['s', 'sl'];
-export const description = "Syncs each module's dependency tree within the workspace.";
+export const description = `Syncs each module's dependency tree within the workspace.`;
 export const args = {
   '-i': 'Include ignored modules.',
   '-w': 'Sync on changes to files.',
@@ -95,7 +96,7 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
       if (source.package) {
         await copy.module(source.package, target);
         await copy.logUpdate(target);
-
+        await chmod(target);
         if (updateVersions) {
           await updatePackageRef(target, source.package.name, source.package.version, {
             save: true,
@@ -141,6 +142,26 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
 }
 
 /**
+ * Runs a `chmod 777` on all synced bin files.
+ */
+export async function chmod(module: IModule) {
+  const dir = fs.join(module.dir, 'node_modules/.bin');
+  if (!(await fs.pathExistsSync(dir))) {
+    return [];
+  }
+  const cmd = exec.command(`chmod 777`);
+  const files = (await fs.readdir(dir)).map(name => fs.join(dir, name));
+  const wait = files.map(path => {
+    return cmd
+      .clone()
+      .add(path)
+      .run({ silent: true });
+  });
+  await Promise.all(wait);
+  return files;
+}
+
+/**
  * Copies each module's dependency tree locally.
  */
 export async function syncWatch(options: ISyncOptions = {}) {
@@ -180,7 +201,7 @@ function watch(
   };
 
   file
-    .watch(fsPath.join(pkg.dir, watchPattern))
+    .watch(fs.join(pkg.dir, watchPattern))
     .pipe(
       filter(path => !path.includes('node_modules/')),
       debounceTime(1000),

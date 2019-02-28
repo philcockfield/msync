@@ -1,6 +1,7 @@
 import * as Rsync from 'rsync';
-import { fsPath, fs } from './libs';
+
 import { IModule } from '.';
+import { fs } from './libs';
 
 interface IRsyncResult {
   err: Error;
@@ -29,8 +30,8 @@ export async function module(
   // Setup initial conditions.
   // const IGNORE = ['.DS_Store', 'node_modules', '.tmp', ...from.gitignore];
   const IGNORE = ['.DS_Store', 'node_modules', '.tmp'];
-  const FROM_DIR = fsPath.join(from.dir, '/');
-  const TO_DIR = fsPath.join(to.dir, 'node_modules', from.name, '/');
+  const FROM_DIR = fs.join(from.dir, '/');
+  const TO_DIR = fs.join(to.dir, 'node_modules', from.name, '/');
 
   // Perform high-speed copy operation.
   await fs.ensureDir(TO_DIR);
@@ -54,14 +55,14 @@ export async function logUpdate(target: IModule) {
   }
 
   // Get the transpiled typsecript directory to write to.
-  const dir = fsPath.join(target.dir, target.tsconfig.compilerOptions.outDir || '');
-  const parentDir = fsPath.basename(fsPath.dirname(dir));
+  const dir = fs.join(target.dir, target.tsconfig.compilerOptions.outDir || '');
+  const parentDir = fs.basename(fs.dirname(dir));
   if (parentDir !== 'node_modules' || !(await fs.pathExists(dir))) {
     return;
   }
 
   // Write the file.
-  const file = fsPath.join(dir, '.__msync.js');
+  const file = fs.join(dir, '.__msync.js');
   const getTotal = async () => {
     if (!(await fs.pathExists(file))) {
       return 0;

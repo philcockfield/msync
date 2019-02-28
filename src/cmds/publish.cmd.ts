@@ -1,15 +1,15 @@
 import {
-  log,
-  loadSettings,
-  exec,
-  listr,
-  IListrOptions,
   constants,
-  IModule,
   elapsed,
+  exec,
+  IListrOptions,
+  IModule,
   inquirer,
-  semver,
+  listr,
+  loadSettings,
+  log,
   plural,
+  semver,
 } from '../common';
 import { printTable } from './ls.cmd';
 
@@ -81,7 +81,7 @@ const runCommand = async (
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
-        return exec.run(command, { silent: true });
+        return exec.cmd.run(command, { silent: true });
       },
     };
   };
