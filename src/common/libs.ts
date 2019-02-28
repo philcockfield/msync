@@ -1,7 +1,7 @@
 import * as semver from 'semver';
 export { semver };
 
-export { log } from '@tdb/log/lib/server';
+export { log } from '@platform/log/lib/server';
 export { exec } from '@platform/util.exec';
 export { npm } from '@platform/npm';
 

@@ -5,11 +5,10 @@ import * as filter from './util.filter';
 import * as value from './util.value';
 import * as util from './util';
 
-export { constants, copy, filter,  util, value };
+export { constants, copy, filter, util, value };
 export { loadSettings, ISettings } from './settings';
 export * from './libs';
 export * from './util';
 export * from './util.package';
 export * from './util.fs';
 export * from '../types';
-

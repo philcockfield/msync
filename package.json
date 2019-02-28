@@ -15,6 +15,7 @@
     "prepare": "ts prepare"
   },
   "dependencies": {
+    "@platform/log": "^0.0.81",
     "@platform/npm": "0.0.27",
     "@platform/util.exec": "0.0.18",
     "command-interface": "4.0.7",

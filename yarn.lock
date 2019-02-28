@@ -65,7 +65,7 @@
     rxjs "6.4.0"
     tslib "1.9.3"
 
-"@platform/log@0.0.81":
+"@platform/log@0.0.81", "@platform/log@^0.0.81":
   version "0.0.81"
   resolved "https://registry.yarnpkg.com/@platform/log/-/log-0.0.81.tgz#c377207fa868f2c8febd8b6d4fce23e859aee9f7"
   integrity sha512-mdeFSrKQa0/Jfbln34+xTiUm7sn0iEi9u0widnlXjMPuYKPM5lwzYpl5yg6DpYB93VzzPRcve7tD2HTqjWwWeA==
@@ -74,7 +74,7 @@
     chalk "2.4.2"
     cli-table "0.3.1"
 
-"@platform/npm@^0.0.27":
+"@platform/npm@0.0.27":
   version "0.0.27"
   resolved "https://registry.yarnpkg.com/@platform/npm/-/npm-0.0.27.tgz#cbb9a0e98fe5fa2afe40878871b0f5fa6866cad2"
   integrity sha512-wruwuBz23i4uhwGGMHclroOIWR6xPRaNoAqIO9U63O90QOPkPmjA9gGk+2axSkTMECbCOIOtzq0AqR2smFBMjw==
