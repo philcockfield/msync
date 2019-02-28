@@ -1,17 +1,33 @@
-import { constants, exec, filter, IModule, listr, loadSettings, log, util } from '../common';
+import {
+  constants,
+  exec,
+  filter,
+  IModule,
+  listr,
+  loadSettings,
+  log,
+  inquirer,
+  semver,
+  value as valueUtil,
+} from '../common';
 
-interface IOutdated {
+type IOutdated = {
   name: string;
   error?: string;
   modules: IOutdatedModule[];
-}
-interface IOutdatedModule {
+};
+type IOutdatedModule = {
   name: string;
   current: string;
   wanted: string;
   latest: string;
   location: string;
-}
+};
+type IUpdate = {
+  name: string;
+  latest: string;
+  count: number;
+};
 
 export const name = 'outdated';
 export const alias = 'o';
@@ -62,10 +78,13 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     // Ignore.
   }
 
+  // console.log('results', results);
+
   // Print outdated modules.
   if (results.length > 0) {
     log.info();
     results.forEach(item => printOutdatedModule(item));
+    await update(modules, await promptToUpdate(results));
   } else {
     log.info();
     log.info.gray(`All modules up-to-date.`);
@@ -77,6 +96,55 @@ export async function outdated(options: { includeIgnored?: boolean }) {
 /**
  * [INTERNAL]
  */
+async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
+  if (outdated.length === 0) {
+    return [];
+  }
+
+  // Build a list of all modules that need updating.
+  const updates: { [key: string]: IUpdate } = {};
+  outdated.forEach(outdated => {
+    outdated.modules.forEach(m => {
+      const { name, latest } = m;
+      const current = updates[name] ? updates[name].latest : undefined;
+      if (!current || semver.gt(latest, current)) {
+        const count = updates[name] ? updates[name].count + 1 : 1;
+        updates[name] = { name, latest, count };
+      }
+    });
+  });
+
+  // Format checkbox choices.
+  const choices = Object.keys(updates).map(key => {
+    const update = updates[key];
+    const modules = valueUtil.plural(update.count, 'module', 'modules');
+    const name = `${key} ➜ ${update.latest} (${update.count} ${modules})`;
+    return { name, value: update.name };
+  });
+
+  // Prompt the user.
+  const answer: { update: string[] } = await inquirer.prompt({
+    name: 'update',
+    type: 'checkbox',
+    choices,
+  });
+
+  // Finish up.
+  return Object.keys(updates)
+    .map(key => updates[key])
+    .filter(update => answer.update.includes(update.name));
+}
+
+export function update(modules: IModule[], updates: IUpdate[]) {
+  console.log('update', updates);
+  if (updates.length === 0) {
+    return;
+  }
+
+
+
+}
+
 async function getOutdated(pkg: IModule) {
   const result: IOutdated = { name: pkg.name, modules: [] };
   const cmd = `cd ${pkg.dir} && npm outdated --json`;

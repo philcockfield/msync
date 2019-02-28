@@ -35,7 +35,7 @@
     fs-extra "7.0.1"
     js-yaml "3.12.1"
 
-"@platform/fs@0.0.36", "@platform/fs@^0.0.36":
+"@platform/fs@0.0.36":
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/@platform/fs/-/fs-0.0.36.tgz#034218116dff7a5d57cca3be651e40c09764c69c"
   integrity sha512-Bj5212hG6sfL51m1OHNKxkT2pCILpomzsulreK3MGJ8zpxu8Rm63ngYprJlacchWhTGl36XhRhweoIQwNFxZsg==
@@ -138,7 +138,7 @@
   resolved "https://registry.yarnpkg.com/@platform/util.is/-/util.is-0.0.30.tgz#1e818c3f547eb41a66a2fa83c8915966f9c9afed"
   integrity sha512-I15A+SAQDprxrV89AIp2lBaIQy7vkB8gKqeNvz8+PaGR2ApYaD0Uw8sBFbuQ7GrUx/rBfEw3lDLZdladx9ss3Q==
 
-"@platform/util.value@0.0.31":
+"@platform/util.value@0.0.31", "@platform/util.value@^0.0.31":
   version "0.0.31"
   resolved "https://registry.yarnpkg.com/@platform/util.value/-/util.value-0.0.31.tgz#35011630ffa661b029ec2018c2d3eefad9e56e4e"
   integrity sha512-8FkCJesNo9gvxCFkLdTCbonPQ2dWItc89YCPpM2LaA+pPZApZyoNqbiR2MKo/1daOK/0yoJlRoSWzIChx/vzFw==
