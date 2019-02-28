@@ -1,4 +1,4 @@
-import { R, moment, log } from './libs';
+import { log, moment, R } from './libs';
 
 /**
  * Converts a nested set of arrays into a flat single-level array.

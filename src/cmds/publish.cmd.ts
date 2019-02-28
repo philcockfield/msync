@@ -1,15 +1,15 @@
 import {
-  log,
-  loadSettings,
-  exec,
-  listr,
-  IListrOptions,
   constants,
-  IModule,
   elapsed,
+  exec,
+  IListrOptions,
+  IModule,
   inquirer,
-  semver,
+  listr,
+  loadSettings,
+  log,
   plural,
+  semver,
 } from '../common';
 import { printTable } from './ls.cmd';
 

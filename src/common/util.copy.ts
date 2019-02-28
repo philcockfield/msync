@@ -1,6 +1,7 @@
 import * as Rsync from 'rsync';
-import { fs } from './libs';
+
 import { IModule } from '.';
+import { fs } from './libs';
 
 interface IRsyncResult {
   err: Error;

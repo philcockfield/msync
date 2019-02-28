@@ -1,6 +1,6 @@
+import { IModule, INpmInfo } from '../types';
 import { npm } from './libs';
 import { compact } from './util';
-import { IModule, INpmInfo } from '../types';
 
 /**
  * Lookup latest info for module from NPM.

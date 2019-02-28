@@ -1,4 +1,4 @@
-import { log, loadSettings, constants, filter, listr, exec, util, IModule } from '../common';
+import { constants, exec, filter, IModule, listr, loadSettings, log, util } from '../common';
 
 interface IOutdated {
   name: string;

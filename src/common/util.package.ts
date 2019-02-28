@@ -1,7 +1,8 @@
 import * as toposort from 'toposort';
-import { R, fs, file } from './libs';
+
+import { IDependency, IModule } from '../types';
+import { file, fs, R } from './libs';
 import { compact } from './util';
-import { IModule, IDependency } from '../types';
 
 /**
  * Converts a set of module-directory globs to package objects.

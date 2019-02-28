@@ -1,8 +1,8 @@
-import * as constants from './constants';
-import * as npm from './util.npm';
-import { fs, log, file, semver, listr } from './libs';
-import { toPackages, orderByDepth } from './util.package';
 import { IModule } from '../types';
+import * as constants from './constants';
+import { file, fs, listr, log, semver } from './libs';
+import * as npm from './util.npm';
+import { orderByDepth, toPackages } from './util.package';
 
 export interface IIgnore {
   paths: string[];

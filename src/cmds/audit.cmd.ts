@@ -1,13 +1,13 @@
 import {
-  log,
-  loadSettings,
-  exec,
-  listr,
-  IListrOptions,
   constants,
-  IModule,
   elapsed,
+  exec,
   fs,
+  IListrOptions,
+  IModule,
+  listr,
+  loadSettings,
+  log,
 } from '../common';
 
 export interface IAuditResult {

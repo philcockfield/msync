@@ -1,5 +1,5 @@
+import { IDependency, IModule } from '../types';
 import { fs } from './libs';
-import { IModule, IDependency } from '../types';
 
 export const localDeps = (pkg: IModule) => {
   return pkg.dependencies.filter((dep: IDependency) => dep.isLocal);

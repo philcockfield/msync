@@ -1,14 +1,15 @@
-import {
-  log,
-  constants,
-  loadSettings,
-  filter,
-  inquirer,
-  tryDelete,
-  flatten,
-  listr,
-} from '../common';
 import { parse } from 'path';
+
+import {
+  constants,
+  filter,
+  flatten,
+  inquirer,
+  listr,
+  loadSettings,
+  log,
+  tryDelete,
+} from '../common';
 
 export const name = 'delete';
 export const alias = 'del';

@@ -1,4 +1,4 @@
-import { log, loadSettings, constants, filter, listr, exec } from '../common';
+import { constants, exec, filter, listr, loadSettings, log } from '../common';
 import * as listCommand from './ls.cmd';
 
 export const name = 'run';

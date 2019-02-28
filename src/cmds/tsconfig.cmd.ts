@@ -1,15 +1,16 @@
-import {
-  log,
-  constants,
-  loadSettings,
-  filter,
-  inquirer,
-  fs,
-  ISettings,
-  value as valueUtil,
-  listr,
-} from '../common';
 import { parse } from 'path';
+
+import {
+  constants,
+  filter,
+  fs,
+  inquirer,
+  ISettings,
+  listr,
+  loadSettings,
+  log,
+  value as valueUtil,
+} from '../common';
 
 type ConfigValue = string | boolean | number;
 

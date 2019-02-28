@@ -1,4 +1,4 @@
-import { log, loadSettings, ISettings, constants, IModule, filter, fs, semver } from '../common';
+import { constants, filter, fs, IModule, ISettings, loadSettings, log, semver } from '../common';
 
 export const name = 'ls';
 export const alias = 'l';
