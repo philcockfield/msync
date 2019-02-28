@@ -25,16 +25,6 @@
     "@types/yargs" "12.0.9"
     yargs "13.2.0"
 
-"@platform/cli@0.0.57":
-  version "0.0.57"
-  resolved "https://registry.yarnpkg.com/@platform/cli/-/cli-0.0.57.tgz#48b9106f1bb2f95ec0a22ae3ef8335d741ae9db2"
-  integrity sha512-NQtoaOwF0B/SLb3NjZDhKRsXkpTGfHFcmGUeBLZ0EuUkrHlsaqsCJ6zplm8QCSrIcsaVOPMzdnHR13JD6SPURA==
-  dependencies:
-    "@platform/fs" "0.0.36"
-    "@platform/util.exec" "0.0.18"
-    "@types/yargs" "12.0.9"
-    yargs "13.2.1"
-
 "@platform/fs@0.0.35":
   version "0.0.35"
   resolved "https://registry.yarnpkg.com/@platform/fs/-/fs-0.0.35.tgz#0f1f7c447d5c27abfd75bae208075feda66fd4ac"
@@ -65,7 +55,7 @@
     rxjs "6.4.0"
     tslib "1.9.3"
 
-"@platform/log@0.0.81", "@platform/log@^0.0.81":
+"@platform/log@0.0.81":
   version "0.0.81"
   resolved "https://registry.yarnpkg.com/@platform/log/-/log-0.0.81.tgz#c377207fa868f2c8febd8b6d4fce23e859aee9f7"
   integrity sha512-mdeFSrKQa0/Jfbln34+xTiUm7sn0iEi9u0widnlXjMPuYKPM5lwzYpl5yg6DpYB93VzzPRcve7tD2HTqjWwWeA==
@@ -74,14 +64,14 @@
     chalk "2.4.2"
     cli-table "0.3.1"
 
-"@platform/npm@0.0.27":
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/@platform/npm/-/npm-0.0.27.tgz#cbb9a0e98fe5fa2afe40878871b0f5fa6866cad2"
-  integrity sha512-wruwuBz23i4uhwGGMHclroOIWR6xPRaNoAqIO9U63O90QOPkPmjA9gGk+2axSkTMECbCOIOtzq0AqR2smFBMjw==
+"@platform/npm@0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@platform/npm/-/npm-0.0.28.tgz#a9f5ef0b6d58051acf85e224af58f36351938be5"
+  integrity sha512-+HKWOt45zmUICERwRdOa/fKX7LySrgEOfzVj/s1DTLYYZhSNsnmgJdGN5NJ43+I3slkDVUfvWnvbCBQpomnedg==
   dependencies:
-    "@platform/cli" "0.0.57"
     "@platform/fs" "0.0.36"
     "@platform/log" "0.0.81"
+    "@platform/util.exec" "0.0.18"
     "@platform/util.value" "0.0.31"
 
 "@platform/test@0.0.28":
@@ -2565,23 +2555,6 @@ yargs@13.2.0:
   version "13.2.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.2.0.tgz#8b749168defffe473ec1e7980634aa360518d7e7"
   integrity sha512-C+2y+DJwm9JIyZqeZtBnXQWAwltzeaWWtWmLdC7mBvs46PZu8a3WOyiKfJX+pEqOfzwH7OljABNwU2XJqftk6g==
-  dependencies:
-    cliui "^4.0.0"
-    find-up "^3.0.0"
-    get-caller-file "^2.0.1"
-    os-locale "^3.1.0"
-    require-directory "^2.1.1"
-    require-main-filename "^2.0.0"
-    set-blocking "^2.0.0"
-    string-width "^3.0.0"
-    which-module "^2.0.0"
-    y18n "^4.0.0"
-    yargs-parser "^13.0.0"
-
-yargs@13.2.1:
-  version "13.2.1"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.2.1.tgz#c8888bcf24424bd4e5a834348366f6fcc37bb8d9"
-  integrity sha512-HgY0xHGmPPakg6kEDufqxZuXVtvPZcipORC8O7S44iEnwsUmP+qnhReHc6d1dyeIZkrPmYFblh45Z2oeDn++fQ==
   dependencies:
     cliui "^4.0.0"
     find-up "^3.0.0"
