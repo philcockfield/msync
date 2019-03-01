@@ -17,7 +17,7 @@
   "dependencies": {
     "@platform/fs": "0.0.36",
     "@platform/log": "0.0.81",
-    "@platform/npm": "0.0.28",
+    "@platform/npm": "0.0.29",
     "@platform/util.exec": "0.0.18",
     "@platform/util.value": "0.0.31",
     "command-interface": "4.0.7",
