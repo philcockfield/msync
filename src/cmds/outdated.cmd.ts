@@ -56,14 +56,13 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   // Print status:
   log.info.magenta(`\nChecking for outdated modules:`);
 
-  // const results: { [key: string]: IOutdated } = {};
   const results: IOutdated[] = [];
   const tasks = modules.map(pkg => {
     return {
       title: `${log.cyan(pkg.name)}`,
       task: async () => {
         const result = await getOutdated(pkg);
-        if (result.modules.length > 0) {
+        if (result.modules.length > 0 || result.error) {
           results.push(result);
         }
       },
@@ -119,6 +118,10 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
     return { name, value: update.name };
   });
 
+  if (choices.length === 0) {
+    return [];
+  }
+
   // Prompt the user.
   const answer: { update: string[] } = await inquirer.prompt({
     name: 'update',
@@ -153,27 +156,40 @@ async function getOutdated(pkg: IModule) {
   const cmd = `cd ${pkg.dir} && npm outdated --json`;
   try {
     const res = await exec.cmd.run(cmd, { silent: true });
-    result.modules = parseOutdated(res.info);
+    const { outdated, error } = parseOutdated(res.info);
+    result.modules = outdated;
+    result.error = error;
   } catch (error) {
     result.error = error.message; // Some other error occured.
   }
   return result;
 }
 
-function parseOutdated(stdout: string[]): IOutdatedModule[] {
+function parseOutdated(stdout: string[]): { error?: string; outdated: IOutdatedModule[] } {
   if (!stdout || stdout.length === 0) {
-    return [];
+    return { outdated: [] };
   }
+
   const json = JSON.parse(stdout.join('\n'));
-  return Object.keys(json).map(name => {
+  const error = json.error;
+  if (error) {
+    return { error: error.summary, outdated: [] };
+  }
+
+  const outdated = Object.keys(json).map(name => {
     const { current, wanted, latest, location } = json[name];
     const outdated: IOutdatedModule = { name, current, wanted, latest, location };
     return outdated;
   });
+
+  return { outdated };
 }
 
 function printOutdatedModule(outdated: IOutdated) {
   log.info.yellow(`${outdated.name}`);
+  if (outdated.error) {
+    log.info.red(outdated.error);
+  }
 
   const table = log.table({
     head: ['Package', 'Current', 'Wanted', 'Latest'].map(label => log.gray(label)),
@@ -189,6 +205,9 @@ function printOutdatedModule(outdated: IOutdated) {
     ]);
   });
 
-  table.log();
+  if (outdated.modules.length > 0) {
+    table.log();
+  }
+
   log.info();
 }
