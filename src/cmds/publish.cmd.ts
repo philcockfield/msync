@@ -76,12 +76,19 @@ const runCommand = async (
   cmd: (pkg: IModule) => string,
   options: IListrOptions,
 ) => {
+  let errors: Array<{ pkg: IModule; info: string[]; errors: string[] }> = [];
+
   const task = (pkg: IModule) => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
       task: async () => {
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
-        return exec.cmd.run(command, { silent: true });
+        const res = await exec.cmd.run(command, { silent: true });
+        if (res.error) {
+          errors = [...errors, { pkg, info: res.info, errors: res.errors }];
+          throw res.error;
+        }
+        return res;
       },
     };
   };
@@ -91,6 +98,9 @@ const runCommand = async (
     await runner.run();
     return { success: true, error: null };
   } catch (error) {
+    errors.forEach(({ info }) => {
+      info.forEach(line => log.info(line));
+    });
     return { success: false, error }; // Fail.
   }
 };
