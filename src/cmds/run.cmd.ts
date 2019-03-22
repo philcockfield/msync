@@ -1,4 +1,4 @@
-import { constants, exec, filter, listr, loadSettings, log } from '../common';
+import { constants, exec, filter, listr, loadSettings, log, IModule } from '../common';
 import * as listCommand from './ls.cmd';
 
 export const name = 'run';
@@ -35,6 +35,7 @@ export async function run(
   options: {
     includeIgnored?: boolean;
     concurrent?: boolean;
+    modules?: IModule[];
   } = {},
 ) {
   const { includeIgnored = false, concurrent = false } = options;
@@ -49,7 +50,8 @@ export async function run(
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+  const modules =
+    options.modules || settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
   log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);

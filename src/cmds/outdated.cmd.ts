@@ -10,6 +10,7 @@ import {
   semver,
   updatePackageRef,
 } from '../common';
+import { run } from './run.cmd';
 
 type IOutdated = {
   name: string;
@@ -83,6 +84,9 @@ export async function outdated(options: { includeIgnored?: boolean }) {
 
     // Prompt the use for which [package.json] files to update.
     const updated = await updatePackageJsonRefs(modules, await promptToUpdate(results));
+    if (updated.length > 0) {
+      await run('yarn install', { concurrent: true, modules: updated });
+    }
   } else {
     log.info();
     log.info.gray(`All modules up-to-date.`);
@@ -137,7 +141,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
 
 async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
   if (updates.length === 0) {
-    return;
+    return [];
   }
 
   let updated: IModule[] = [];
