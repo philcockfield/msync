@@ -1,4 +1,13 @@
-import { constants, exec, filter, listr, loadSettings, log, IModule } from '../common';
+import {
+  constants,
+  exec,
+  filter,
+  listr,
+  loadSettings,
+  log,
+  IModule,
+  value as valueUtil,
+} from '../common';
 import * as listCommand from './ls.cmd';
 
 export const name = 'run';
@@ -33,6 +42,7 @@ export async function cmd(args?: {
 export async function run(
   cmd: string,
   options: {
+    printStatus?: boolean;
     includeIgnored?: boolean;
     concurrent?: boolean;
     modules?: IModule[];
@@ -54,9 +64,11 @@ export async function run(
     options.modules || settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
-  log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);
-  listCommand.printTable(modules, { showPath: true });
-  log.info();
+  if (valueUtil.defaultValue(options.printStatus, true)) {
+    log.info.magenta(`\nRun ${log.cyan(cmd)} on:`);
+    listCommand.printTable(modules, { showPath: true });
+    log.info();
+  }
 
   // Run tasks.
   const tasks = modules.map(pkg => {

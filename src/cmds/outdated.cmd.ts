@@ -85,7 +85,7 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     // Prompt the use for which [package.json] files to update.
     const updated = await updatePackageJsonRefs(modules, await promptToUpdate(results));
     if (updated.length > 0) {
-      await run('yarn install', { concurrent: true, modules: updated });
+      await run('yarn install', { concurrent: true, modules: updated, printStatus: false });
     }
   } else {
     log.info();
