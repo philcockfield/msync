@@ -3,10 +3,10 @@ import {
   exec,
   filter,
   IModule,
+  inquirer,
   listr,
   loadSettings,
   log,
-  inquirer,
   semver,
   updatePackageRef,
 } from '../common';
@@ -82,7 +82,7 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     results.forEach(item => printOutdatedModule(item));
 
     // Prompt the use for which [package.json] files to update.
-    await updatePackageJsonRefs(modules, await promptToUpdate(results));
+    const updated = await updatePackageJsonRefs(modules, await promptToUpdate(results));
   } else {
     log.info();
     log.info.gray(`All modules up-to-date.`);
@@ -106,7 +106,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
       const { name, latest } = m;
       const current = updates[name] ? updates[name].latest : undefined;
       if (!current || semver.gt(latest, current)) {
-        updates[name] = { name, latest };
+        updates[name] = { name, latest: latest };
       }
     });
   });
@@ -140,15 +140,27 @@ async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
     return;
   }
 
-  const wait = updates.map(async update => {
-    return Promise.all(
-      modules.map(async module => {
-        updatePackageRef(module, update.name, update.latest, { save: true });
+  let updated: IModule[] = [];
+
+  for (const update of updates) {
+    await Promise.all(
+      modules.map(async pkg => {
+        const changed = await updatePackageRef(pkg, update.name, update.latest, { save: true });
+        if (changed && !updated.some(m => m.name === pkg.name)) {
+          updated = [...updated, pkg];
+        }
       }),
     );
-  });
+  }
 
-  await Promise.all(wait);
+  if (updated.length > 0) {
+    log.info.gray(`\nUpdated:`);
+    updated.forEach(pkg => {
+      log.info.gray(` - ${log.cyan(pkg.name)}`);
+    });
+  }
+
+  return updated;
 }
 
 async function getOutdated(pkg: IModule) {
