@@ -1,7 +1,7 @@
 import * as toposort from 'toposort';
 
 import { IDependency, IModule } from '../types';
-import { file, fs, R } from './libs';
+import { fs, R } from './libs';
 import { compact } from './util';
 
 /**
@@ -12,7 +12,7 @@ export async function toPackages(moduleDirs: string[]) {
 
   // Build list of packages.
   for (const pattern of moduleDirs) {
-    const matches = await file.glob(pattern);
+    const matches = await fs.glob.find(pattern);
     for (const path of matches) {
       if (!path.includes('node_modules/')) {
         packages.push(await toPackage(path));

@@ -104,7 +104,7 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
 async function ignorePaths(yaml: IYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
-    const paths = await file.glob(fs.resolve(dir, pattern));
+    const paths = await fs.glob.find(fs.resolve(dir, pattern));
     paths.forEach(path => result.push(path));
   }
   return result;

@@ -7,4 +7,7 @@ export { value } from '@platform/util.value';
 export { npm } from '@platform/npm';
 export { fs } from '@platform/fs';
 
-export { R, moment, file, listr, IListrOptions, inquirer, plural } from 'command-interface';
+export { moment, file, listr, IListrOptions, inquirer, plural } from 'command-interface';
+
+import * as R from 'ramda';
+export { R };

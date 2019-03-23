@@ -3,6 +3,7 @@
 .npmrc
 .env
 .vscode
+.tmp*
 
 /dist
 /lib

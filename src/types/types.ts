@@ -26,4 +26,4 @@ export interface IDependency {
   package?: IModule;
 }
 
-export { LogTable } from '@tdb/log/lib/server';
+export { ILogTable } from '@platform/log/lib/server';

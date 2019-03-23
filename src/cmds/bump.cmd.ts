@@ -6,7 +6,7 @@ import {
   inquirer,
   loadSettings,
   log,
-  LogTable,
+  ILogTable,
   R,
   savePackage,
   semver,
@@ -107,7 +107,7 @@ async function bumpModule(options: {
   save: boolean;
   level?: number;
   ref?: { name: string; fromVersion: string; toVersion: string };
-  table?: LogTable;
+  table?: ILogTable;
 }) {
   // Setup initial conditions.
   const { release, pkg, allModules, save, level = 0, ref } = options;
