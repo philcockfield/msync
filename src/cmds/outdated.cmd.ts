@@ -162,6 +162,7 @@ async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
     updated.forEach(pkg => {
       log.info.gray(` - ${log.cyan(pkg.name)}`);
     });
+    log.info();
   }
 
   return updated;
