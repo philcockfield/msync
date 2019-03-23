@@ -1,0 +1,13 @@
+{
+  "extends": "@platform/ts/tsconfig.json",
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {
+    "outDir": "lib",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "target": "esnext",
+    "jsx": "react"
+  }
+}

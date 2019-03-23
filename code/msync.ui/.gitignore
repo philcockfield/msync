@@ -1,0 +1,6 @@
+node_modules
+.uiharness
+.cache
+.dev
+lib
+lib.test

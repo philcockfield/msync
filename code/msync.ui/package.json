@@ -1,0 +1,29 @@
+{
+  "name": "msync.ui",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "ui": "ui $@",
+    "start": "ui start $@",
+    "test": "ts test",
+    "tdd": "ts test --watch",
+    "lint": "ts lint",
+    "build": "ts build $@",
+    "build-test": "ts build --tsconfig=tsconfig.test $@",
+    "prepare": "ts prepare"
+  },
+  "dependencies": {
+    "react": "16.8.5",
+    "react-dom": "16.8.5",
+    "@uiharness/electron": "0.4.6"
+  },
+  "devDependencies": {
+    "@uiharness/dev": "0.2.16"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT"
+}
