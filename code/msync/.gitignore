@@ -1,11 +1,1 @@
-.DS_Store
-.build
-.npmrc
-.env
-.vscode
-.tmp*
-
-lib
-/TEMP.md
 /sample/**/lib
-
