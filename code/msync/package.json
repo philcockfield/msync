@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index",
   "types": "./lib/index.d.ts",
@@ -32,7 +32,8 @@
     "@types/semver": "5.5.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "bin.js"
   ],
   "repository": "philcockfield/msync",
   "license": "MIT"
