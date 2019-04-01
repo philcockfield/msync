@@ -15,19 +15,19 @@
     "prepare": "ts prepare"
   },
   "dependencies": {
-    "@platform/fs": "0.0.42",
-    "@platform/log": "0.0.94",
-    "@platform/npm": "0.0.42",
-    "@platform/exec": "0.0.3",
-    "@platform/util.value": "0.0.44",
+    "@platform/fs": "0.0.44",
+    "@platform/log": "0.0.100",
+    "@platform/npm": "0.0.48",
+    "@platform/exec": "0.0.7",
+    "@platform/util.value": "0.0.50",
     "command-interface": "4.1.0",
     "rsync": "0.6.1",
-    "semver": "5.6.0",
+    "semver": "6.0.0",
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@platform/test": "0.0.35",
-    "@platform/ts": "3.3.70",
+    "@platform/test": "0.0.37",
+    "@platform/ts": "3.4.0",
     "@types/rsync": "0.4.30",
     "@types/semver": "5.5.0"
   },
