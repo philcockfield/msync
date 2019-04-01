@@ -1,0 +1,29 @@
+productName: msync
+appId: msync.ui
+publish:
+  provider: github
+  owner: philcockfield
+  repo: msync
+  vPrefixedTagName: true
+  releaseType: draft
+  publishAutoUpdate: true
+mac:
+  target:
+    - zip
+  artifactName: '${productName}-${version}-mac.${ext}'
+  icon: static/build/app.icns
+win:
+  target:
+    - zip
+  artifactName: '${productName}-${version}-win.${ext}'
+  icon: static/build/app.ico
+linux:
+  target:
+    - zip
+  category: Development
+  artifactName: '${productName}-${version}-linux.${ext}'
+files:
+  - .uiharness/.bundle/app.main/**
+  - .uiharness/.bundle/app.renderer/prod/**
+directories:
+  output: .uiharness/dist
