@@ -3,6 +3,11 @@
 .npmrc
 .env
 .tmp*
+.uiharness
+.cache
+.dev
+lib
+lib.test
 
 lib
 
