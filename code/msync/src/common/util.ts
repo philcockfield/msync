@@ -15,10 +15,7 @@ export function flatten<T>(list: any): T[] {
 }
 
 export const compact = <T>(value: T[]) =>
-  R.pipe(
-    R.reject(R.isNil),
-    R.reject(R.isEmpty),
-  )(value) as T[];
+  R.pipe(R.reject(R.isNil), R.reject(R.isEmpty))(value) as T[];
 
 /**
  * Logs to the console with a `silent` switch.

@@ -1,5 +1,4 @@
-import { INpmInfo } from '@platform/npm/lib/types';
-export { INpmInfo };
+export type INpmInfo = { name: string; version: string; latest: string };
 
 export interface IModule {
   engine: 'NPM' | 'YARN';
