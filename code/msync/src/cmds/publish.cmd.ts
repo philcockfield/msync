@@ -2,7 +2,6 @@ import {
   constants,
   elapsed,
   exec,
-  IListrOptions,
   IModule,
   inquirer,
   listr,
