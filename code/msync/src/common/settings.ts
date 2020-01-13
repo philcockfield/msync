@@ -36,9 +36,7 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
   if (spinner) {
     // Load the settings with a spinner.
     let result: ISettings | undefined;
-    const title = npm
-      ? 'Loading module info locally and from NPM.'
-      : 'Loading module info locally.';
+    const title = npm ? 'Loading module info locally and from NPM' : 'Loading module info locally';
     const task = {
       title,
       task: async () => (result = await loadSettingsInternal(options)),

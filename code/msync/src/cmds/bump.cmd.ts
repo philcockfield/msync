@@ -11,6 +11,7 @@ import {
   savePackage,
   semver,
   updatePackageRef,
+  formatModuleName,
 } from '../common';
 import * as listCommand from './ls.cmd';
 
@@ -131,16 +132,14 @@ async function bumpModule(options: {
   if (!ref) {
     let msg = '';
     msg += `  ${log.yellow(release.toUpperCase())} `;
-    msg += `update ${log.cyan(pkg.name)} from ${log.gray(pkg.latest)} ${log.gray(
-      '=>',
-    )} ${log.magenta(version)} `;
+    msg += `update ${formatModuleName(pkg.name)} from ${pkg.latest} → ${log.magenta(version)} `;
     log.info.gray(msg);
   } else {
     table.add([
       log.yellow(`${release.toUpperCase()}  `),
-      log.cyan(`${pkg.name}  `),
-      log.gray(`${pkg.latest} => ${log.magenta(version)}  `),
-      log.gray(`${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(ref.toVersion)}`),
+      formatModuleName(`${pkg.name}  `),
+      log.gray(`${pkg.latest} → ${log.magenta(version)}  `),
+      log.gray(`${formatModuleName(ref.name)} ${ref.fromVersion} → ${log.magenta(ref.toVersion)}`),
     ]);
   }
 
@@ -178,6 +177,7 @@ async function promptForModule(modules: IModule[]) {
     name: 'name',
     message: 'Select a module',
     choices,
+    pageSize: 30,
   };
   const res = (await inquirer.prompt(confirm as any)) as { name: string };
   const name = res.name;

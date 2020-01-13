@@ -1,4 +1,14 @@
-import { constants, filter, fs, IModule, ISettings, loadSettings, log, semver } from '../common';
+import {
+  constants,
+  filter,
+  fs,
+  IModule,
+  ISettings,
+  loadSettings,
+  log,
+  semver,
+  formatModuleName,
+} from '../common';
 
 export const name = 'ls';
 export const alias = 'l';
@@ -106,13 +116,13 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
       .filter(dep => (dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true))
       .map(dep => {
         const isIgnored = dep.package && dep.package.isIgnored;
-        const bullet = isIgnored ? log.gray('-') : log.magenta('-');
+        // const bullet = isIgnored ? log.gray('-') : log.magenta('-');
         const name = isIgnored
           ? log.gray(dep.name)
           : dep.isLocal
           ? log.cyan(dep.name)
           : log.gray(dep.name);
-        return `${bullet} ${name} ${log.gray(dep.version)}`;
+        return `${name} ${log.gray(dep.version)}`;
       })
       .join('\n');
 
@@ -123,9 +133,8 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
     return dependants
       .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
       .map(pkg => {
-        const bullet = pkg.isIgnored ? log.gray('-') : log.magenta('-');
-        const name = pkg.isIgnored ? log.gray(pkg.name) : log.cyan(pkg.name);
-        return `${bullet} ${name} ${log.gray(pkg.version)}`;
+        const name = pkg.isIgnored ? log.gray(pkg.name) : formatModuleName(pkg.name);
+        return `${name} ${log.gray(pkg.version)}`;
       })
       .join('\n');
   };
@@ -133,16 +142,38 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
   const column: { [key: string]: ITableColumn } = {
     module: {
       head: 'module',
-      render: (pkg: IModule) => log.cyan(pkg.name),
+      render: (pkg: IModule) => {
+        const text = formatModuleName(pkg.name);
+        return `  ${text}`;
+      },
     },
     version: {
       head: 'version  ',
       render: (pkg: IModule) => {
         const npmVersion = pkg.npm && pkg.npm.latest;
+
+        type Color = (input: string) => string;
+        const format = (args: {
+          from: { text: string; color: Color };
+          to: { text: string; color: Color };
+        }) => {
+          const { from, to } = args;
+          const max = Math.max(from.text.length, 12);
+          const left = `${from.text}                   `.substring(0, max);
+          const right = to.color(`← NPM ${to.text}`);
+          return `${from.color(left)} ${right}`;
+        };
+
         if (npmVersion && semver.gt(pkg.version, npmVersion)) {
-          return log.yellow(`${pkg.version}`) + log.gray(` (NPM ${npmVersion})`);
+          return format({
+            from: { text: pkg.version, color: log.yellow },
+            to: { text: npmVersion, color: log.gray },
+          });
         } else if (npmVersion && semver.lt(pkg.version, npmVersion)) {
-          return log.gray(`${pkg.version}`) + log.magenta(` (NPM ${npmVersion})`);
+          return format({
+            from: { text: pkg.version, color: log.gray },
+            to: { text: npmVersion, color: log.magenta },
+          });
         } else {
           return log.magenta(pkg.version);
         }
