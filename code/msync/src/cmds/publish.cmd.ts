@@ -2,7 +2,6 @@ import {
   constants,
   elapsed,
   exec,
-  IListrOptions,
   IModule,
   inquirer,
   listr,
@@ -10,6 +9,7 @@ import {
   log,
   plural,
   semver,
+  formatModuleName,
 } from '../common';
 import { printTable } from './ls.cmd';
 
@@ -44,6 +44,7 @@ export async function publish(options: {} = {}) {
   }
 
   // Prompt the user if they want to continue.
+  log.info();
   if (!(await promptYesNo(`Publish ${total} ${plural('module', total)} to NPM now?`))) {
     log.info();
     return;
@@ -56,17 +57,24 @@ export async function publish(options: {} = {}) {
   // [Slow] Full install and sync mode.
   const publishCommand = (pkg: IModule) => {
     const install = pkg.engine === 'YARN' ? 'yarn install' : 'npm install';
-    return `${install} && npm publish && msync sync`;
+    // return `${install} && npm publish && msync sync`;
+    return `${install} && npm publish`;
   };
+
+  let current: IModule | undefined;
   const publishResult = await runCommand(modules, publishCommand, {
     concurrent: false,
     exitOnError: true,
+    onStart: pkg => (current = pkg),
   });
 
   if (publishResult.success) {
     log.info(`\n✨✨  Done ${log.gray(elapsed(startedAt))}\n`);
   } else {
-    log.info.yellow(`\n💩  Something went wrong while publishing.\n`);
+    log.info();
+    log.info.yellow(`Failed on module:`);
+    log.info.gray(`  ${formatModuleName(current?.name || 'UNKNOWN')}`);
+    log.info();
     log.error(publishResult.error);
   }
 }
@@ -74,14 +82,16 @@ export async function publish(options: {} = {}) {
 const runCommand = async (
   modules: IModule[],
   cmd: (pkg: IModule) => string,
-  options: IListrOptions,
+  options: { concurrent: boolean; exitOnError: boolean; onStart: (pkg: IModule) => void },
 ) => {
+  const { concurrent, exitOnError } = options;
   let errors: Array<{ pkg: IModule; info: string[]; errors: string[] }> = [];
 
   const task = (pkg: IModule) => {
     return {
-      title: `${log.cyan(pkg.name)} ${log.magenta(cmd(pkg))}`,
+      title: `${formatModuleName(pkg.name)} ${log.gray(cmd(pkg))}`,
       task: async () => {
+        options.onStart(pkg);
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
         const res = await exec.cmd.run(command, { silent: true });
         if (res.error) {
@@ -93,7 +103,7 @@ const runCommand = async (
     };
   };
   const tasks = modules.map(pkg => task(pkg));
-  const runner = listr(tasks, options);
+  const runner = listr(tasks, { concurrent, exitOnError });
   try {
     await runner.run();
     return { success: true, error: null };
@@ -111,8 +121,8 @@ async function promptYesNo(message: string) {
     name: 'answer',
     message,
     choices: [
-      { name: 'Yes', value: 'true' },
-      { name: 'No', value: 'false' },
+      { name: 'yes', value: 'true' },
+      { name: 'no', value: 'false' },
     ],
   };
   const res = (await inquirer.prompt(confirm as any)) as { answer: string };

@@ -10,4 +10,5 @@ export * from './libs';
 export * from './util';
 export * from './util.package';
 export * from './util.fs';
+export * from './util.format';
 export * from '../types';

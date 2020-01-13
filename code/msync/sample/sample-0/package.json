@@ -1,12 +1,12 @@
 {
   "name": "msync.sample-0",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "scripts": {
     "build": "tsc",
     "prepare": "yarn run build"
   },
   "dependencies": {
-    "msync.sample-1": "^0.0.7",
+    "msync.sample-1": "^0.0.8",
     "msync.sample-3": "^2.3.13",
     "msync.sample-4-ignored": "^2.3.7"
   },
