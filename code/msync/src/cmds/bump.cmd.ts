@@ -172,26 +172,24 @@ async function bumpModule(options: {
 
 async function promptForModule(modules: IModule[]) {
   const choices = modules.map(pkg => ({ name: pkg.name, value: pkg.name }));
-  const confirm = {
+  const res = (await inquirer.prompt({
     type: 'list',
     name: 'name',
     message: 'Select a module',
     choices,
     pageSize: 30,
-  };
-  const res = (await inquirer.prompt(confirm as any)) as { name: string };
+  })) as { name: string };
   const name = res.name;
   return modules.find(pkg => pkg.name === name);
 }
 
 async function promptForReleaseType(version: string) {
   const choices = ['patch', 'minor', 'major'];
-  const confirm = {
+  const res = (await inquirer.prompt({
     type: 'list',
     name: 'name',
     message: 'Release',
     choices,
-  };
-  const res = (await inquirer.prompt(confirm as any)) as { name: string };
+  })) as { name: string };
   return res.name;
 }

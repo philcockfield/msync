@@ -131,6 +131,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
     name: 'update',
     type: 'checkbox',
     choices,
+    pageSize: 30,
   });
 
   // Finish up.
