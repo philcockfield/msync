@@ -209,17 +209,14 @@ function printOutdatedModule(outdated: IOutdated) {
   }
 
   const table = log.table({
-    head: ['Package', 'Current', 'Wanted', 'Latest'].map(label => log.gray(label)),
+    head: ['package', 'current', 'wanted', 'latest'].map(label => log.gray(label)),
+    border: false,
   });
 
   outdated.modules.forEach(item => {
-    const { name, current, wanted, latest } = item;
-    table.add([
-      name,
-      log.gray(current),
-      wanted === latest ? log.green(wanted) : log.magenta(wanted),
-      log.green(latest),
-    ]);
+    const { name, current, latest } = item;
+    const wanted = item.wanted === latest ? log.green(item.wanted) : log.magenta(item.wanted);
+    table.add([`${name}  `, `${log.gray(current)}  `, `${wanted}  `, `${log.green(latest)}`]);
   });
 
   if (outdated.modules.length > 0) {

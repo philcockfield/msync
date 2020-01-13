@@ -136,7 +136,7 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
       render: (pkg: IModule) => log.cyan(pkg.name),
     },
     version: {
-      head: 'version',
+      head: 'version  ',
       render: (pkg: IModule) => {
         const npmVersion = pkg.npm && pkg.npm.latest;
         if (npmVersion && semver.gt(pkg.version, npmVersion)) {
@@ -170,7 +170,11 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
 
   const logModules = (modules: IModule[]) => {
     const cols = [] as ITableColumn[];
-    const addColumn = (col: ITableColumn, include = true) => include && cols.push(col);
+    const addColumn = (col: ITableColumn, include = true) => {
+      if (include) {
+        cols.push(col);
+      }
+    };
 
     addColumn(column.module);
     addColumn(column.version);
@@ -180,10 +184,10 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
     (columns || []).forEach(col => addColumn(col));
 
     const head = cols.map(col => log.gray(col.head));
-    const builder = log.table({ head });
+    const builder = log.table({ head, border: false });
     modules.forEach(pkg => {
       const row = [] as string[];
-      cols.forEach(col => row.push(col.render(pkg)));
+      cols.forEach(col => row.push(`${col.render(pkg)}  `));
       builder.add(row);
     });
     builder.log();

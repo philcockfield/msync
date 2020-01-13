@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
+## [2.4.0] - 2020-01-13
+#### Changed
+- Updated dependencies
+- Removed borders from table logging.
+
+
 
 ## [2.2.0] - 2019-03-01
 #### Added

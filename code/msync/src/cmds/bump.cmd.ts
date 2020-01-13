@@ -69,6 +69,7 @@ export async function bump(options: IOptions = {}) {
   if (!module) {
     return;
   }
+  log.info();
 
   // Retrieve the dependant modules and list them in a table.
   const dependants = dependsOn(module, modules);
@@ -78,6 +79,7 @@ export async function bump(options: IOptions = {}) {
   }
 
   // Get the version number.
+  log.info();
   const release = (await promptForReleaseType(module.version)) as ReleaseType;
   if (!release) {
     return;
@@ -85,13 +87,16 @@ export async function bump(options: IOptions = {}) {
 
   // Update the selected module and all dependant modules.
   log.info();
-  const tableBuilder = await bumpModule({
+  const table = await bumpModule({
     release,
     pkg: module,
     allModules: modules,
     save,
   });
-  tableBuilder.log();
+
+  log.info();
+  log.info(table.toString());
+  log.info();
 
   if (dryRun) {
     log.info.gray(`\nNo files were saved.`);
@@ -120,8 +125,8 @@ async function bumpModule(options: {
   }
 
   // Log output.
-  const head = ['update', 'module', 'version', 'ref updated'].map(title => log.gray(title));
-  const tableBuilder = options.table || log.table({ head });
+  const head = ['update', 'module', 'version', 'dependants'].map(title => log.gray(title));
+  const table = options.table || log.table({ head, border: false });
 
   if (!ref) {
     let msg = '';
@@ -131,10 +136,10 @@ async function bumpModule(options: {
     )} ${log.magenta(version)} `;
     log.info.gray(msg);
   } else {
-    tableBuilder.add([
-      log.yellow(release.toUpperCase()),
-      log.cyan(pkg.name),
-      log.gray(`${pkg.latest} => ${log.magenta(version)}`),
+    table.add([
+      log.yellow(`${release.toUpperCase()}  `),
+      log.cyan(`${pkg.name}  `),
+      log.gray(`${pkg.latest} => ${log.magenta(version)}  `),
       log.gray(`${log.cyan(ref.name)} ${ref.fromVersion} => ${log.magenta(ref.toVersion)}`),
     ]);
   }
@@ -148,7 +153,7 @@ async function bumpModule(options: {
 
   // Update all dependant modules.
   if (isRoot && dependants.length > 0) {
-    log.info.gray('\nDependant modules:');
+    log.info.gray('\nChanges:');
   }
 
   for (const dependentPkg of dependants) {
@@ -160,10 +165,10 @@ async function bumpModule(options: {
       level: level + 1,
       ref: { name: pkg.name, fromVersion: pkg.latest, toVersion: version },
       save,
-      table: tableBuilder,
+      table,
     });
   }
-  return tableBuilder;
+  return table;
 }
 
 async function promptForModule(modules: IModule[]) {
@@ -174,7 +179,7 @@ async function promptForModule(modules: IModule[]) {
     message: 'Select a module',
     choices,
   };
-  const res = (await inquirer.prompt(confirm)) as { name: string };
+  const res = (await inquirer.prompt(confirm as any)) as { name: string };
   const name = res.name;
   return modules.find(pkg => pkg.name === name);
 }
@@ -187,6 +192,6 @@ async function promptForReleaseType(version: string) {
     message: 'Release',
     choices,
   };
-  const res = (await inquirer.prompt(confirm)) as { name: string };
+  const res = (await inquirer.prompt(confirm as any)) as { name: string };
   return res.name;
 }

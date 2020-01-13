@@ -1,6 +1,6 @@
 {
   "name": "msync",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
   "main": "./lib/index",
   "types": "./lib/index.d.ts",
@@ -20,7 +20,7 @@
     "@platform/npm": "0.2.36",
     "@platform/exec": "0.2.40",
     "@platform/util.value": "0.6.11",
-    "command-interface": "4.1.0",
+    "command-interface": "4.2.0",
     "rsync": "0.6.1",
     "semver": "7.1.1",
     "toposort": "2.0.2"

@@ -89,7 +89,7 @@ function levelColor(level: Level) {
 
 function printAudit(results: IAuditResult[]) {
   const head = [log.gray('module'), log.red('vulnerabilities')];
-  const builder = log.table({ head });
+  const builder = log.table({ head, border: false });
 
   results
     .filter(audit => !audit.ok)
@@ -105,7 +105,7 @@ function printAudit(results: IAuditResult[]) {
         .trim();
 
       builder.add([
-        log.gray(`${bullet} ${log.cyan(audit.module)} ${audit.version}`),
+        log.gray(`${bullet} ${log.cyan(audit.module)}  ${audit.version}  `),
         output || log.green('safe'),
       ]);
     });

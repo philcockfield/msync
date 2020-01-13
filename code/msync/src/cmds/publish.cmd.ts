@@ -115,7 +115,7 @@ async function promptYesNo(message: string) {
       { name: 'No', value: 'false' },
     ],
   };
-  const res = (await inquirer.prompt(confirm)) as { answer: string };
+  const res = (await inquirer.prompt(confirm as any)) as { answer: string };
   const answer = res.answer;
   return answer === 'true' ? true : false;
 }
