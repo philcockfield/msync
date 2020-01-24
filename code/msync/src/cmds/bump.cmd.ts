@@ -88,7 +88,7 @@ export async function bump(options: IOptions = {}) {
 
   // Update the selected module and all dependant modules.
   log.info();
-  const table = await bumpModule({
+  const bumped = await bumpModule({
     release,
     pkg: module,
     allModules: modules,
@@ -96,7 +96,7 @@ export async function bump(options: IOptions = {}) {
   });
 
   log.info();
-  log.info(table.toString());
+  log.info(bumped.log());
   log.info();
 
   if (dryRun) {
@@ -129,14 +129,17 @@ async function bumpModule(options: {
   const head = ['update', 'module', 'version', 'dependants'].map(title => log.gray(title));
   const table = options.table || log.table({ head, border: false });
 
-  if (!ref) {
+  const logPkgUpdate = (args: { release: ReleaseType; pkg: IModule; version: string }) => {
+    const { release, pkg, version } = args;
     let msg = '';
     msg += `  ${log.yellow(release.toUpperCase())} `;
-    msg += `update ${formatModuleName(pkg.name)} from ${pkg.latest} → ${log.magenta(version)} `;
-    log.info.gray(msg);
-  } else {
+    msg += `${formatModuleName(pkg.name)}  from ${pkg.latest} → ${log.yellow(version)} `;
+    return log.gray(msg);
+  };
+
+  if (ref) {
     table.add([
-      log.yellow(`${release.toUpperCase()}  `),
+      log.yellow(`  ${release.toUpperCase()}  `),
       formatModuleName(`${pkg.name}  `),
       log.gray(`${pkg.latest} → ${log.magenta(version)}  `),
       log.gray(`${formatModuleName(ref.name)} ${ref.fromVersion} → ${log.magenta(ref.toVersion)}`),
@@ -152,7 +155,7 @@ async function bumpModule(options: {
 
   // Update all dependant modules.
   if (isRoot && dependants.length > 0) {
-    log.info.gray('\nChanges:');
+    log.info.gray('\nchanges:');
   }
 
   for (const dependentPkg of dependants) {
@@ -167,7 +170,20 @@ async function bumpModule(options: {
       table,
     });
   }
-  return table;
+
+  return {
+    table,
+    log() {
+      return `
+${log.info(logPkgUpdate({ release, pkg, version }))}
+
+${table.toString()}
+
+${log.gray('complete')}
+${log.info(logPkgUpdate({ release, pkg, version }))}
+`.substring(1);
+    },
+  };
 }
 
 async function promptForModule(modules: IModule[]) {
