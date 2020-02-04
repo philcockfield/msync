@@ -10,6 +10,7 @@ import {
   plural,
   semver,
   formatModuleName,
+  time,
 } from '../common';
 import { printTable } from './ls.cmd';
 
@@ -89,7 +90,7 @@ const runCommand = async (
 
   const task = (pkg: IModule) => {
     return {
-      title: `${formatModuleName(pkg.name)} ${log.gray(cmd(pkg))}`,
+      title: log.gray(`${formatModuleName(pkg.name)}: ${cmd(pkg)}`),
       task: async () => {
         options.onStart(pkg);
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
@@ -98,6 +99,7 @@ const runCommand = async (
           errors = [...errors, { pkg, info: res.info, errors: res.errors }];
           throw res.error;
         }
+        await time.wait(2500); // 🌳 NB: Ensure everything settles before starting the next publish.
         return res;
       },
     };
@@ -116,7 +118,7 @@ const runCommand = async (
 };
 
 async function promptYesNo(message: string) {
-  const confirm = {
+  const res = (await inquirer.prompt({
     type: 'list',
     name: 'answer',
     message,
@@ -124,8 +126,7 @@ async function promptYesNo(message: string) {
       { name: 'yes', value: 'true' },
       { name: 'no', value: 'false' },
     ],
-  };
-  const res = (await inquirer.prompt(confirm as any)) as { answer: string };
+  })) as { answer: string };
   const answer = res.answer;
   return answer === 'true' ? true : false;
 }

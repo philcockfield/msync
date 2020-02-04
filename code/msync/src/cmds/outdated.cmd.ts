@@ -9,6 +9,7 @@ import {
   log,
   semver,
   updatePackageRef,
+  formatModuleName,
 } from '../common';
 import { run } from './run.cmd';
 
@@ -55,12 +56,13 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
-  log.info.magenta(`\nChecking for outdated modules:`);
+  log.info.gray(`\nChecking for outdated modules:`);
 
   const results: IOutdated[] = [];
+
   const tasks = modules.map(pkg => {
     return {
-      title: `${log.cyan(pkg.name)}`,
+      title: `${formatModuleName(pkg.name)}`,
       task: async () => {
         const result = await getOutdated(pkg);
         if (result.modules.length > 0 || result.error) {
@@ -131,6 +133,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
     name: 'update',
     type: 'checkbox',
     choices,
+    pageSize: 30,
   });
 
   // Finish up.
@@ -209,14 +212,19 @@ function printOutdatedModule(outdated: IOutdated) {
   }
 
   const table = log.table({
-    head: ['package', 'current', 'wanted', 'latest'].map(label => log.gray(label)),
+    head: [' dependency', 'current ', 'wanted ', 'latest'].map(label => log.gray(label)),
     border: false,
   });
 
   outdated.modules.forEach(item => {
     const { name, current, latest } = item;
     const wanted = item.wanted === latest ? log.green(item.wanted) : log.magenta(item.wanted);
-    table.add([`${name}  `, `${log.gray(current)}  `, `${wanted}  `, `${log.green(latest)}`]);
+    table.add([
+      log.gray(`  • ${formatModuleName(name)}  `),
+      `${log.gray(current)}  `,
+      `${wanted}  `,
+      `${log.green(latest)}`,
+    ]);
   });
 
   if (outdated.modules.length > 0) {
