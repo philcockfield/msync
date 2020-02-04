@@ -7,6 +7,9 @@ import { file, fs, listr, log, semver, value } from './libs';
 import * as npm from './util.npm';
 import { orderByDepth, toPackages } from './util.package';
 
+type ReadUpdate = { total: number; completed: number; pkg?: t.IModule };
+type ReadUpdateEvent = (e: ReadUpdate) => void;
+
 export interface IIgnore {
   paths: string[];
   names: string[];
@@ -46,19 +49,16 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
         new Observable<string>(observer => {
           observer.next('Calculating number of modules...');
           (async () => {
-            let total = -1;
-            let current = 0;
-            const onTotal = (count: number) => {
-              total = count;
-              observer.next(`Querying ${total} modules`);
+            const onReadUpdate: ReadUpdateEvent = e => {
+              const { total, completed, pkg } = e;
+              const percent = value.round((completed / total) * 100);
+              let msg = `Querying ${total} modules (${percent}%)`;
+              msg = pkg ? `${msg}: ${pkg.name}` : msg;
+              observer.next(msg);
             };
-            const onGetBatch = (pkgs: t.IModule[]) => {
-              current += pkgs.length;
-              const percent = value.round((current / total) * 100);
-              const message = `Querying ${total} modules (${percent}%)`;
-              observer.next(message);
-            };
-            result = await read({ ...options, onTotal, onGetBatch });
+
+            result = await read({ ...options, onReadUpdate });
+
             observer.complete();
           })();
         }),
@@ -77,13 +77,9 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
  */
 
 async function read(
-  options: IOptions & {
-    onTotal?: (total: number) => void;
-    onGetModule?: (pkg: t.IModule) => void;
-    onGetBatch?: (pkgs: t.IModule[]) => void;
-  } = {},
+  options: IOptions & { onReadUpdate?: ReadUpdateEvent } = {},
 ): Promise<ISettings | undefined> {
-  const { onTotal, onGetBatch, onGetModule } = options;
+  const { onReadUpdate } = options;
 
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
@@ -113,14 +109,23 @@ async function read(
   };
   modules.forEach(pkg => (pkg.isIgnored = isIgnored(pkg, ignore)));
 
-  if (onTotal) {
-    onTotal(modules.length);
-  }
+  // Alert listeners to progress.
+  let completed = -1;
+  const fireReadUpdate = (pkg?: t.IModule) => {
+    completed++;
+    if (onReadUpdate) {
+      const total = modules.length;
+      onReadUpdate({ total, completed, pkg });
+    }
+  };
+
+  // Initial progress update (0-completed).
+  fireReadUpdate();
 
   // NPM.
   if (options.npm) {
     const list = modules.filter(pkg => !pkg.isIgnored);
-    const npmModules = await npm.info(list, { onGetBatch, onGetModule });
+    const npmModules = await npm.info(list, { onModuleRead: fireReadUpdate });
     modules.forEach(pkg => {
       pkg.npm = npmModules.find(item => item.name === pkg.name);
       if (pkg.npm?.latest && semver.gt(pkg.npm.latest, pkg.version)) {

@@ -8,22 +8,21 @@ export async function info(
   pkg: t.IModule | t.IModule[],
   options: {
     batchSize?: number;
-    onGetModule?: (pkg: t.IModule) => void;
-    onGetBatch?: (pkgs: t.IModule[]) => void;
+    onModuleRead?: (pkg: t.IModule) => void;
   } = {},
 ) {
-  const { onGetModule, onGetBatch } = options;
+  const { onModuleRead } = options;
   const modules = (Array.isArray(pkg) ? pkg : [pkg]).filter(pkg => pkg.json.private !== true);
   const batchSize = defaultValue(options.batchSize, 20);
 
   const getInfo = async (pkg: t.IModule) => {
     try {
-      if (onGetModule) {
-        onGetModule(pkg);
-      }
       const name = pkg.name;
       const version = pkg.version;
       const latest = await npm.getVersion(pkg.name);
+      if (onModuleRead) {
+        onModuleRead(pkg);
+      }
       const res: t.INpmInfo = { name, version, latest };
       return res;
     } catch (error) {
@@ -34,9 +33,6 @@ export async function info(
 
   let res: t.INpmInfo[] = [];
   for (const batch of chunk(batchSize, modules)) {
-    if (onGetBatch) {
-      onGetBatch(batch);
-    }
     const items = await Promise.all(batch.map(pkg => getInfo(pkg)));
     res = [...res, ...items];
   }
