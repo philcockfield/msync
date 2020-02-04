@@ -1,15 +1,26 @@
-import * as t from '../types';
+import * as t from './types';
 import { npm, defaultValue } from './libs';
 
 /**
  * Lookup latest info for module from NPM.
  */
-export async function info(pkg: t.IModule | t.IModule[], options: { batchSize?: number } = {}) {
+export async function info(
+  pkg: t.IModule | t.IModule[],
+  options: {
+    batchSize?: number;
+    onGetModule?: (pkg: t.IModule) => void;
+    onGetBatch?: (pkgs: t.IModule[]) => void;
+  } = {},
+) {
+  const { onGetModule, onGetBatch } = options;
   const modules = (Array.isArray(pkg) ? pkg : [pkg]).filter(pkg => pkg.json.private !== true);
   const batchSize = defaultValue(options.batchSize, 20);
 
   const getInfo = async (pkg: t.IModule) => {
     try {
+      if (onGetModule) {
+        onGetModule(pkg);
+      }
       const name = pkg.name;
       const version = pkg.version;
       const latest = await npm.getVersion(pkg.name);
@@ -23,6 +34,9 @@ export async function info(pkg: t.IModule | t.IModule[], options: { batchSize?: 
 
   let res: t.INpmInfo[] = [];
   for (const batch of chunk(batchSize, modules)) {
+    if (onGetBatch) {
+      onGetBatch(batch);
+    }
     const items = await Promise.all(batch.map(pkg => getInfo(pkg)));
     res = [...res, ...items];
   }

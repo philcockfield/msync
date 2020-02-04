@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs';
+import * as t from './types';
 
 import { IModule } from '../types';
 import * as constants from './constants';
-import { file, fs, listr, log, semver } from './libs';
+import { file, fs, listr, log, semver, value } from './libs';
 import * as npm from './util.npm';
 import { orderByDepth, toPackages } from './util.package';
 
@@ -45,8 +46,19 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
         new Observable<string>(observer => {
           observer.next('Calculating number of modules...');
           (async () => {
-            const onTotal = (total: number) => observer.next(`Querying ${total} modules`);
-            result = await read({ ...options, onTotal });
+            let total = -1;
+            let current = 0;
+            const onTotal = (count: number) => {
+              total = count;
+              observer.next(`Querying ${total} modules`);
+            };
+            const onGetBatch = (pkgs: t.IModule[]) => {
+              current += pkgs.length;
+              const percent = value.round((current / total) * 100);
+              const message = `Querying ${total} modules (${percent}%)`;
+              observer.next(message);
+            };
+            result = await read({ ...options, onTotal, onGetBatch });
             observer.complete();
           })();
         }),
@@ -65,8 +77,14 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
  */
 
 async function read(
-  options: IOptions & { onTotal?: (total: number) => void } = {},
+  options: IOptions & {
+    onTotal?: (total: number) => void;
+    onGetModule?: (pkg: t.IModule) => void;
+    onGetBatch?: (pkgs: t.IModule[]) => void;
+  } = {},
 ): Promise<ISettings | undefined> {
+  const { onTotal, onGetBatch, onGetModule } = options;
+
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
   if (!path) {
@@ -95,13 +113,14 @@ async function read(
   };
   modules.forEach(pkg => (pkg.isIgnored = isIgnored(pkg, ignore)));
 
-  if (options.onTotal) {
-    options.onTotal(modules.length);
+  if (onTotal) {
+    onTotal(modules.length);
   }
 
   // NPM.
   if (options.npm) {
-    const npmModules = await npm.info(modules.filter(pkg => !pkg.isIgnored));
+    const list = modules.filter(pkg => !pkg.isIgnored);
+    const npmModules = await npm.info(list, { onGetBatch, onGetModule });
     modules.forEach(pkg => {
       pkg.npm = npmModules.find(item => item.name === pkg.name);
       if (pkg.npm?.latest && semver.gt(pkg.npm.latest, pkg.version)) {

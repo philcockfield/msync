@@ -1,4 +1,4 @@
-import * as t from '../types';
+import * as t from './types';
 import * as constants from './constants';
 import * as copy from './util.copy';
 import * as filter from './util.filter';
