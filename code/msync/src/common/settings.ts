@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 import { IModule } from '../types';
 import * as constants from './constants';
 import { file, fs, listr, log, semver } from './libs';
@@ -39,18 +41,32 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
     const title = npm ? 'Loading module info locally and from NPM' : 'Loading module info locally';
     const task = {
       title,
-      task: async () => (result = await loadSettingsInternal(options)),
+      task: () =>
+        new Observable<string>(observer => {
+          observer.next('Calculating number of modules...');
+          (async () => {
+            const onTotal = (total: number) => observer.next(`Querying ${total} modules`);
+            result = await read({ ...options, onTotal });
+            observer.complete();
+          })();
+        }),
     };
     await listr([task]).run();
     log.info();
     return result;
   } else {
     // No spinner.
-    return loadSettingsInternal(options);
+    return read(options);
   }
 }
 
-async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings | undefined> {
+/**
+ * [Internal]
+ */
+
+async function read(
+  options: IOptions & { onTotal?: (total: number) => void } = {},
+): Promise<ISettings | undefined> {
   // Find the configuration YAML file.
   const path = await file.findClosestAncestor(process.cwd(), constants.CONFIG_FILE_NAME);
   if (!path) {
@@ -79,12 +95,16 @@ async function loadSettingsInternal(options: IOptions = {}): Promise<ISettings |
   };
   modules.forEach(pkg => (pkg.isIgnored = isIgnored(pkg, ignore)));
 
+  if (options.onTotal) {
+    options.onTotal(modules.length);
+  }
+
   // NPM.
   if (options.npm) {
     const npmModules = await npm.info(modules.filter(pkg => !pkg.isIgnored));
     modules.forEach(pkg => {
       pkg.npm = npmModules.find(item => item.name === pkg.name);
-      if (pkg.npm && semver.gt(pkg.npm.latest, pkg.version)) {
+      if (pkg.npm?.latest && semver.gt(pkg.npm.latest, pkg.version)) {
         pkg.latest = pkg.npm.latest;
       }
     });

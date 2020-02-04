@@ -3,7 +3,7 @@ export { semver };
 
 export { log } from '@platform/log/lib/server';
 export { exec } from '@platform/exec';
-export { value, time } from '@platform/util.value';
+export { value, time, defaultValue } from '@platform/util.value';
 export { npm } from '@platform/npm';
 export { fs } from '@platform/fs';
 
