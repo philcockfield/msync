@@ -132,4 +132,4 @@ async function promptYesNo(message: string) {
 }
 
 const isPublishRequired = (pkg: IModule) =>
-  pkg.npm ? semver.gt(pkg.version, pkg.npm.latest) : false;
+  pkg.npm?.latest ? semver.gt(pkg.version, pkg.npm.latest) : false;
