@@ -32,11 +32,11 @@ export const args = {};
 /**
  * CLI command.
  */
-export async function cmd(args?: { params: string[]; options: {} }) {
-  await audit({});
+export async function cmd(args?: { params: string[] }) {
+  await audit();
 }
 
-export async function audit(options: {} = {}) {
+export async function audit() {
   // Retrieve settings.
   const settings = await loadSettings({ npm: true, spinner: true });
   if (!settings) {

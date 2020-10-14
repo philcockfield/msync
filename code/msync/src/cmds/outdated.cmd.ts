@@ -13,6 +13,8 @@ import {
 } from '../common';
 import { run } from './run.cmd';
 
+type O = Record<string, unknown>;
+
 type IOutdated = {
   name: string;
   error?: string;
@@ -37,7 +39,7 @@ export const description = 'Checks all modules for outdated references on NPM.';
 /**
  * CLI command.
  */
-export async function cmd(args?: { params: string[]; options: {} }) {
+export async function cmd(args?: { params: string[]; options: O }) {
   outdated({});
 }
 

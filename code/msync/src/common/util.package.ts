@@ -194,7 +194,7 @@ export async function updatePackageRef(
 /**
  * Saves the given package JSON.
  */
-export async function savePackage(dir: string, json: object) {
+export async function savePackage(dir: string, json: any) {
   const text = `${JSON.stringify(json, null, '  ')}\n`;
   await fs.writeFile(fs.join(dir, 'package.json'), text);
 }
