@@ -48,8 +48,8 @@ export async function syncVersions(options: ISyncVersionOptions = {}) {
   }
 
   const modules = settings.modules
-    .filter(pkg => filterUtil.localDeps(pkg).length > 0)
-    .filter(pkg => filterUtil.includeIgnored(pkg, includeIgnored));
+    .filter((pkg) => filterUtil.localDeps(pkg).length > 0)
+    .filter((pkg) => filterUtil.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
   await syncModules(modules, options);
@@ -76,10 +76,10 @@ async function syncModules(modules: IModule[], options: ISyncVersionOptions = {}
     }
   };
 
-  const tasks = modules.map(target => {
+  const tasks = modules.map((target) => {
     const sources = filterUtil
       .localDeps(target)
-      .filter(dep => filterUtil.includeIgnored(dep.package, includeIgnored));
+      .filter((dep) => filterUtil.includeIgnored(dep.package, includeIgnored));
     const title = log.magenta(target.name);
     return {
       title,

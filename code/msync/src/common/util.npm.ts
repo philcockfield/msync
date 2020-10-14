@@ -12,7 +12,7 @@ export async function info(
   } = {},
 ) {
   const { onModuleRead } = options;
-  const modules = (Array.isArray(pkg) ? pkg : [pkg]).filter(pkg => pkg.json.private !== true);
+  const modules = (Array.isArray(pkg) ? pkg : [pkg]).filter((pkg) => pkg.json.private !== true);
   const batchSize = defaultValue(options.batchSize, 20);
 
   const getInfo = async (pkg: t.IModule) => {
@@ -33,7 +33,7 @@ export async function info(
 
   let res: t.INpmInfo[] = [];
   for (const batch of chunk(batchSize, modules)) {
-    const items = await Promise.all(batch.map(pkg => getInfo(pkg)));
+    const items = await Promise.all(batch.map((pkg) => getInfo(pkg)));
     res = [...res, ...items];
   }
 

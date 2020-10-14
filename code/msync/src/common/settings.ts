@@ -46,10 +46,10 @@ export async function loadSettings(options: IOptions = {}): Promise<ISettings | 
     const task = {
       title,
       task: () =>
-        new Observable<string>(observer => {
+        new Observable<string>((observer) => {
           observer.next('Calculating number of modules...');
           (async () => {
-            const onReadUpdate: ReadUpdateEvent = e => {
+            const onReadUpdate: ReadUpdateEvent = (e) => {
               const { total, completed, pkg } = e;
               const percent = value.round((completed / total) * 100);
               let msg = `Querying ${total} modules (${percent}%)`;
@@ -96,7 +96,7 @@ async function read(
   // Resolve all module-directories in the YAML to
   // be within the "current working directory".
   const dir = fs.dirname(path);
-  yaml.modules = yaml.modules.map(path => fs.resolve(dir, path));
+  yaml.modules = yaml.modules.map((path) => fs.resolve(dir, path));
 
   // Load the [package.json] from files and setup depth order.
   let modules = await toPackages(yaml.modules);
@@ -107,7 +107,7 @@ async function read(
     paths: await ignorePaths(yaml, dir),
     names: yaml.ignore.names,
   };
-  modules.forEach(pkg => (pkg.isIgnored = isIgnored(pkg, ignore)));
+  modules.forEach((pkg) => (pkg.isIgnored = isIgnored(pkg, ignore)));
 
   // Alert listeners to progress.
   let completed = -1;
@@ -124,10 +124,10 @@ async function read(
 
   // NPM.
   if (options.npm) {
-    const list = modules.filter(pkg => !pkg.isIgnored);
+    const list = modules.filter((pkg) => !pkg.isIgnored);
     const npmModules = await npm.info(list, { onModuleRead: fireReadUpdate });
-    modules.forEach(pkg => {
-      pkg.npm = npmModules.find(item => item.name === pkg.name);
+    modules.forEach((pkg) => {
+      pkg.npm = npmModules.find((item) => item.name === pkg.name);
       if (pkg.npm?.latest && semver.gt(pkg.npm.latest, pkg.version)) {
         pkg.latest = pkg.npm.latest;
       }
@@ -147,7 +147,7 @@ async function ignorePaths(yaml: IYaml, dir: string) {
   const result = [] as string[];
   for (const pattern of yaml.ignore.paths) {
     const paths = await fs.glob.find(fs.resolve(dir, pattern));
-    paths.forEach(path => result.push(path));
+    paths.forEach((path) => result.push(path));
   }
   return result;
 }

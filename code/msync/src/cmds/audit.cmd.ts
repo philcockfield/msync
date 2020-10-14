@@ -92,11 +92,11 @@ function printAudit(results: IAuditResult[]) {
   const builder = log.table({ head, border: false });
 
   results
-    .filter(audit => !audit.ok)
-    .forEach(audit => {
+    .filter((audit) => !audit.ok)
+    .forEach((audit) => {
       const bullet = audit.ok ? log.green('✔') : log.red('✖');
       const output = Object.keys(audit.vulnerabilities)
-        .map(key => ({ key: key as Level, value: audit.vulnerabilities[key] }))
+        .map((key) => ({ key: key as Level, value: audit.vulnerabilities[key] }))
         .reduce((acc, next) => {
           const text =
             next.value > 0 ? log.gray(`${next.key}: ${levelColor(next.key)(next.value)}`) : '';
@@ -145,7 +145,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
           : [];
 
         const issues = Object.keys(vulnerabilities)
-          .map(key => ({ key, value: vulnerabilities[key] }))
+          .map((key) => ({ key, value: vulnerabilities[key] }))
           .reduce((acc, next) => (next.value > 0 ? acc + next.value : acc), 0);
 
         // Clean up.
@@ -166,7 +166,7 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
       },
     };
   };
-  const tasks = modules.map(pkg => task(pkg));
+  const tasks = modules.map((pkg) => task(pkg));
   const runner = listr(tasks, options);
   try {
     await runner.run();

@@ -21,9 +21,9 @@ export async function toPackages(moduleDirs: string[]) {
   }
 
   // Determine which ones are local.
-  const findPackage = (dep: IDependency) => packages.find(pkg => pkg.name === dep.name);
-  packages.forEach(pkg => {
-    pkg.dependencies.forEach(dep => {
+  const findPackage = (dep: IDependency) => packages.find((pkg) => pkg.name === dep.name);
+  packages.forEach((pkg) => {
+    pkg.dependencies.forEach((dep) => {
       dep.package = findPackage(dep);
       dep.isLocal = dep.package !== undefined;
     });
@@ -56,7 +56,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
     if (!deps) {
       return;
     }
-    Object.keys(deps).forEach(name =>
+    Object.keys(deps).forEach((name) =>
       dependencies.push({
         name,
         version: deps[name],
@@ -129,19 +129,19 @@ async function getEngine(dir: string): Promise<IModule['engine']> {
 export function orderByDepth(packages: IModule[]): IModule[] {
   const toDependenciesArray = (pkg: IModule) => {
     const deps = pkg.dependencies;
-    const result = deps.map(dep => dep.name).map(name => [pkg.name, name]);
+    const result = deps.map((dep) => dep.name).map((name) => [pkg.name, name]);
     return deps.length === 0 ? [[pkg.name]] : result;
   };
 
   const graph = packages
-    .map(pkg => toDependenciesArray(pkg))
+    .map((pkg) => toDependenciesArray(pkg))
     .reduce((acc: any[], items: any[]) => {
-      items.forEach(item => acc.push(item));
+      items.forEach((item) => acc.push(item));
       return acc;
     }, []);
 
   const names = toposort<string>(graph).reverse();
-  const result = names.map(name => R.find(R.propEq('name', name), packages));
+  const result = names.map((name) => R.find(R.propEq('name', name), packages));
   return R.reject(R.isNil, result) as IModule[];
 }
 
@@ -150,7 +150,7 @@ export function orderByDepth(packages: IModule[]): IModule[] {
  */
 export function dependsOn(pkg: IModule, modules: IModule[]) {
   const result = modules.filter(
-    module => module.dependencies.find(dep => dep.name === pkg.name) !== undefined,
+    (module) => module.dependencies.find((dep) => dep.name === pkg.name) !== undefined,
   );
   return compact<IModule>(result);
 }
@@ -169,8 +169,8 @@ export async function updatePackageRef(
 
   // Update the version on the target JSON.
   const prefix = (version: string) =>
-    ['^', '~'].filter(p => version && version.startsWith(p))[0] || '';
-  ['dependencies', 'devDependencies', 'peerDependencies'].forEach(key => {
+    ['^', '~'].filter((p) => version && version.startsWith(p))[0] || '';
+  ['dependencies', 'devDependencies', 'peerDependencies'].forEach((key) => {
     const obj = target.json[key];
     if (obj && obj[moduleName]) {
       const currentValue = obj[moduleName];

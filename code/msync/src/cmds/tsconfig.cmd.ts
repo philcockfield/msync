@@ -72,9 +72,9 @@ export async function cmd(args?: {
 async function getTsconfigPaths(settings: ISettings, options: { includeIgnored?: boolean }) {
   const { includeIgnored = false } = options;
   const paths = settings.modules
-    .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
-    .map(m => m.dir)
-    .map(dir => fs.join(dir, 'tsconfig.json'));
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
+    .map((m) => m.dir)
+    .map((dir) => fs.join(dir, 'tsconfig.json'));
   return filter.fileExists(paths);
 }
 
@@ -86,7 +86,7 @@ async function saveChangesWithPrompt(paths: string[], changes: { [key: string]: 
 
   // List files.
   log.info.cyan(`\nChange files:`);
-  paths.forEach(path => {
+  paths.forEach((path) => {
     log.info(` ${toDisplayPath(path)}`);
   });
   log.info();
@@ -131,7 +131,7 @@ async function saveChanges(paths: string[], changes: { [key: string]: ConfigValu
     await fs.writeFile(path, text);
   };
 
-  const tasks = paths.map(path => {
+  const tasks = paths.map((path) => {
     return {
       title: `${log.cyan('Updated')} ${toDisplayPath(path)}`,
       task: async () => saveChange(path),

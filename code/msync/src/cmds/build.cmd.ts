@@ -58,8 +58,8 @@ export async function build(
     return;
   }
   const modules = settings.modules
-    .filter(pkg => filterUtil.includeIgnored(pkg, includeIgnored))
-    .filter(pkg => pkg.isTypeScript);
+    .filter((pkg) => filterUtil.includeIgnored(pkg, includeIgnored))
+    .filter((pkg) => pkg.isTypeScript);
 
   if (watch) {
     return buildWatch(modules, includeIgnored, verbose);
@@ -78,7 +78,7 @@ const tscCommand = async (pkg: IModule) => {
  */
 export async function buildOnce(modules: IModule[]) {
   const startedAt = new Date();
-  const tasks = modules.map(pkg => {
+  const tasks = modules.map((pkg) => {
     return {
       title: `${log.magenta(pkg.name)} ${log.gray('=> sync')}`,
       task: async () => {
@@ -126,7 +126,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean, ve
     log.clear();
     const items = Object.keys(state)
       .sort()
-      .map(key => ({ key, value: state[key] }));
+      .map((key) => ({ key, value: state[key] }));
 
     // Print build summary.
     items.forEach(({ key, value }) => {
@@ -140,7 +140,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean, ve
     if (verbose && errors.length > 0) {
       log.info();
       errors.forEach(({ key, value }) => {
-        value.errors.forEach(error => {
+        value.errors.forEach((error) => {
           log
             .table()
             .add([log.yellow(key), formatError(error)])
@@ -150,11 +150,11 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean, ve
     }
   });
 
-  modules.forEach(async pkg => {
+  modules.forEach(async (pkg) => {
     const tsc = await tscCommand(pkg);
     const cmd = `cd ${pkg.dir} && ${tsc} --watch`;
 
-    exec.cmd.run(cmd).output$.subscribe(e => {
+    exec.cmd.run(cmd).output$.subscribe((e) => {
       let text = e.text;
       const isBuilding =
         text.includes('Starting compilation in watch') ||
@@ -239,7 +239,7 @@ export async function buildWatch(modules: IModule[], includeIgnored: boolean, ve
 const formatError = (error: string) => {
   const MAX = 80;
   const lines = [] as string[];
-  error.split('\n').forEach(line => {
+  error.split('\n').forEach((line) => {
     line = line.length <= MAX ? line : splitLines(line);
     lines.push(line);
   });
@@ -250,7 +250,7 @@ const splitLines = (line: string) => {
   const MAX = 80;
   const words = [] as string[];
   let count = 0;
-  line.split('').forEach(word => {
+  line.split('').forEach((word) => {
     count += word.length;
     if (count > MAX) {
       word = `${word}\n`;

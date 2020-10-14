@@ -53,14 +53,14 @@ export async function outdated(options: { includeIgnored?: boolean }) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules.filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
   log.info.gray(`\nChecking for outdated modules:`);
 
   const results: IOutdated[] = [];
 
-  const tasks = modules.map(pkg => {
+  const tasks = modules.map((pkg) => {
     return {
       title: `${formatModuleName(pkg.name)}`,
       task: async () => {
@@ -82,7 +82,7 @@ export async function outdated(options: { includeIgnored?: boolean }) {
   // Print outdated modules.
   if (results.length > 0) {
     log.info();
-    results.forEach(item => printOutdatedModule(item));
+    results.forEach((item) => printOutdatedModule(item));
 
     // Prompt the use for which [package.json] files to update.
     const updated = await updatePackageJsonRefs(modules, await promptToUpdate(results));
@@ -107,8 +107,8 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
 
   // Build a list of all modules that need updating.
   const updates: { [key: string]: IUpdate } = {};
-  outdated.forEach(outdated => {
-    outdated.modules.forEach(m => {
+  outdated.forEach((outdated) => {
+    outdated.modules.forEach((m) => {
       const { name, latest } = m;
       const current = updates[name] ? updates[name].latest : undefined;
       if (!current || semver.gt(latest, current)) {
@@ -118,7 +118,7 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
   });
 
   // Format checkbox choices.
-  const choices = Object.keys(updates).map(key => {
+  const choices = Object.keys(updates).map((key) => {
     const update = updates[key];
     const name = `${key} ➜ ${update.latest}`;
     return { name, value: update.name };
@@ -138,8 +138,8 @@ async function promptToUpdate(outdated: IOutdated[]): Promise<IUpdate[]> {
 
   // Finish up.
   return Object.keys(updates)
-    .map(key => updates[key])
-    .filter(update => answer.update.includes(update.name));
+    .map((key) => updates[key])
+    .filter((update) => answer.update.includes(update.name));
 }
 
 async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
@@ -151,9 +151,9 @@ async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
 
   for (const update of updates) {
     await Promise.all(
-      modules.map(async pkg => {
+      modules.map(async (pkg) => {
         const changed = await updatePackageRef(pkg, update.name, update.latest, { save: true });
-        if (changed && !updated.some(m => m.name === pkg.name)) {
+        if (changed && !updated.some((m) => m.name === pkg.name)) {
           updated = [...updated, pkg];
         }
       }),
@@ -162,7 +162,7 @@ async function updatePackageJsonRefs(modules: IModule[], updates: IUpdate[]) {
 
   if (updated.length > 0) {
     log.info.gray(`\nUpdated:`);
-    updated.forEach(pkg => {
+    updated.forEach((pkg) => {
       log.info.gray(` - ${log.cyan(pkg.name)}`);
     });
     log.info();
@@ -196,7 +196,7 @@ function parseOutdated(stdout: string[]): { error?: string; outdated: IOutdatedM
     return { error: error.summary, outdated: [] };
   }
 
-  const outdated = Object.keys(json).map(name => {
+  const outdated = Object.keys(json).map((name) => {
     const { current, wanted, latest, location } = json[name];
     const outdated: IOutdatedModule = { name, current, wanted, latest, location };
     return outdated;
@@ -212,11 +212,11 @@ function printOutdatedModule(outdated: IOutdated) {
   }
 
   const table = log.table({
-    head: [' dependency', 'current ', 'wanted ', 'latest'].map(label => log.gray(label)),
+    head: [' dependency', 'current ', 'wanted ', 'latest'].map((label) => log.gray(label)),
     border: false,
   });
 
-  outdated.modules.forEach(item => {
+  outdated.modules.forEach((item) => {
     const { name, current, latest } = item;
     const wanted = item.wanted === latest ? log.green(item.wanted) : log.magenta(item.wanted);
     table.add([
