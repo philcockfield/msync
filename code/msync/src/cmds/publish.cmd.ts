@@ -22,11 +22,11 @@ export const args = {};
 /**
  * CLI command.
  */
-export async function cmd(args?: { params: string[]; options: {} }) {
-  await publish({});
+export async function cmd(args?: { params: string[] }) {
+  await publish();
 }
 
-export async function publish(options: {} = {}) {
+export async function publish() {
   // Retrieve settings.
   const settings = await loadSettings({ npm: true, spinner: true });
   if (!settings) {
@@ -35,7 +35,7 @@ export async function publish(options: {} = {}) {
   }
 
   // Filter on modules that require publishing.
-  const modules = settings.modules.filter(pkg => isPublishRequired(pkg));
+  const modules = settings.modules.filter((pkg) => isPublishRequired(pkg));
   printTable(modules);
 
   const total = modules.length;
@@ -57,16 +57,16 @@ export async function publish(options: {} = {}) {
 
   // [Slow] Full install and sync mode.
   const publishCommand = (pkg: IModule) => {
-    const install = pkg.engine === 'YARN' ? 'yarn install' : 'npm install';
+    // const install = pkg.engine === 'YARN' ? 'yarn install' : 'npm install';
     // return `${install} && npm publish && msync sync`;
-    return `${install} && npm publish`;
+    return `yarn install && yarn publish --non-interactive`;
   };
 
   let current: IModule | undefined;
   const publishResult = await runCommand(modules, publishCommand, {
     concurrent: false,
     exitOnError: true,
-    onStart: pkg => (current = pkg),
+    onStart: (pkg) => (current = pkg),
   });
 
   if (publishResult.success) {
@@ -104,14 +104,14 @@ const runCommand = async (
       },
     };
   };
-  const tasks = modules.map(pkg => task(pkg));
+  const tasks = modules.map((pkg) => task(pkg));
   const runner = listr(tasks, { concurrent, exitOnError });
   try {
     await runner.run();
     return { success: true, error: null };
   } catch (error) {
     errors.forEach(({ info }) => {
-      info.forEach(line => log.info(line));
+      info.forEach((line) => log.info(line));
     });
     return { success: false, error }; // Fail.
   }

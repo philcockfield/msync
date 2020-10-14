@@ -52,34 +52,34 @@ export async function cmd(args?: {
 
   // Retrieve the list of module directories.
   const modules = settings.modules
-    .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
-    .map(m => m.dir);
+    .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
+    .map((m) => m.dir);
 
   // Delete each
   switch (response.type) {
     case 'yarn.lock':
-      await deleteAfterPrompt(modules.map(dir => `${dir}/yarn.lock`));
+      await deleteAfterPrompt(modules.map((dir) => `${dir}/yarn.lock`));
       break;
 
     case 'package-lock.json':
-      await deleteAfterPrompt(modules.map(dir => `${dir}/package-lock.json`));
+      await deleteAfterPrompt(modules.map((dir) => `${dir}/package-lock.json`));
       break;
 
     case '.tslint.json.OLD':
-      await deleteAfterPrompt(modules.map(dir => `${dir}/.tslint.json.OLD`));
+      await deleteAfterPrompt(modules.map((dir) => `${dir}/.tslint.json.OLD`));
       break;
 
     case 'logs (error)':
       await deleteAfterPrompt(
         flatten([
-          modules.map(dir => `${dir}/yarn-error.log`),
-          modules.map(dir => `${dir}/npm-debug.log`),
+          modules.map((dir) => `${dir}/yarn-error.log`),
+          modules.map((dir) => `${dir}/npm-debug.log`),
         ]),
       );
       break;
 
     case 'node_modules':
-      await deleteAfterPrompt(modules.map(dir => `${dir}/node_modules`));
+      await deleteAfterPrompt(modules.map((dir) => `${dir}/node_modules`));
       break;
 
     default:
@@ -103,7 +103,7 @@ async function deleteAfterPrompt(paths: string[]) {
 
   // List files.
   log.info.cyan(`\nDelete files:`);
-  paths.forEach(path => {
+  paths.forEach((path) => {
     log.info(` ${toDisplayPath(path)}`);
   });
   log.info();
@@ -141,7 +141,7 @@ function toDisplayPath(path: string) {
 }
 
 async function deleteFiles(paths: string[]) {
-  const tasks = paths.map(path => {
+  const tasks = paths.map((path) => {
     return {
       title: `${log.cyan('Delete')} ${toDisplayPath(path)}`,
       task: async () => tryDelete(path, { retry: 3 }),

@@ -63,7 +63,7 @@ export async function bump(options: IOptions = {}) {
     log.warn.yellow(constants.CONFIG_NOT_FOUND_ERROR);
     return;
   }
-  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules.filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Prompt for the module to bump.
   const module = await promptForModule(modules);
@@ -126,7 +126,7 @@ async function bumpModule(options: {
   }
 
   // Log output.
-  const head = ['update', 'module', 'version', 'dependants'].map(title => log.gray(title));
+  const head = ['update', 'module', 'version', 'dependants'].map((title) => log.gray(title));
   const table = options.table || log.table({ head, border: false });
 
   const logPkgUpdate = (args: { release: ReleaseType; pkg: IModule; version: string }) => {
@@ -187,7 +187,7 @@ ${log.info(logPkgUpdate({ release, pkg, version }))}
 }
 
 async function promptForModule(modules: IModule[]) {
-  const choices = modules.map(pkg => ({ name: pkg.name, value: pkg.name }));
+  const choices = modules.map((pkg) => ({ name: pkg.name, value: pkg.name }));
   const res = (await inquirer.prompt({
     type: 'list',
     name: 'name',
@@ -196,7 +196,7 @@ async function promptForModule(modules: IModule[]) {
     pageSize: 30,
   })) as { name: string };
   const name = res.name;
-  return modules.find(pkg => pkg.name === name);
+  return modules.find((pkg) => pkg.name === name);
 }
 
 async function promptForReleaseType(version: string) {

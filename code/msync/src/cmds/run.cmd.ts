@@ -61,7 +61,7 @@ export async function run(
     return;
   }
   const modules =
-    options.modules || settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+    options.modules || settings.modules.filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   // Print status:
   if (valueUtil.defaultValue(options.printStatus, true)) {
@@ -71,7 +71,7 @@ export async function run(
   }
 
   // Run tasks.
-  const tasks = modules.map(pkg => {
+  const tasks = modules.map((pkg) => {
     return {
       title: `${log.cyan(pkg.name)} ${log.magenta(cmd)}`,
       task: async () => {

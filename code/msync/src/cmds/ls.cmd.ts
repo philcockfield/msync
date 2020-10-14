@@ -75,7 +75,7 @@ export async function ls(options: IListOptions = {}) {
     return;
   }
 
-  const modules = settings.modules.filter(pkg => filter.includeIgnored(pkg, includeIgnored));
+  const modules = settings.modules.filter((pkg) => filter.includeIgnored(pkg, includeIgnored));
 
   if (formatting) {
     // Pretty formatting.
@@ -88,7 +88,7 @@ export async function ls(options: IListOptions = {}) {
   } else {
     // No formatting.
     log.info();
-    modules.forEach(pkg => log.info(pkg.name));
+    modules.forEach((pkg) => log.info(pkg.name));
     log.info();
   }
 
@@ -112,9 +112,9 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
 
   const listDependences = (pkg: IModule, modules: IModule[]) =>
     pkg.dependencies
-      .filter(dep => (showAllDependencies ? true : dep.isLocal))
-      .filter(dep => (dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true))
-      .map(dep => {
+      .filter((dep) => (showAllDependencies ? true : dep.isLocal))
+      .filter((dep) => (dep.package ? filter.includeIgnored(dep.package, includeIgnored) : true))
+      .map((dep) => {
         const isIgnored = dep.package && dep.package.isIgnored;
         // const bullet = isIgnored ? log.gray('-') : log.magenta('-');
         const name = isIgnored
@@ -131,8 +131,8 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
       return log.yellow('dependant');
     }
     return dependants
-      .filter(pkg => filter.includeIgnored(pkg, includeIgnored))
-      .map(pkg => {
+      .filter((pkg) => filter.includeIgnored(pkg, includeIgnored))
+      .map((pkg) => {
         const name = pkg.isIgnored ? log.gray(pkg.name) : formatModuleName(pkg.name);
         return `${name} ${log.gray(pkg.version)}`;
       })
@@ -212,13 +212,13 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
     addColumn(column.dependencies, dependencies !== 'none');
     addColumn(column.dependants, showDependants);
     addColumn(column.path, showPath);
-    (columns || []).forEach(col => addColumn(col));
+    (columns || []).forEach((col) => addColumn(col));
 
-    const head = cols.map(col => log.gray(col.head));
+    const head = cols.map((col) => log.gray(col.head));
     const builder = log.table({ head, border: false });
-    modules.forEach(pkg => {
+    modules.forEach((pkg) => {
       const row = [] as string[];
-      cols.forEach(col => row.push(`${col.render(pkg)}  `));
+      cols.forEach((col) => row.push(`${col.render(pkg)}  `));
       builder.add(row);
     });
     builder.log();

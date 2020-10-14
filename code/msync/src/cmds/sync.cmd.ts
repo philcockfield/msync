@@ -72,8 +72,8 @@ export async function sync(options: ISyncOptions = {}) {
   }
 
   const modules = settings.modules
-    .filter(pkg => filterUtil.localDeps(pkg).length > 0)
-    .filter(pkg => filterUtil.includeIgnored(pkg, includeIgnored));
+    .filter((pkg) => filterUtil.localDeps(pkg).length > 0)
+    .filter((pkg) => filterUtil.includeIgnored(pkg, includeIgnored));
 
   // Finish up.
   await syncModules(modules, options);
@@ -106,11 +106,11 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
     }
   };
 
-  const tasks = modules.map(target => {
+  const tasks = modules.map((target) => {
     const sources = filterUtil
       .localDeps(target)
-      .filter(dep => filterUtil.includeIgnored(dep.package, includeIgnored));
-    const sourceNames = sources.map(dep => ` ${log.cyan(dep.name)}`);
+      .filter((dep) => filterUtil.includeIgnored(dep.package, includeIgnored));
+    const sourceNames = sources.map((dep) => ` ${log.cyan(dep.name)}`);
     const title = `${log.magenta(target.name)} ${log.cyan(
       sourceNames.length > 0 ? '⬅' : '',
     )}${sourceNames}`;
@@ -150,12 +150,9 @@ export async function chmod(module: IModule) {
     return [];
   }
   const cmd = exec.command(`chmod 777`);
-  const files = (await fs.readdir(dir)).map(name => fs.join(dir, name));
-  const wait = files.map(path => {
-    return cmd
-      .clone()
-      .add(path)
-      .run({ silent: true });
+  const files = (await fs.readdir(dir)).map((name) => fs.join(dir, name));
+  const wait = files.map((path) => {
+    return cmd.clone().add(path).run({ silent: true });
   });
   await Promise.all(wait);
   return files;
@@ -179,7 +176,7 @@ export async function syncWatch(options: ISyncOptions = {}) {
   const { modules, settings } = result;
 
   // Start the watcher for each module.
-  modules.forEach(pkg => watch(pkg, modules, settings.watchPattern, includeIgnored, silent));
+  modules.forEach((pkg) => watch(pkg, modules, settings.watchPattern, includeIgnored, silent));
 }
 
 /**
@@ -203,7 +200,7 @@ function watch(
   file
     .watch(fs.join(pkg.dir, watchPattern))
     .pipe(
-      filter(path => !path.includes('node_modules/')),
+      filter((path) => !path.includes('node_modules/')),
       debounceTime(1000),
     )
     .subscribe(() => sync());
