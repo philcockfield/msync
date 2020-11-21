@@ -59,7 +59,7 @@ export async function publish() {
   const publishCommand = (pkg: IModule) => {
     // const install = pkg.engine === 'YARN' ? 'yarn install' : 'npm install';
     // return `${install} && npm publish && msync sync`;
-    return `yarn install && yarn publish --non-interactive`;
+    return `yarn install && npm publish`;
   };
 
   let current: IModule | undefined;
