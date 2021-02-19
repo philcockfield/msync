@@ -99,7 +99,7 @@ const runCommand = async (
         const containsError = (...messages: string[]) =>
           errors.some((err) =>
             err.errors.some((line) => {
-              return messages.some((msg) => line.includes(msg));
+              return messages.every((msg) => line.includes(msg));
             }),
           );
 
