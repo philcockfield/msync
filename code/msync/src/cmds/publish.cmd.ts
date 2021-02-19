@@ -95,9 +95,25 @@ const runCommand = async (
         options.onStart(pkg);
         const command = `cd ${pkg.dir} && ${cmd(pkg)}`;
         const res = await exec.cmd.run(command, { silent: true });
+
+        const containsError = (...messages: string[]) =>
+          errors.some((err) =>
+            err.errors.some((line) => {
+              return messages.some((msg) => line.includes(msg));
+            }),
+          );
+
         if (res.error) {
           errors = [...errors, { pkg, info: res.info, errors: res.errors }];
-          throw res.error;
+
+          const isAlreadyPublishedError = containsError(
+            '403 Forbidden',
+            'cannot publish over the previously published',
+          );
+
+          if (!isAlreadyPublishedError) {
+            throw res.error;
+          }
         }
         await time.wait(2500); // 🌳 NB: Ensure everything settles before starting the next publish.
         return res;
