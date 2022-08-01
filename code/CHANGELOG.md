@@ -13,8 +13,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
-## [2.5.0] - 2022-08-02
+## [2.6.0] - 2022-08-02
 #### Added
+- Save option for `msync ls` command `--save <filename, optional>` dumps dependency order to JSON file.
 #### Changed
 - Updated dependency refs, including typescript and other build libs.
 #### Deprecated
