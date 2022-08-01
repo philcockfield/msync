@@ -179,7 +179,7 @@ async function loadYaml(path: string) {
     result.watchPattern = result.watchPattern || constants.DEFAULT_WATCH_PATTERN;
 
     return result;
-  } catch (error) {
+  } catch (error: any) {
     log.error(`Failed to parse YAML configuration.`);
     log.error(error.message);
     log.info(log.magenta('File:'), path, '\n');

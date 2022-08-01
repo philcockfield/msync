@@ -181,7 +181,7 @@ async function getOutdated(pkg: IModule) {
     const { outdated, error } = parseOutdated(res.info);
     result.modules = outdated;
     result.error = error;
-  } catch (error) {
+  } catch (error: any) {
     result.error = error.message; // Some other error occured.
   }
   return result;

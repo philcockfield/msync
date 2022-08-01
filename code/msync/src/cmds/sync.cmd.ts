@@ -133,7 +133,7 @@ export async function syncModules(modules: IModule[], options: ISyncOptions = {}
       write(log.gray(` ${elapsed(startedAt)}, ${moment().format('h:mm:ssa')}`));
       write('');
     }
-  } catch (error) {
+  } catch (error: any) {
     write(log.yellow(`\nFailed while syncing module '${error.message}'.`));
   }
 

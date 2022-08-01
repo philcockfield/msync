@@ -177,17 +177,11 @@ async function runAudits(modules: IModule[], options: IListrOptions) {
 }
 
 async function execToJson(cmd: string) {
-  const done = (stdout: string, error?: Error) => {
-    try {
-      return JSON.parse(stdout);
-    } catch (error) {
-      throw error;
-    }
-  };
+  const done = (stdout: string, error?: Error) => JSON.parse(stdout);
   try {
     const res = await exec.cmd.run(cmd, { silent: true });
     return done(res.info.join('\n'));
-  } catch (error) {
+  } catch (error: any) {
     return done(error.stdout);
   }
 }

@@ -46,7 +46,5 @@ export function round(value: number, decimals: number) {
  * Pauses as a promise.
  */
 export function delay(msecs: number) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), msecs);
-  });
+  return new Promise<void>((resolve) => setTimeout(resolve, msecs));
 }

@@ -25,7 +25,7 @@ export async function info(
       }
       const res: t.INpmInfo = { name, version, latest };
       return res;
-    } catch (error) {
+    } catch (error: any) {
       const message = `Failed getting NPM info for '${pkg.name}'. ${error.message}`;
       throw new Error(message);
     }

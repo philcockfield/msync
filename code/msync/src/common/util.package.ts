@@ -43,7 +43,7 @@ async function toPackage(packageFilePath: string): Promise<IModule> {
       const text = (await fs.readFile(packageFilePath)).toString();
       const json = JSON.parse(text);
       return json;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(`Failed to parse '${packageFilePath}'. ${error.message}`);
     }
   };

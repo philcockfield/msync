@@ -11,23 +11,26 @@
     "test": "ts test",
     "tdd": "yarn run test --reporter min --watch",
     "lint": "ts lint",
-    "build": "ts build $@",
+    "build": "ts build --no-esm $@",
     "prepare": "ts prepare"
   },
   "dependencies": {
-    "@platform/exec": "0.2.63",
-    "@platform/fs": "0.5.24",
-    "@platform/log": "0.1.31",
-    "@platform/npm": "0.3.14",
-    "@platform/util.value": "0.8.1",
+    "@platform/exec": "0.4.1",
+    "@platform/fs": "0.7.7",
+    "@platform/log": "0.1.62",
+    "@platform/npm": "0.4.18",
+    "@platform/util.value": "0.9.10",
     "command-interface": "4.2.1",
     "rsync": "0.6.1",
     "toposort": "2.0.2"
   },
   "devDependencies": {
-    "@platform/test": "0.1.16",
-    "@platform/ts": "4.0.2",
-    "@types/rsync": "0.4.30"
+    "@platform/test": "0.3.1",
+    "@platform/ts": "4.7.5",
+    "@types/rsync": "0.4.32"
+  },
+  "resolutions": {
+    "tslib": "2.4.0"
   },
   "files": [
     "lib",
