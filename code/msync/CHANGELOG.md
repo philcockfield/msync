@@ -13,6 +13,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
+## [2.5.0] - 2022-08-02
+#### Added
+#### Changed
+- Updated dependency refs, including typescript and other build libs.
+#### Deprecated
+#### Removed
+#### Fixed
+#### Security
+
+
+
 ## [2.4.0] - 2020-01-13
 #### Changed
 - Updated dependencies
