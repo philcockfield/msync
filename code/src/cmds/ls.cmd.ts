@@ -1,13 +1,14 @@
 import {
   constants,
   filter,
+  formatModuleName,
   fs,
   IModule,
-  ISettings,
   loadSettings,
   log,
   semver,
-  formatModuleName,
+  t,
+  time,
 } from '../common';
 
 export const name = 'ls';
@@ -18,6 +19,7 @@ export const args = {
   '-i': 'Include ignored modules.',
   '-p': 'Show path to module.',
   '-n': 'Retrieve registry details from NPM.',
+  '--save': 'Save to a json file (within the directory)',
   '--no-formatting': 'Simple list without table formatting.',
 };
 
@@ -32,6 +34,7 @@ export async function cmd(args?: {
     p?: boolean;
     n?: boolean;
     formatting?: boolean;
+    save?: boolean | string;
   };
 }) {
   const options = (args && args.options) || {};
@@ -41,17 +44,18 @@ export async function cmd(args?: {
     showPath: options.p,
     npm: options.n,
     formatting: options.formatting,
+    savePath: Util.formatSavePath(options.save),
   });
 }
 
 export type DisplayDependencies = 'none' | 'local' | 'all';
 
-export interface ITableColumn {
+export interface TableColumn {
   head?: string;
   render: (data: any) => string;
 }
 
-export interface IListOptions {
+export interface ListOptions {
   basePath?: string;
   dependencies?: DisplayDependencies;
   includeIgnored?: boolean;
@@ -59,14 +63,15 @@ export interface IListOptions {
   formatting?: boolean;
   dependants?: IModule[];
   npm?: boolean;
-  columns?: ITableColumn[];
+  columns?: TableColumn[];
+  savePath?: string;
 }
 
 /**
  * List modules in dependency order.
  */
-export async function ls(options: IListOptions = {}) {
-  const { includeIgnored = false, npm = false } = options;
+export async function ls(options: ListOptions = {}) {
+  const { includeIgnored = false, npm = false, savePath } = options;
   const formatting = options.formatting === false ? false : true;
 
   const settings = await loadSettings({ npm, spinner: npm });
@@ -92,13 +97,19 @@ export async function ls(options: IListOptions = {}) {
     log.info();
   }
 
+  if (savePath) {
+    const obj = Util.toJson(modules);
+    const json = `${JSON.stringify(obj, null, '  ')}\n`;
+    await fs.writeFile(fs.resolve(savePath), json);
+  }
+
   return {
     modules,
-    settings: settings as ISettings,
+    settings,
   };
 }
 
-export function printTable(modules: IModule[], options: IListOptions = {}) {
+export function printTable(modules: IModule[], options: ListOptions = {}) {
   const {
     dependencies = 'none',
     includeIgnored = false,
@@ -139,7 +150,7 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
       .join('\n');
   };
 
-  const column: { [key: string]: ITableColumn } = {
+  const column: { [key: string]: TableColumn } = {
     module: {
       head: 'module',
       render: (pkg: IModule) => {
@@ -200,8 +211,8 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
   };
 
   const logModules = (modules: IModule[]) => {
-    const cols = [] as ITableColumn[];
-    const addColumn = (col: ITableColumn, include = true) => {
+    const cols = [] as TableColumn[];
+    const addColumn = (col: TableColumn, include = true) => {
       if (include) {
         cols.push(col);
       }
@@ -229,3 +240,37 @@ export function printTable(modules: IModule[], options: IListOptions = {}) {
     logModules(modules);
   }
 }
+
+/**
+ * [Helpers]
+ */
+
+const Util = {
+  formatSavePath(input?: boolean | string) {
+    if (!input) return undefined;
+    if (input === true) return 'msync.deps.json';
+
+    if (typeof input === 'string') {
+      const text = (input || '')
+        .toString()
+        .trim()
+        .replace(/^\/*/, '')
+        .replace(/\.json$/, '');
+      return `${text}.json`;
+    }
+
+    return undefined;
+  },
+
+  toJson(modules: t.IModule[]): t.IModulesJson {
+    const json: t.IModulesJson = {
+      timestamp: time.now.timestamp,
+      modules: modules.map((module) => {
+        const { name, version, dir } = module;
+        return { name, version, dir };
+      }),
+    };
+
+    return json;
+  },
+};

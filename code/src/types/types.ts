@@ -1,6 +1,8 @@
+export { ILogTable } from '@platform/log/lib/server';
+
 export type INpmInfo = { name: string; version: string; latest: string };
 
-export interface IModule {
+export type IModule = {
   engine: 'NPM' | 'YARN';
   dir: string;
   name: string;
@@ -15,14 +17,23 @@ export interface IModule {
   dependencies: IDependency[];
   json: any;
   npm?: INpmInfo;
-}
+};
 
-export interface IDependency {
+export type IDependency = {
   name: string;
   version: string;
   isDev: boolean;
   isLocal: boolean;
   package?: IModule;
-}
+};
 
-export { ILogTable } from '@platform/log/lib/server';
+export type IModulesJson = {
+  timestamp: number; // ISO timestamp
+  modules: IModuleJson[];
+};
+
+export type IModuleJson = {
+  name: string;
+  version: string;
+  dir: string;
+};
