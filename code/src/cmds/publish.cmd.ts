@@ -11,6 +11,7 @@ import {
   semver,
   formatModuleName,
   time,
+  SaveUtil,
 } from '../common';
 import { printTable } from './ls.cmd';
 
@@ -46,7 +47,18 @@ export async function publish() {
 
   // Prompt the user if they want to continue.
   log.info();
-  if (!(await promptYesNo(`Publish ${total} ${plural('module', total)} to NPM now?`))) {
+  const prompt = `Publish ${total} ${plural('module', total)} to NPM now?`;
+  const answer = await promptYesNoSave(prompt);
+
+  if (typeof answer === 'boolean' && answer === false) {
+    log.info();
+    return;
+  }
+
+  if (answer === 'save') {
+    const path = 'msync.publish.json';
+    await SaveUtil.write(path, modules);
+    log.info.gray(`saved publish manifest to ${log.white(path)}`);
     log.info();
     return;
   }
@@ -134,19 +146,20 @@ const runCommand = async (
   }
 };
 
-async function promptYesNo(message: string) {
+async function promptYesNoSave(message: string) {
   const res = (await inquirer.prompt({
     type: 'list',
     name: 'answer',
     message,
     choices: [
-      { name: 'yes', value: 'true' },
-      { name: 'no', value: 'false' },
+      { name: 'yes', value: true },
+      { name: 'no', value: false },
+      { name: 'save (json file)', value: 'save' },
     ],
   })) as { answer: string };
-  const answer = res.answer;
-  return answer === 'true' ? true : false;
+  return res.answer;
 }
 
-const isPublishRequired = (pkg: IModule) =>
-  pkg.npm?.latest ? semver.gt(pkg.version, pkg.npm.latest) : false;
+const isPublishRequired = (pkg: IModule) => {
+  return pkg.npm?.latest ? semver.gt(pkg.version, pkg.npm.latest) : false;
+};

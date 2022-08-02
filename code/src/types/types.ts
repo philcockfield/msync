@@ -29,11 +29,13 @@ export type IDependency = {
 
 export type IModulesJson = {
   timestamp: number; // ISO timestamp
+  order: 'DepthFirst';
   modules: IModuleJson[];
 };
 
 export type IModuleJson = {
+  dir: string;
   name: string;
   version: string;
-  dir: string;
+  npm?: { version: string };
 };

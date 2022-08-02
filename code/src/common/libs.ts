@@ -1,5 +1,32 @@
-import * as R from 'ramda';
-export { R };
+import {
+  clone,
+  equals,
+  find,
+  isEmpty,
+  isNil,
+  pipe,
+  prop,
+  propEq,
+  reject,
+  sortBy,
+  uniqBy,
+} from 'ramda';
+import * as toposort from 'toposort';
+
+export { toposort };
+export const R = {
+  sortBy,
+  uniqBy,
+  isNil,
+  reject,
+  isEmpty,
+  find,
+  propEq,
+  clone,
+  prop,
+  pipe,
+  equals,
+};
 
 export { moment, file, listr, IListrOptions, inquirer, plural } from 'command-interface';
 

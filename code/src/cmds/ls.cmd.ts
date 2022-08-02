@@ -7,8 +7,7 @@ import {
   loadSettings,
   log,
   semver,
-  t,
-  time,
+  SaveUtil,
 } from '../common';
 
 export const name = 'ls';
@@ -44,7 +43,7 @@ export async function cmd(args?: {
     showPath: options.p,
     npm: options.n,
     formatting: options.formatting,
-    savePath: Util.formatSavePath(options.save),
+    savePath: SaveUtil.formatSavePath(options.save),
   });
 }
 
@@ -98,9 +97,7 @@ export async function ls(options: ListOptions = {}) {
   }
 
   if (savePath) {
-    const obj = Util.toJson(modules);
-    const json = `${JSON.stringify(obj, null, '  ')}\n`;
-    await fs.writeFile(fs.resolve(savePath), json);
+    await SaveUtil.write(savePath, modules);
   }
 
   return {
@@ -240,37 +237,3 @@ export function printTable(modules: IModule[], options: ListOptions = {}) {
     logModules(modules);
   }
 }
-
-/**
- * [Helpers]
- */
-
-const Util = {
-  formatSavePath(input?: boolean | string) {
-    if (!input) return undefined;
-    if (input === true) return 'msync.deps.json';
-
-    if (typeof input === 'string') {
-      const text = (input || '')
-        .toString()
-        .trim()
-        .replace(/^\/*/, '')
-        .replace(/\.json$/, '');
-      return `${text}.json`;
-    }
-
-    return undefined;
-  },
-
-  toJson(modules: t.IModule[]): t.IModulesJson {
-    const json: t.IModulesJson = {
-      timestamp: time.now.timestamp,
-      modules: modules.map((module) => {
-        const { name, version, dir } = module;
-        return { name, version, dir };
-      }),
-    };
-
-    return json;
-  },
-};
