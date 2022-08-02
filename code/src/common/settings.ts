@@ -6,7 +6,7 @@ import * as constants from './constants';
 import { file, fs, listr, log, semver, value } from './libs';
 import * as npm from './util.npm';
 import { toPackages } from './util.package';
-import { orderByDepth } from './util.sort';
+import { SortUtil } from './util.sort';
 
 type ReadUpdate = { total: number; completed: number; pkg?: t.IModule };
 type ReadUpdateEvent = (e: ReadUpdate) => void;
@@ -101,7 +101,7 @@ async function read(
 
   // Load the [package.json] from files and setup depth order.
   let modules = await toPackages(yaml.modules);
-  modules = orderByDepth(modules);
+  modules = SortUtil.orderByDepth(modules);
 
   // Flag ignored packages.
   const ignore = {
