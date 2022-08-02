@@ -18,20 +18,14 @@ export const SaveUtil = {
     return undefined;
   },
 
-  toJson(dir: string, modules: t.IModule[]): t.IModulesJson {
+  toJson(modules: t.IModule[]): t.IModulesJson {
     const timestamp = time.now.timestamp;
 
-    const formatDir = (path: string) => {
-      return path.startsWith(dir) ? path.substring(dir.length + 1) : path;
-    };
-
     const json: t.IModulesJson = {
-      order: 'DepthFirst',
       timestamp,
-      dir,
+      order: 'DepthFirst',
       modules: modules.map((module) => {
-        const { name, version } = module;
-        const dir = formatDir(module.dir);
+        const { name, version, dir } = module;
         const latest = module.npm?.latest;
         const npm = latest ? { version: latest } : undefined;
         return { dir, name, version, npm };
@@ -41,9 +35,9 @@ export const SaveUtil = {
   },
 
   async write(path: string, modules: t.IModule[]) {
-    const dir = fs.resolve('.');
-    const obj = SaveUtil.toJson(dir, modules);
+    path = fs.resolve(path);
+    const obj = SaveUtil.toJson(modules);
     const json = `${JSON.stringify(obj, null, '  ')}\n`;
-    await fs.writeFile(fs.resolve(path), json);
+    await fs.writeFile(path, json);
   },
 };

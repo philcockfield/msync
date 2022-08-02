@@ -30,7 +30,6 @@ export type IDependency = {
 export type IModulesJson = {
   timestamp: number; // ISO timestamp
   order: 'DepthFirst';
-  dir: string;
   modules: IModuleJson[];
 };
 
