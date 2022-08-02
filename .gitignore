@@ -9,4 +9,4 @@ yarn-error.log
 lib
 lib.test
 
-**/sample/msync.*.json
+/sample/msync.*.json
