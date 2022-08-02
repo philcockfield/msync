@@ -5,7 +5,8 @@ import { IModule } from '../types';
 import * as constants from './constants';
 import { file, fs, listr, log, semver, value } from './libs';
 import * as npm from './util.npm';
-import { orderByDepth, toPackages } from './util.package';
+import { toPackages } from './util.package';
+import { orderByDepth } from './util.sort';
 
 type ReadUpdate = { total: number; completed: number; pkg?: t.IModule };
 type ReadUpdateEvent = (e: ReadUpdate) => void;

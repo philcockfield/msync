@@ -9,9 +9,10 @@ export { loadSettings, ISettings } from './settings';
 
 export * from './libs';
 export * from './util';
-export * from './util.package';
 export * from './util.fs';
 export * from './util.format';
 export * from './util.save';
+export * from './util.package';
+export * from './util.sort';
 
 export * from '../types';
