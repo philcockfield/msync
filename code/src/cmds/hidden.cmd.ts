@@ -23,7 +23,8 @@ export async function cmd(args?: { params: string[] }) {
   let count = 0;
 
   for (const pattern of settings.hidden) {
-    const paths = await fs.glob.find(fs.join(base, pattern));
+    let paths = await fs.glob.find(fs.join(base, pattern));
+    paths = paths.filter((path) => !path.includes('node_modules/'));
 
     for (const path of paths) {
       const relative = path.substring(base.length + 1);
