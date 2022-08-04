@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Security
 
 
-## [2.6.1] - 2022-08-02
+## [2.7.0] - 2022-08-04
 #### Added
 - `save` option to the `msync publish` option that will dump the publish order manifest to JSON but not go ahead with the executing the publish operation.
 - `hidden` command that extracts a folder containing key hidden files from the repo (useful when setting up a new machine).
