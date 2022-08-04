@@ -16,5 +16,9 @@ ignore:
   names:
     - msync.sample-4-ignored
 
+hidden:
+  - '**/.env'
+  - '**/.secret*'
+
 
 # watchPattern: /**/*.js

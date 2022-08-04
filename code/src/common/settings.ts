@@ -20,6 +20,7 @@ export interface IYaml {
   modules: string[];
   ignore: IIgnore;
   watchPattern: string;
+  hidden: string[];
 }
 
 export interface ISettings {
@@ -27,6 +28,7 @@ export interface ISettings {
   modules: IModule[];
   ignored: IIgnore;
   watchPattern: string;
+  hidden: string[];
 }
 
 export interface IOptions {
@@ -135,12 +137,16 @@ async function read(
     });
   }
 
+  // Hidden files.
+  const hidden: string[] = yaml.hidden ?? [];
+
   // Finish up.
   return {
     path,
     ignored: ignore,
     watchPattern: yaml.watchPattern,
     modules,
+    hidden,
   };
 }
 
