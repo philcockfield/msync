@@ -38,6 +38,7 @@ export async function cmd(args?: {
   const watch = options.w || false;
   const includeIgnored = options.i || false;
   const verbose = options.v || false;
+
   await build({ includeIgnored, watch, verbose });
 }
 
@@ -82,9 +83,17 @@ export async function buildOnce(modules: IModule[]) {
     return {
       title: `${log.magenta(pkg.name)} ${log.gray('=> sync')}`,
       task: async () => {
+        const throwErrors = (errors: string[]) => {
+          throw new Error(`Failed: ${errors.join('; ')}`.trim());
+        };
+
         const tsc = await tscCommand(pkg);
         const cmd = `cd ${pkg.dir} && ${tsc}`;
-        await exec.cmd.run(cmd, { silent: true });
+        const res = await exec.cmd.run(cmd, { silent: true });
+        if (!res.ok) {
+          throwErrors(res.errors);
+        }
+
         await syncCommand.sync({
           includeIgnored: false,
           updateVersions: false,
