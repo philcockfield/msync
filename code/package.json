@@ -1,0 +1,41 @@
+{
+  "name": "msync",
+  "version": "2.7.1",
+  "description": "Easily manage building and syncing multiple node-modules in a flexibly defined workspace.",
+  "main": "./lib/index",
+  "types": "./lib/index.d.ts",
+  "bin": {
+    "msync": "bin.js"
+  },
+  "scripts": {
+    "test": "ts test",
+    "tdd": "yarn run test --reporter min --watch",
+    "lint": "ts lint",
+    "build": "ts build --no-esm $@",
+    "prepare": "ts prepare"
+  },
+  "dependencies": {
+    "@platform/exec": "0.4.3",
+    "@platform/fs": "0.7.9",
+    "@platform/log": "0.1.65",
+    "@platform/npm": "0.4.21",
+    "@platform/util.value": "0.9.13",
+    "command-interface": "4.2.1",
+    "rsync": "0.6.1",
+    "toposort": "2.0.2"
+  },
+  "devDependencies": {
+    "@platform/test": "0.3.1",
+    "@platform/ts": "4.7.7",
+    "@types/rsync": "0.4.32"
+  },
+  "resolutions": {
+    "tslib": "2.4.0"
+  },
+  "files": [
+    "lib",
+    "bin.js"
+  ],
+  "repository": "philcockfield/msync",
+  "license": "MIT"
+}

@@ -1,0 +1,24 @@
+modules:
+  # - ./sample/*/package.json
+  # - ./sample/libs/**/package.json
+
+  - ./sample/sample-0/package.json
+  # - ./sample/libs/sample-2/package.json
+  - ./sample/libs/sample-1/package.json
+
+  # (Msync module itself).
+  # - ./package.json
+  # - ../log.server/package.json
+
+ignore:
+  paths:
+    - ./sample/**/ignore-folder
+  names:
+    - msync.sample-4-ignored
+
+hidden:
+  - '**/.env'
+  - '**/.secret*'
+
+
+# watchPattern: /**/*.js
